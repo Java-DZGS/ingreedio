@@ -1,0 +1,19 @@
+@import '../../theme/theme.scss';
+.button {
+  background: linear-gradient(
+    to top right,
+    $primary-green,
+    $primary-blue
+  ); // Gradient background
+  color: white; // White text color
+  border: none; // Remove border
+  padding: 5px 25px; // Adjust padding as needed
+  font-size: 16px; // Adjust font size as needed
+  cursor: pointer; // Show pointer cursor on hover
+  border-radius: 25px; // Add border radius for rounded corners
+  font-size: 18px;
+  font-weight: 600;
+  &:hover {
+    opacity: 0.9; // Reduce opacity on hover
+  }
+}
