@@ -3,8 +3,8 @@ import './FilledButton.scss';
 import Button from '../Button/Button';
 
 type FilledButtonProps = {
-  label: string;
-  onClick: () => void;
+  label?: string;
+  onClick?: () => void;
 };
 
 const FilledButton = ({

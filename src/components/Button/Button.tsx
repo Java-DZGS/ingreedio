@@ -1,9 +1,9 @@
 import React from 'react';
 
 type ButtonProps = {
-  label: string;
-  onClick: () => void;
-  className: string;
+  label?: string;
+  onClick?: () => void;
+  className?: string;
 };
 
 const Button = ({
