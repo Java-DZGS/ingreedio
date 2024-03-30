@@ -4,17 +4,13 @@
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
-  background: linear-gradient(
-    to top right,
-    $primary-green,
-    $primary-blue
-  ); // Gradient background
-  color: transparent; // Make text transparent
-  -webkit-background-clip: text; // Clip the background to the text
-  background-clip: text; // Clip the background to the text
+  background: linear-gradient(to top right, $primary-green, $primary-blue);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
   font-size: 18px;
   font-weight: 900;
   &:hover {
-    opacity: 0.9; // Reduce opacity on hover
+    opacity: 0.9;
   }
 }

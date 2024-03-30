@@ -9,10 +9,10 @@
   border: 2px solid $primary-green-blue;
   border-radius: 25px;
   font-family: 'Inter', sans-serif;
-  outline: none; // Remove default focus outline
-  transition: border-color 0.3s ease; // Add transition for smoother effect
+  outline: none;
+  transition: border-color 0.3s ease;
 
   &:focus {
-    border-color: darken($primary-green-blue, 10%); // Adjust to your preference
+    border-color: darken($primary-green-blue, 10%);
   }
 }

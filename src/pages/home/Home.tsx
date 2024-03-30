@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-// Home.js
 
 import React, { ReactElement } from 'react';
 import './Home.scss';
