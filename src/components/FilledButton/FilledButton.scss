@@ -1,0 +1,15 @@
+@import '../../theme/theme.scss';
+.button {
+  background: linear-gradient(to top right, $primary-green, $primary-blue);
+  color: white;
+  border: none;
+  padding: 5px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 600;
+  &:hover {
+    opacity: 0.9;
+  }
+}

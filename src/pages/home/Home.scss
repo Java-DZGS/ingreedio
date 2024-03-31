@@ -1,0 +1,68 @@
+@import './../../theme/theme.scss';
+
+.home-screen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 100%;
+
+  .centered-component {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -90px;
+
+    .title-container {
+      font-family: 'Playfair Display', serif;
+      font-size: 60px;
+      font-weight: bolder;
+      margin-bottom: 40px;
+      color: $text-gray;
+      width: 550px;
+      line-height: 70px;
+
+      .green-highlight {
+        color: $text-green;
+      }
+    }
+    .search-container {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      .product-search-container,
+      .ingredient-search-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .ingredient-search-container {
+        flex: 2;
+      }
+      .input-label {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: $text-gray;
+        margin-bottom: 5px;
+        text-align: left;
+      }
+      .search-button-container {
+        display: flex;
+        align-items: flex-end;
+        .inner-search-button-container {
+          padding-left: 10px;
+          display: flex;
+          align-items: center;
+          height: 65%;
+          .search-button {
+            display: flex;
+            height: 90%;
+          }
+        }
+      }
+    }
+  }
+}

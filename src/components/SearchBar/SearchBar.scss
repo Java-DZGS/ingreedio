@@ -1,0 +1,18 @@
+@import '../../theme/theme.scss';
+
+.search-bar {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+  font-size: 1.2rem;
+  border: 2px solid $primary-green-blue;
+  border-radius: 25px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: darken($primary-green-blue, 10%);
+  }
+}
