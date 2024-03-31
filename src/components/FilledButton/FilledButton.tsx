@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import './FilledButton.scss';
 import Button from '../Button/Button';
 
 type FilledButtonProps = {
-  label?: string;
+  children?: ReactNode;
   onClick?: () => void;
 };
 
 const FilledButton = ({
-  label = '',
+  children,
   onClick = () => {},
 }: FilledButtonProps): JSX.Element => (
-  <Button label={label} onClick={onClick} className="button" />
+  <Button onClick={onClick} className="button">
+    {children}
+  </Button>
 );
 
 export default FilledButton;

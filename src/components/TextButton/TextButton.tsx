@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import './TextButton.scss';
 import Button from '../Button/Button';
 
 interface TextButtonProps {
-  label?: string;
+  children?: ReactNode;
   onClick?: () => void;
 }
 
 const TextButton = ({
-  label = '',
+  children,
   onClick = () => {},
 }: TextButtonProps): JSX.Element => (
-  <Button label={label} onClick={onClick} className="text-button" />
+  <Button onClick={onClick} className="text-button">
+    {children}
+  </Button>
 );
 
 export default TextButton;
