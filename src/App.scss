@@ -1,3 +1,4 @@
+@import './theme/theme.scss';
 .app {
   display: flex;
   flex-direction: column;
@@ -10,4 +11,6 @@
   display: flex;
   flex: 1;
   max-height: 100%;
+  color: $text-gray;
+  font-family: 'Inter', sans-serif;
 }

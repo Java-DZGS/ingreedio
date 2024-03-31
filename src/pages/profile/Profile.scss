@@ -1,0 +1,46 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+
+  flex: 1;
+
+  .card-wrapper {
+    text-align: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .card-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      flex: 1;
+
+      .card-header-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 30px;
+        font-weight: bold;
+      }
+    }
+    .card-content-container {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      width: 1000px;
+
+      .user-details-container {
+        padding: 20px 0;
+        width: 100%;
+      }
+
+      .inner-tags-container {
+        padding: 20px 0;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}

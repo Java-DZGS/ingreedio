@@ -1,0 +1,25 @@
+.profile-section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.section-title h2 {
+  font-size: 24px; /* Adjust font size as needed */
+  font-family: 'Playfair Display', serif;
+  margin-right: 10px; /* Adjust spacing between title and line */
+}
+
+.title-line {
+  height: 1px;
+  background-color: black; /* Adjust line color */
+  border: none;
+  width: 100%;
+}

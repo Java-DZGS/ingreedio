@@ -1,0 +1,19 @@
+.user-details-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  th,
+  td {
+    padding-bottom: 16px;
+    text-align: left;
+  }
+
+  th {
+    font-weight: normal;
+  }
+
+  td {
+    font-weight: bold;
+  }
+}
