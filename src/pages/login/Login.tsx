@@ -1,16 +1,10 @@
 import React, { ReactElement, useState } from 'react';
 import './Login.scss';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Stack,
-} from '@chakra-ui/react';
+import { Button, FormControl, FormHelperText } from '@chakra-ui/react';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from 'react-router-dom';
+import Input from '../../components/Input/Input';
+import { ROUTES } from '../../routes/routes';
 
 const Login = (): ReactElement => {
   // Navigate hook
@@ -44,34 +38,29 @@ const Login = (): ReactElement => {
         userState: { name: 'user', uuid: 123456 },
       });
 
-      navigate('/');
+      navigate(ROUTES.HOME);
     }, 500);
   };
 
   return (
     <div className="login-page">
-      <Box
-        w="full"
-        maxW="md"
-        borderWidth="1px"
-        borderRadius="lg"
-        p="6"
-        boxShadow="md"
-      >
+      <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <Stack spacing="4">
+          <div className="email-container">
             <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
               <Input
+                label="Email"
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </FormControl>
+          </div>
+          <div className="password-container">
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
               <Input
                 type="password"
+                label="Password"
                 onChange={(e) => setPassword(e.target.value)}
                 minLength={6}
                 pattern="\D*\d+\D*"
@@ -82,12 +71,38 @@ const Login = (): ReactElement => {
                 1 digit.
               </FormHelperText>
             </FormControl>
-            <Button colorScheme="blue" type="submit" isLoading={loading}>
-              Sign in
+          </div>
+          <Button
+            style={{
+              borderRadius: 20,
+              paddingRight: 25,
+              paddingLeft: 25,
+              fontSize: 18,
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+            colorScheme="green"
+            type="submit"
+            isLoading={loading}
+          >
+            Log in
+          </Button>
+          <p>or</p>
+          <div>
+            <Button
+              style={{
+                marginTop: 10,
+                marginBottom: 10,
+              }}
+              colorScheme="green"
+              variant="link"
+              onClick={() => navigate(ROUTES.REGISTRATION)}
+            >
+              Create new account
             </Button>
-          </Stack>
+          </div>
         </form>
-      </Box>
+      </div>
     </div>
   );
 };

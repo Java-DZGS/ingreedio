@@ -5,3 +5,9 @@
   height: 100vh;
   background: linear-gradient(to top right, #eeffd8, #e4f1ff);
 }
+
+.screen {
+  display: flex;
+  flex: 1;
+  max-height: 100%;
+}

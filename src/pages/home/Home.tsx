@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React, { ReactElement } from 'react';
 import './Home.scss';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -18,16 +16,18 @@ const Home = (): ReactElement => {
         </div>
         <div className="search-container">
           <div className="product-search-container">
-            <label htmlFor="product-search" className="input-label">
-              Product
-            </label>
-            <SearchBar id="product-search" placeholder="e.g. shampoo" />
+            <SearchBar
+              id="product-search"
+              label="Product"
+              placeholder="e.g. shampoo"
+            />
           </div>
           <div className="ingredient-search-container">
-            <label htmlFor="ingredient-search" className="input-label">
-              Ingredients
-            </label>
-            <SearchBar id="ingredient-search" placeholder="e.g. shea butter" />
+            <SearchBar
+              id="ingredient-search"
+              label="Ingredients"
+              placeholder="e.g. shea butter"
+            />
           </div>
           <div className="search-button-container">
             <div className="inner-search-button-container">

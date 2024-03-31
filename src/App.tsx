@@ -5,15 +5,19 @@ import Login from './pages/login/Login';
 import { ROUTES } from './routes/routes';
 import './App.scss';
 import Header from './components/Header';
+import Registration from './pages/registraton/Registration';
 
 function App(): ReactElement {
   return (
     <div className="app">
       <Header />
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path={ROUTES.LOGIN} element={<Login />} />
-      </Routes>
+      <div className="screen">
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+        </Routes>
+      </div>
     </div>
   );
 }

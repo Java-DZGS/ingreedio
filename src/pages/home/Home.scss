@@ -41,22 +41,16 @@
       .ingredient-search-container {
         flex: 2;
       }
-      .input-label {
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        font-size: 18px;
-        color: $text-gray;
-        margin-bottom: 5px;
-        text-align: left;
-      }
       .search-button-container {
         display: flex;
         align-items: flex-end;
+
         .inner-search-button-container {
-          padding-left: 10px;
+          padding-left: 5px;
+          padding-bottom: 3px;
           display: flex;
           align-items: center;
-          height: 65%;
+          height: 70%;
           .search-button {
             display: flex;
             height: 90%;
