@@ -22,19 +22,21 @@ const Header = (): ReactElement => {
       <div className="registration-login-container">
         <div className="button-container">
           <TextButton
-            label="Sign up"
             onClick={() => {
               navigate(ROUTES.REGISTRATION);
             }}
-          />
+          >
+            Sign up
+          </TextButton>
         </div>
         <div className="button-container">
           <Button
-            label="Log in"
             onClick={() => {
               navigate(ROUTES.LOGIN);
             }}
-          />
+          >
+            Log in
+          </Button>
         </div>
       </div>
     </div>

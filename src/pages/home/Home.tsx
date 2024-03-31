@@ -32,7 +32,7 @@ const Home = (): ReactElement => {
           <div className="search-button-container">
             <div className="inner-search-button-container">
               <div className="search-button">
-                <FilledButton label="Search" />
+                <FilledButton>Search</FilledButton>
               </div>
             </div>
           </div>

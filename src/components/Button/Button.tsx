@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type ButtonProps = {
-  label?: string;
   onClick?: () => void;
   className?: string;
+  children?: ReactNode;
 };
 
 const Button = ({
-  label = '',
+  children,
   onClick = () => {},
   className = '',
 }: ButtonProps): JSX.Element => (
   <button type="button" className={className} onClick={onClick}>
-    {label}
+    {children}
   </button>
 );
 
