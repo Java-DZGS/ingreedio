@@ -1,0 +1,24 @@
+// Tag.scss
+.tag {
+  display: inline-block;
+  border-radius: 15px;
+  background-color: #ccc;
+  padding: 2px 10px;
+  margin: 5px;
+  position: relative;
+  .tag-text {
+    padding-right: 5px;
+  }
+}
+
+.tag span {
+  margin-right: 5px;
+}
+
+.delete-button {
+  right: 5px;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+}

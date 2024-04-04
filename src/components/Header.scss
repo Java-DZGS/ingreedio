@@ -20,15 +20,24 @@
       max-height: 100%;
     }
   }
-
-  .registration-login-container {
+  .right-control-container {
     position: absolute;
     right: 30px;
     display: flex;
     align-items: center;
-    .button-container {
-      padding-left: 10px;
-      padding-right: 10px;
+
+    .registration-login-container {
+      display: flex;
+      flex-direction: row;
+
+      .button-container {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
     }
+
+    // .profile-button-container {
+    //   height: 20px;
+    // }
   }
 }

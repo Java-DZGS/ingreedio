@@ -19,12 +19,13 @@
     "import/extensions": "off",
     "react/jsx-filename-extension": "off",
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": "error",
     "import/prefer-default-export": "off",
     "no-shadow": "off",
     "react/require-default-props": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "jsx-a11y/click-events-have-key-events": "off"
+    "jsx-a11y/click-events-have-key-events": "off",
+    "linebreak-style": "off"
   },
   "settings": {
     "import/resolver": {

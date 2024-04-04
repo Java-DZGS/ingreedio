@@ -6,6 +6,7 @@ import { ROUTES } from './routes/routes';
 import './App.scss';
 import Header from './components/Header';
 import Registration from './pages/registraton/Registration';
+import Profile from './pages/profile/Profile';
 
 function App(): ReactElement {
   return (
@@ -16,6 +17,7 @@ function App(): ReactElement {
           <Route index element={<Home />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+          <Route path={ROUTES.PROFILE} element={<Profile />} />
         </Routes>
       </div>
     </div>
