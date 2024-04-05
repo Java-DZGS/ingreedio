@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import FilledButton from './FilledButton/FilledButton';
 import logo from '../assets/logo.svg';
 import './Header.scss';
@@ -11,6 +12,8 @@ import profileIcon from '../assets/icons/profile.svg';
 const Header = (): ReactElement => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const isAuthenticated = useIsAuthenticated();
+
   return (
     <div className="header">
       <div
@@ -22,7 +25,7 @@ const Header = (): ReactElement => {
         <img src={logo} alt="Logo" />
       </div>
       <div className="right-control-container">
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <div className="profile-button-container">
             <TextButton onClick={() => navigate(ROUTES.PROFILE)}>
               <div>

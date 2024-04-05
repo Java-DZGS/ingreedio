@@ -3,8 +3,12 @@ import './Login.scss';
 import { Button, FormControl, FormHelperText } from '@chakra-ui/react';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import Input from '../../components/Input/Input';
 import { ROUTES } from '../../routes/routes';
+import actions from '../../store/actions';
+import { IRootState } from '../..';
 
 const Login = (): ReactElement => {
   // Navigate hook
@@ -12,46 +16,67 @@ const Login = (): ReactElement => {
   // Sign in hook
   const signIn = useSignIn();
 
+  const dispatch = useDispatch();
+  const isAuthenticated = useIsAuthenticated();
+  // todo: correct 'any'
+  const { loginSuccessful, accessToken } = useSelector((state: IRootState) => state.auth);
+
   // States
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Password regex
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    dispatch(actions.signInRequest(username, password));
+
     // Prevent from page reload
     e.preventDefault();
 
-    // Set loading button
-    setLoading(true);
+    console.log(loginSuccessful);
+    console.log(accessToken);
 
-    // TODO: get token from the backend and replace this timeout
-    setTimeout(() => {
-      setLoading(false);
-
+    if (loginSuccessful) {
       signIn({
         auth: {
-          // TODO: insert the token here
-          token: '<jwt token>',
+          token: accessToken,
         },
-        userState: { name: 'user', uuid: 123456 },
+        // todo: refresh token, uuid
+        userState: { name: username, uuid: 123456 },
       });
 
+      console.log(isAuthenticated);
+
       navigate(ROUTES.HOME);
-    }, 500);
+      // Set loading button
+      // todo: return the loading button
+      // setLoading(true);
+
+      // // TODO: get token from the backend and replace this timeout
+      // setTimeout(() => {
+      //   setLoading(false);
+
+      //   signIn({
+      //     auth: {
+      //       // TODO: insert the token here
+      //       token: '<jwt token>',
+      //     },
+      //     userState: { name: 'user', uuid: 123456 },
+      //   });
+
+      // }, 500);
+    }
   };
 
   return (
     <div className="login-page">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <div className="email-container">
-            <FormControl id="email">
+          <div className="username-container">
+            <FormControl id="username">
               <Input
-                label="Email"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
+                label="Username"
+                type="text"
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </FormControl>
