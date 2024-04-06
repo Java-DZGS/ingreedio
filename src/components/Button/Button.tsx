@@ -20,6 +20,7 @@ const Button = ({
       flexDirection: 'row',
       gap: 10,
       justifyContent: 'center',
+      alignItems: 'center',
     }}
     onClick={onClick}
   >

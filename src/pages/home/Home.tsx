@@ -9,6 +9,7 @@ import { ROUTES } from '../../routes/routes';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
+  // todo: keep ingredients in a provider to not duplicate code between Home and Products list
   const [product, setProduct] = useState('');
   const [ingredients, setIngredients] = useState<string[]>([]);
 

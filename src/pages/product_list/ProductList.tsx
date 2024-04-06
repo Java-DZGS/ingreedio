@@ -70,10 +70,18 @@ const ProductList = (): ReactElement => {
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">
-            <SearchBar label="Product" placeholder="e.g. shampoo" />
+            <SearchBar
+              label="Product"
+              placeholder="e.g. shampoo"
+              initialValue={productName}
+            />
           </div>
           <div className="ingredient-search-container">
-            <SearchBar label="Ingredients" placeholder="e.g. shea butter" />
+            <SearchBar
+              label="Ingredients"
+              placeholder="e.g. shea butter"
+              initialValue={ingredientNames.join(', ')}
+            />
           </div>
           <div className="category-search-container">
             <SearchBar label="Category" placeholder="e.g. skin care" />
