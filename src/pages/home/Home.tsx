@@ -1,10 +1,30 @@
-import React, { ReactElement } from 'react';
+// Home.tsx
+
+import React, { ReactElement, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Home.scss';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
+import { ROUTES } from '../../routes/routes';
 
-// eslint-disable-next-line arrow-body-style
 const Home = (): ReactElement => {
+  const navigate = useNavigate();
+  const [product, setProduct] = useState('');
+  const [ingredients, setIngredients] = useState<string[]>([]);
+
+  const handleSearch = () => {
+    const queryParams = new URLSearchParams();
+    if (product) queryParams.set('product', product);
+    if (ingredients.length > 0) {
+      const ingredientsString = ingredients.join(',');
+      queryParams.set('ingredients', ingredientsString);
+    }
+
+    const searchUrl = `${ROUTES.PRODUCTS}?${queryParams.toString()}`;
+
+    navigate(searchUrl);
+  };
+
   return (
     <div className="home-screen">
       <div className="centered-component">
@@ -20,6 +40,7 @@ const Home = (): ReactElement => {
               id="product-search"
               label="Product"
               placeholder="e.g. shampoo"
+              onChange={(value) => setProduct(value)}
             />
           </div>
           <div className="ingredient-search-container">
@@ -27,12 +48,15 @@ const Home = (): ReactElement => {
               id="ingredient-search"
               label="Ingredients"
               placeholder="e.g. shea butter"
+              onChange={(value) => setIngredients(
+                value.split(',').map((ingredient) => ingredient.trim()),
+              )}
             />
           </div>
           <div className="search-button-container">
             <div className="inner-search-button-container">
               <div className="search-button">
-                <FilledButton>Search</FilledButton>
+                <FilledButton onClick={handleSearch}>Search</FilledButton>
               </div>
             </div>
           </div>
