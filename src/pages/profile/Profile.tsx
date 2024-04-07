@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import Card from '../../components/Card/Card';
 import './Profile.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -34,10 +35,18 @@ const Profile = (): ReactElement => {
     'dupa',
     'dupa',
   ];
+
+  const signOut = useSignOut();
+
   const handleDeleteTag = (index: number) => {
     // Implement delete tag logic here
     console.log('Deleting tag at index', index);
   };
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
   return (
     <div className="profile-container">
       <div className="card-wrapper">
@@ -46,7 +55,12 @@ const Profile = (): ReactElement => {
             <div className="card-header">
               <div className="card-header-text">Your profile</div>
               <div className="logout-button">
-                <FilledButton reverseGradient>Log out</FilledButton>
+                <FilledButton
+                  reverseGradient
+                  onClick={handleSignOut}
+                >
+                  Log out
+                </FilledButton>
               </div>
             </div>
             <ProfileSection title="Account data">
@@ -63,7 +77,7 @@ const Profile = (): ReactElement => {
                 />
               </div>
             </ProfileSection>
-            <ProfileSection title="Disiked ingredients">
+            <ProfileSection title="Disliked ingredients">
               <div className="inner-tags-container">
                 <TagList
                   tags={tags}

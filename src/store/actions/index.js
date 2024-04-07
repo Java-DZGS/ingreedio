@@ -15,10 +15,10 @@ const signInFailure = (error) => ({
   payload: error,
 });
 
-const signUpRequest = (username, displayname, email, password) => ({
+const signUpRequest = (userName, displayName, email, password) => ({
   type: types.SIGN_UP_REQUEST,
   payload: {
-    username, displayname, email, password,
+    userName, displayName, email, password,
   },
 });
 

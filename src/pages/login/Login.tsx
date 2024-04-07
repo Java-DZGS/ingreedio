@@ -18,7 +18,6 @@ const Login = (): ReactElement => {
 
   const dispatch = useDispatch();
   const isAuthenticated = useIsAuthenticated();
-  // todo: correct 'any'
   const { loginSuccessful, accessToken } = useSelector((state: IRootState) => state.auth);
 
   // States

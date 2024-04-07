@@ -21,6 +21,8 @@ const Registration = (): ReactElement => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(username + displayName + email + password);
+
     // Prevent from page reload
     dispatch(actions.signUpRequest(username, displayName, email, password));
 
