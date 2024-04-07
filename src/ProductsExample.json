@@ -1,0 +1,107 @@
+[
+    {
+        "id": 1,
+        "name": "L'Oreal Paris Voluminous Lash Paradise Mascara",
+        "smallImageUrl": "https://pro-fra-s3-productsassets.rossmann.pl/product_1_large/340253_1280_720_1709195283.png",
+        "provider": "L'Oreal Paris",
+        "shortDescription": "Voluptuous volume and intense length with a full lash fringe that's feathery soft"
+    },
+    {
+        "id": 2,
+        "name": "Maybelline Fit Me Matte + Poreless Foundation",
+        "smallImageUrl": "https://pro-fra-s3-productsassets.rossmann.pl/product_7_medium/261655_360_350_1709165010.png",
+        "provider": "Maybelline",
+        "shortDescription": "Mattifies and refines pores, leaving a natural, seamless finish"
+    },
+    {
+        "id": 3,
+        "name": "NYX Professional Makeup Soft Matte Lip Cream",
+        "smallImageUrl": "https://pro-fra-s3-productsassets.rossmann.pl/product_7_medium/2080170_360_350_1710513339.png",
+        "provider": "NYX Professional Makeup",
+        "shortDescription": "Velvety smooth, long-lasting matte finish in vibrant colors"
+    },
+    {
+        "id": 4,
+        "name": "Urban Decay Naked Eyeshadow Palette",
+        "smallImageUrl": "https://example.com/image4.jpg",
+        "provider": "Urban Decay",
+        "shortDescription": "Neutral eyeshadows with smooth, blendable textures for endless eye looks"
+    },
+    {
+        "id": 5,
+        "name": "MAC Cosmetics Studio Fix Powder Plus Foundation",
+        "smallImageUrl": "https://example.com/image5.jpg",
+        "provider": "MAC Cosmetics",
+        "shortDescription": "A one-step powder and foundation that provides a smooth, flawless, matte finish"
+    },
+    {
+        "id": 6,
+        "name": "Clinique Dramatically Different Moisturizing Lotion+",
+        "smallImageUrl": "https://example.com/image6.jpg",
+        "provider": "Clinique",
+        "shortDescription": "Hydrates all day, helps strengthen skin's moisture barrier, leaves skin glowing"
+    },
+    {
+        "id": 7,
+        "name": "Anastasia Beverly Hills Dipbrow Pomade",
+        "smallImageUrl": "https://example.com/image7.jpg",
+        "provider": "Anastasia Beverly Hills",
+        "shortDescription": "Waterproof eyebrow pomade that sculpts and defines brows"
+    },
+    {
+        "id": 8,
+        "name": "Too Faced Better Than Sex Mascara",
+        "smallImageUrl": "https://example.com/image8.jpg",
+        "provider": "Too Faced",
+        "shortDescription": "High-performance mascara that lengthens, volumizes, and curls lashes"
+    },
+    {
+        "id": 9,
+        "name": "Revlon ColorStay Liquid Eyeliner",
+        "smallImageUrl": "https://example.com/image9.jpg",
+        "provider": "Revlon",
+        "shortDescription": "Long-wearing, felt-tip liquid eyeliner for precise application"
+    },
+    {
+        "id": 10,
+        "name": "Benefit Cosmetics Hoola Matte Bronzer",
+        "smallImageUrl": "https://example.com/image10.jpg",
+        "provider": "Benefit Cosmetics",
+        "shortDescription": "Award-winning bronzing powder for a natural-looking tan"
+    },
+    {
+        "id": 11,
+        "name": "Tarte Shape Tape Concealer",
+        "smallImageUrl": "https://example.com/image11.jpg",
+        "provider": "Tarte",
+        "shortDescription": "Full-coverage, creamy concealer that brightens and smooths the skin"
+    },
+    {
+        "id": 12,
+        "name": "NARS Radiant Creamy Concealer",
+        "smallImageUrl": "https://example.com/image12.jpg",
+        "provider": "NARS",
+        "shortDescription": "Buildable, medium-to-full coverage concealer with a luminous finish"
+    },
+    {
+        "id": 13,
+        "name": "Estée Lauder Double Wear Stay-in-Place Foundation",
+        "smallImageUrl": "https://example.com/image13.jpg",
+        "provider": "Estée Lauder",
+        "shortDescription": "24-hour wear foundation with a matte finish that looks fresh and natural"
+    },
+    {
+        "id": 14,
+        "name": "Laura Mercier Translucent Loose Setting Powder",
+        "smallImageUrl": "https://example.com/image14.jpg",
+        "provider": "Laura Mercier",
+        "shortDescription": "Lightweight, sheer setting powder that sets makeup for extended wear with a matte finish"
+    },
+    {
+        "id": 15,
+        "name": "Fenty Beauty Gloss Bomb Universal Lip Luminizer",
+        "smallImageUrl": "https://example.com/image15.jpg",
+        "provider": "Fenty Beauty",
+        "shortDescription": "High-shine, non-sticky lip gloss that hydrates and enhances lips with a universal shade"
+    }
+]

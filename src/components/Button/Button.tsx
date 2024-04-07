@@ -15,9 +15,11 @@ const Button = ({
     type="button"
     className={className}
     style={{
+      flex: 1,
       display: 'flex',
       flexDirection: 'row',
       gap: 10,
+      justifyContent: 'center',
       alignItems: 'center',
     }}
     onClick={onClick}
