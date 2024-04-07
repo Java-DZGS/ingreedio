@@ -6,6 +6,7 @@ import './Home.scss';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
+import { getUrl } from '../../utils/navigation';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
@@ -14,16 +15,11 @@ const Home = (): ReactElement => {
   const [ingredients, setIngredients] = useState<string[]>([]);
 
   const handleSearch = () => {
-    const queryParams = new URLSearchParams();
-    if (product) queryParams.set('product', product);
-    if (ingredients.length > 0) {
-      const ingredientsString = ingredients.join(',');
-      queryParams.set('ingredients', ingredientsString);
-    }
-
-    const searchUrl = `${ROUTES.PRODUCTS}?${queryParams.toString()}`;
-
-    navigate(searchUrl);
+    const params = {
+      product,
+      ingredients: ingredients.join(','),
+    };
+    navigate(getUrl(params, ROUTES.PRODUCTS));
   };
 
   return (
