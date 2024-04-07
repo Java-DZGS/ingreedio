@@ -11,7 +11,6 @@ import profileIcon from '../assets/icons/profile.svg';
 
 const Header = (): ReactElement => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const isAuthenticated = useIsAuthenticated;
 
   return (

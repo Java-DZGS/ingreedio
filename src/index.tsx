@@ -18,6 +18,8 @@ export type IRootState = ReturnType<typeof store.getState>
 const authStore = createStore<IUserData>({
   authName: '_auth',
   authType: 'localstorage',
+  // todo: refresh tokens
+  // refresh: refresh,
 });
 
 const root = ReactDOM.createRoot(

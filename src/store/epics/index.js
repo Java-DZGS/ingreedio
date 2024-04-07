@@ -22,8 +22,8 @@ const signUpEpic = (action$, store) => action$.pipe(
       userName, displayName, email, password,
     },
   }) => from(services.signUpApi(userName, displayName, email, password)).pipe(
-    map((response) => actions.signInSuccess(response.data)),
-    catchError((error) => of(actions.signInFailure(error.message))),
+    map((response) => actions.signUpSuccess(response.data)),
+    catchError((error) => of(actions.signUpFailure(error.message))),
   )),
 );
 

@@ -22,9 +22,24 @@ const signUpRequest = (userName, displayName, email, password) => ({
   },
 });
 
+const signUpSuccess = () => ({
+  type: types.SIGN_UP_SUCCESS,
+});
+
+const signUpFailure = () => ({
+  type: types.SIGN_UP_SUCCESS,
+});
+
+const signOut = () => ({
+  type: types.SIGN_OUT,
+});
+
 export default {
   signInRequest,
   signInSuccess,
   signInFailure,
   signUpRequest,
+  signUpSuccess,
+  signUpFailure,
+  signOut,
 };

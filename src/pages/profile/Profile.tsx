@@ -1,11 +1,15 @@
 import React, { ReactElement } from 'react';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './Profile.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import ProfileSection from '../../components/ProfileSection/ProfileSection';
 import UserDetails from '../../components/UserDetails/UserDetails';
 import TagList from '../../components/TagList/TagList';
+import { ROUTES } from '../../routes/routes';
+import actions from '../../store/actions';
 
 // eslint-disable-next-line arrow-body-style
 const Profile = (): ReactElement => {
@@ -36,7 +40,9 @@ const Profile = (): ReactElement => {
     'dupa',
   ];
 
+  const navigate = useNavigate();
   const signOut = useSignOut();
+  const dispatch = useDispatch();
 
   const handleDeleteTag = (index: number) => {
     // Implement delete tag logic here
@@ -44,7 +50,9 @@ const Profile = (): ReactElement => {
   };
 
   const handleSignOut = () => {
+    dispatch(actions.signOut());
     signOut();
+    navigate(ROUTES.HOME);
   };
 
   return (
