@@ -1,13 +1,14 @@
 // ProductList.tsx
 
 import React, { ReactElement, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import products from '../../ProductsExample.json';
 import './ProductList.scss'; // Import SCSS file for styling
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import ScrollBar from '../../components/Scrollbar/ScrollBar';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
@@ -24,49 +25,24 @@ const ProductList = (): ReactElement => {
 
   return (
     <div className="product-list-page">
-      <Scrollbars
-        className="scrollbar-container"
-        renderThumbVertical={({ style, ...props }) => (
-          <div
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props}
-            style={{
-              ...style,
-              backgroundColor: 'rgba(29, 108, 226, 0.27)',
-              borderRadius: 10,
-            }}
-          />
-        )}
-        renderTrackVertical={({ style, ...props }) => (
-          <div
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props}
-            style={{
-              ...style,
-              backgroundColor: 'rgba(29, 108, 226, 0.17)',
-              borderRadius: 10,
-              height: '100%',
-              top: 0,
-              right: 0,
-            }}
-          />
-        )}
-      >
-        <div className="product-grid">
+      <ScrollBar className="scrollbar-container">
+        <ul className="product-grid">
           {products.map((product) => (
-            <div key={product.id} className="product">
-              <ProductTile
-                name={product.name}
-                provider={product.provider}
-                smallImageUrl={product.smallImageUrl}
-                shortDescription={product.shortDescription}
-                rating={3}
-                isLiked
-              />
-            </div>
+            <li key={product.id} className="product">
+              <Link to={`/product/${product.id}`}>
+                <ProductTile
+                  name={product.name}
+                  provider={product.provider}
+                  smallImageUrl={product.smallImageUrl}
+                  shortDescription={product.shortDescription}
+                  rating={3}
+                  isLiked
+                />
+              </Link>
+            </li>
           ))}
-        </div>
-      </Scrollbars>
+        </ul>
+      </ScrollBar>
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">

@@ -1,24 +1,22 @@
 .star-rating {
-    display: flex;
-    align-items: center;
-  
-    .stars {
-      margin-right: 5px;
-      .star {
-        color: rgb(184, 184, 184);
-        font-size: 24px;
-        &.full-star {
-          color: gold;
-        }
-        &.half-star {
-          color: gold;
-          
-        }
+  display: flex;
+  align-items: center;
+
+  .stars {
+    margin-right: 5px;
+    .star {
+      color: rgb(184, 184, 184);
+
+      &.full-star {
+        color: gold;
+      }
+      &.half-star {
+        color: gold;
       }
     }
-  
-    .rating-text {
-      font-size: 16px;
-    }
   }
-  
+
+  .rating-text {
+    font-size: 60%;
+  }
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../Card/Card';
 import './ProductTile.scss';
 import StarRating from '../StarRating/StarRating';
+import heart from '../../assets/icons/heart.svg';
 
 type ProductTileProps = {
   name: string;
@@ -26,12 +27,17 @@ const ProductTile = ({
         <img src={smallImageUrl} alt={name} className="product-image" />
       </div>
       <div className="product-details">
-        <h2 className="product-name">{name}</h2>
+        <div className="product-name-container">
+          <h2 className="product-name">{name}</h2>
+          {isLiked && <img src={heart} alt="Liked" className="heart-icon" />}
+        </div>
 
         <p className="product-distributor">{provider}</p>
 
         <p className="product-description">{shortDescription}</p>
-        <StarRating rating={rating} />
+        <div className="star-rating-container">
+          <StarRating rating={rating} />
+        </div>
       </div>
     </div>
   </Card>
