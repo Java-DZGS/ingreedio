@@ -55,10 +55,13 @@ export const auth = (state = initialState, action) => {
       };
 
     case actions.SIGN_OUT:
-      console.log('recuder signing out');
+      return state;
+
+    case actions.END_AUTH_ACTION:
       return {
         ...state,
         loginSuccessful: null,
+        signupSuccessful: null,
       };
 
     default:

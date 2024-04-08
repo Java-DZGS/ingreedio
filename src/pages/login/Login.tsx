@@ -29,7 +29,7 @@ const Login = (): ReactElement => {
   const [loggingIn, setLoggingIn] = useState(false);
 
   useEffect(() => {
-    if (!loggingIn) return;
+    if (!loggingIn || loginSuccessful == null) return;
 
     if (loginSuccessful) {
       signIn({
@@ -46,7 +46,9 @@ const Login = (): ReactElement => {
       // todo: proper error message
       alert('Login unsuccessful');
     }
+
     setLoggingIn(false);
+    dispatch(actions.endAuthAction());
   }, [loginSuccessful]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

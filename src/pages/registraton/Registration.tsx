@@ -27,7 +27,7 @@ const Registration = (): ReactElement => {
   const [signingUp, setSigningUp] = useState(false);
 
   useEffect(() => {
-    if (!signingUp) return;
+    if (!signingUp || signupSuccessful == null) return;
 
     if (signupSuccessful) {
       navigate(ROUTES.LOGIN);
@@ -35,7 +35,9 @@ const Registration = (): ReactElement => {
       // todo: proper error message
       alert('Sign up unsuccessful');
     }
+
     setSigningUp(false);
+    dispatch(actions.endAuthAction());
   }, [signupSuccessful]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -34,6 +34,10 @@ const signOut = () => ({
   type: types.SIGN_OUT,
 });
 
+const endAuthAction = () => ({
+  type: types.END_AUTH_ACTION,
+});
+
 export default {
   signInRequest,
   signInSuccess,
@@ -42,4 +46,5 @@ export default {
   signUpSuccess,
   signUpFailure,
   signOut,
+  endAuthAction,
 };
