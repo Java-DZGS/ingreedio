@@ -13,8 +13,6 @@ interface IUserData {
   uid: string;
 }
 
-export type IRootState = ReturnType<typeof store.getState>
-
 const authStore = createStore<IUserData>({
   authName: '_auth',
   authType: 'localstorage',

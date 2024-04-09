@@ -1,22 +1,24 @@
-import actions from '../../types';
+import { AnyAction } from 'redux';
+import { types } from '../../actions';
 
 const initialState = {
-  loginSuccessful: null,
-  signupSuccessful: null,
-  accessToken: null,
-  refreshToken: null,
-  buttonLoading: false,
+  loginSuccessful: null as boolean | null,
+  signupSuccessful: null as boolean | null,
+  accessToken: '' as string,
+  refreshToken: '' as string,
+  buttonLoading: false as boolean,
 };
 
-export const auth = (state = initialState, action) => {
+export const auth = (state: typeof initialState = initialState, action: AnyAction)
+  : typeof initialState => {
   switch (action.type) {
-    case actions.SIGN_IN_REQUEST:
+    case types.SIGN_IN_REQUEST:
       return {
         ...state,
         buttonLoading: true,
       };
 
-    case actions.SIGN_IN_SUCCESS:
+    case types.SIGN_IN_SUCCESS:
       return {
         ...state,
         loginSuccessful: true,
@@ -25,39 +27,39 @@ export const auth = (state = initialState, action) => {
         buttonLoading: false,
       };
 
-    case actions.SIGN_IN_FAILURE:
+    case types.SIGN_IN_FAILURE:
       return {
         ...state,
         loginSuccessful: false,
-        accessToken: null,
-        refreshToken: null,
+        accessToken: '',
+        refreshToken: '',
         buttonLoading: false,
       };
 
-    case actions.SIGN_UP_REQUEST:
+    case types.SIGN_UP_REQUEST:
       return {
         ...state,
         buttonLoading: true,
       };
 
-    case actions.SIGN_UP_SUCCESS:
+    case types.SIGN_UP_SUCCESS:
       return {
         ...state,
         signupSuccessful: true,
         buttonLoading: false,
       };
 
-    case actions.SIGN_UP_FAILURE:
+    case types.SIGN_UP_FAILURE:
       return {
         ...state,
         signupSuccessful: false,
         buttonLoading: false,
       };
 
-    case actions.SIGN_OUT:
+    case types.SIGN_OUT:
       return state;
 
-    case actions.END_AUTH_ACTION:
+    case types.END_AUTH_ACTION:
       return {
         ...state,
         loginSuccessful: null,

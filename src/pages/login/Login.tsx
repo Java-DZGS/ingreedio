@@ -1,14 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import './Login.scss';
-import { Button, FormControl, FormHelperText } from '@chakra-ui/react';
+import { Button, FormControl } from '@chakra-ui/react';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import Input from '../../components/Input/Input';
 import { ROUTES } from '../../routes/routes';
 import actions from '../../store/actions';
-import { IRootState } from '../..';
+import { RootState } from '../../store/reducers';
 
 const Login = (): ReactElement => {
   // Navigate hook
@@ -21,7 +20,7 @@ const Login = (): ReactElement => {
     loginSuccessful,
     accessToken,
     buttonLoading,
-  } = useSelector((state: IRootState) => state.auth);
+  } = useSelector((state: RootState) => state.auth);
 
   // States
   const [username, setUsername] = useState('');

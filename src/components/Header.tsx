@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import FilledButton from './FilledButton/FilledButton';

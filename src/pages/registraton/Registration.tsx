@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
 import { ROUTES } from '../../routes/routes';
 import actions from '../../store/actions';
-import { IRootState } from '../..';
+import { RootState } from '../../store/reducers';
 
 const Registration = (): ReactElement => {
   // Navigate hook
@@ -17,7 +17,7 @@ const Registration = (): ReactElement => {
   const {
     signupSuccessful,
     buttonLoading,
-  } = useSelector((state: IRootState) => state.auth);
+  } = useSelector((state: RootState) => state.auth);
 
   // States
   const [email, setEmail] = useState('');
