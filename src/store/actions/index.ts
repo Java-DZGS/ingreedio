@@ -30,7 +30,7 @@ const signInFailure = (error: AxiosError): AnyAction => ({
 });
 
 const signUpRequest = (
-  userName: string,
+  username: string,
   displayName: string,
   email: string,
   password: string,
@@ -38,7 +38,7 @@ const signUpRequest = (
   : AnyAction => ({
   type: types.SIGN_UP_REQUEST,
   payload: {
-    userName, displayName, email, password,
+    username, displayName, email, password,
   },
 });
 

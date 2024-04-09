@@ -8,19 +8,19 @@ export interface AuthResponse {
   refreshToken: string,
 }
 
-export const signInApi = (userName: string, password: string):
+export const signInApi = (username: string, password: string):
   Promise<AxiosResponse<AuthResponse>> => axios.post(
-  `${authApiUrl}/login`, { userName, password },
+  `${authApiUrl}/login`, { username, password },
 );
 
 export const signUpApi = (
-  userName: string,
+  username: string,
   displayName: string,
   email: string,
   password: string,
 ):
   Promise<AxiosResponse<AuthResponse>> => axios.post(
   `${authApiUrl}/register`, {
-    userName, displayName, email, password,
+    username, displayName, email, password,
   },
 );

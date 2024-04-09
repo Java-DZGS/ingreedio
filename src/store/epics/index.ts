@@ -15,10 +15,7 @@ const signInEpic = (
     services.signInApi(payload.username, payload.password),
   ).pipe(
     map((response) => actions.signInSuccess(response.data)),
-    catchError((error) => {
-      console.log(error);
-      return of(actions.signInFailure(error.message));
-    }),
+    catchError((error) => of(actions.signInFailure(error.message))),
   )),
 );
 
@@ -29,9 +26,9 @@ const signUpEpic = (
   ofType(types.SIGN_UP_REQUEST),
   switchMap(({
     payload: {
-      userName, displayName, email, password,
+      username, displayName, email, password,
     },
-  }) => from(services.signUpApi(userName, displayName, email, password)).pipe(
+  }) => from(services.signUpApi(username, displayName, email, password)).pipe(
     map((response) => actions.signUpSuccess()),
     catchError((error) => of(actions.signUpFailure(error.message))),
   )),
