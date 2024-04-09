@@ -1,0 +1,40 @@
+import React from 'react';
+import Card from '../Card/Card';
+import './ProductTile.scss';
+import StarRating from '../StarRating/StarRating';
+
+type ProductTileProps = {
+  name: string;
+  provider: string;
+  shortDescription: string;
+  rating: number;
+  isLiked: boolean;
+  smallImageUrl: string;
+};
+
+const ProductTile = ({
+  name,
+  provider,
+  shortDescription,
+  rating,
+  isLiked,
+  smallImageUrl,
+}: ProductTileProps): JSX.Element => (
+  <Card>
+    <div className="product-tile">
+      <div className="product-image-container">
+        <img src={smallImageUrl} alt={name} className="product-image" />
+      </div>
+      <div className="product-details">
+        <h2 className="product-name">{name}</h2>
+
+        <p className="product-distributor">{provider}</p>
+
+        <p className="product-description">{shortDescription}</p>
+        <StarRating rating={rating} />
+      </div>
+    </div>
+  </Card>
+);
+
+export default ProductTile;

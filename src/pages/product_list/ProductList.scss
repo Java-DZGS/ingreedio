@@ -1,0 +1,39 @@
+.product-list-page {
+  padding: 20px;
+  padding-top: 50px;
+  display: flex;
+  flex: 1;
+  .scrollbar-container {
+    width: 70%;
+    flex: 10;
+  }
+  .filters-container {
+    flex: 3;
+    padding: 20px;
+    background-color: 'rgba(229, 244, 255, 0.42)';
+
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .search-button-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .product-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 10px;
+    .product {
+      width: calc(50% - 20px);
+    }
+  }
+}
