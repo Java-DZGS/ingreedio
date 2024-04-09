@@ -1,0 +1,31 @@
+{
+  "id": 456,
+  "name": "Moisturizing Cream",
+  "largeImageUrl": "https://pro-fra-s3-productsassets.rossmann.pl/product_7_medium/2080170_360_350_1710513339.png",
+  "brand": "Skincare Co.",
+  "longDescription": "This rich cream hydrates and nourishes your skin.",
+  "volume": 100,
+  "ingredients": [
+    "Water",
+    "Glycerin",
+    "Shea Butter",
+    "Hyaluronic Acid",
+    "Water",
+    "Glycerin",
+    "Shea Butter",
+    "Hyaluronic Acid",
+    "Water",
+    "Glycerin",
+    "Shea Butter",
+    "Hyaluronic Acid",
+    "Water",
+    "Glycerin",
+    "Shea Butter",
+    "Hyaluronic Acid",
+    "Water", "Glycerin", "Shea Butter", "Hyaluronic Acid"
+  ],
+  "provider": "Rossmann",
+  "shortDescription": "Mattifies and refines pores, leaving a natural, seamless finish",
+  "rating": 6,
+  "isLiked": true
+}

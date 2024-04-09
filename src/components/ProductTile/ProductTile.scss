@@ -21,10 +21,18 @@
     flex: 1;
     max-width: calc(100% - 120px);
 
+    .product-name-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: left;
+      .heart-icon {
+        width: 20px;
+        margin-top: -5px;
+      }
+    }
     .product-name {
       font-weight: bold;
       font-size: 18px;
-      margin: 0;
     }
 
     .product-distributor {
@@ -40,6 +48,11 @@
       display: inline-block;
       overflow: hidden;
       width: calc(100%);
+      padding-bottom: 3px;
+    }
+
+    .star-rating-container {
+      font-size: 24px;
     }
   }
 }

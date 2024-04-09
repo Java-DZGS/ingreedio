@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Registration from './pages/registraton/Registration';
 import Profile from './pages/profile/Profile';
 import ProductList from './pages/product_list/ProductList';
+import ProductDetails from './pages/product_details/ProductDetails';
 
 function App(): ReactElement {
   return (
@@ -20,6 +21,7 @@ function App(): ReactElement {
           <Route path={ROUTES.REGISTRATION} element={<Registration />} />
           <Route path={ROUTES.PROFILE} element={<Profile />} />
           <Route path={ROUTES.PRODUCTS} element={<ProductList />} />
+          <Route path={ROUTES.PRODUCT} element={<ProductDetails />} />
         </Routes>
       </div>
     </div>
