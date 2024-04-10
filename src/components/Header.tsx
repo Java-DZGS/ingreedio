@@ -11,7 +11,7 @@ import profileIcon from '../assets/icons/profile.svg';
 
 const Header = (): ReactElement => {
   const navigate = useNavigate();
-  const isAuthenticated = useIsAuthenticated;
+  const isAuthenticated = useIsAuthenticated();
 
   return (
     <div className="header">
@@ -24,7 +24,7 @@ const Header = (): ReactElement => {
         <img src={logo} alt="Logo" />
       </div>
       <div className="right-control-container">
-        {isAuthenticated() ? (
+        {isAuthenticated ? (
           <div className="profile-button-container">
             <TextButton onClick={() => navigate(ROUTES.PROFILE)}>
               <div>
