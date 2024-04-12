@@ -1,10 +1,13 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import './Login.scss';
-import { Button, FormControl, FormHelperText } from '@chakra-ui/react';
+import { Button, FormControl } from '@chakra-ui/react';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
 import { ROUTES } from '../../routes/routes';
+import actions from '../../store/actions';
+import { RootState } from '../../store/reducers';
 
 const Login = (): ReactElement => {
   // Navigate hook
@@ -12,46 +15,59 @@ const Login = (): ReactElement => {
   // Sign in hook
   const signIn = useSignIn();
 
+  const dispatch = useDispatch();
+  const {
+    loginSuccessful,
+    accessToken,
+    buttonLoading,
+  } = useSelector((state: RootState) => state.auth);
+
   // States
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
 
-  // Password regex
+  useEffect(() => {
+    if (!loggingIn || loginSuccessful == null) return;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // Prevent from page reload
-    e.preventDefault();
-
-    // Set loading button
-    setLoading(true);
-
-    // TODO: get token from the backend and replace this timeout
-    setTimeout(() => {
-      setLoading(false);
-
+    if (loginSuccessful) {
       signIn({
         auth: {
-          // TODO: insert the token here
-          token: '<jwt token>',
+          token: accessToken,
         },
-        userState: { name: 'user', uuid: 123456 },
+        userState: { name: username },
+        // todo: refresh tokens
+        // refresh: refreshToken,
       });
 
       navigate(ROUTES.HOME);
-    }, 500);
+    } else {
+      // todo: proper error message
+      alert('Login unsuccessful');
+    }
+
+    setLoggingIn(false);
+    dispatch(actions.endAuthAction());
+  }, [loginSuccessful]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    setLoggingIn(true);
+    dispatch(actions.signInRequest(username, password));
+
+    // Prevent from page reload
+    e.preventDefault();
   };
 
   return (
     <div className="login-page">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <div className="email-container">
-            <FormControl id="email">
+          <div className="username-container">
+            <FormControl id="username">
               <Input
-                label="Email"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
+                label="Username"
+                type="text"
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </FormControl>
@@ -63,13 +79,8 @@ const Login = (): ReactElement => {
                 label="Password"
                 onChange={(e) => setPassword(e.target.value)}
                 minLength={6}
-                pattern="\D*\d+\D*"
                 required
               />
-              <FormHelperText>
-                Password must be at least 6 characters long and contain at least
-                1 digit.
-              </FormHelperText>
             </FormControl>
           </div>
           <Button
@@ -83,7 +94,7 @@ const Login = (): ReactElement => {
             }}
             colorScheme="green"
             type="submit"
-            isLoading={loading}
+            isLoading={buttonLoading}
           >
             Log in
           </Button>
