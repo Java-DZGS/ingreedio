@@ -11,23 +11,51 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import productJson from '../../ProductExample.json';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
+import { RootState } from '../../store/reducers';
+import actions from '../../store/actions';
+import { ProductDetailsResponse } from '../../services/productService/product.service';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
-  const [product, setProduct] = useState(productJson);
+  const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { products, productsList } = useSelector(
+    (state: RootState) => state.product,
+  );
+  var shortDescription = '';
 
   useEffect(() => {
-    // Fetch product details based on productId
-    // Example:
-    // fetchProduct(productId)
-    //   .then((product) => setProduct(product))
-    //   .catch((error) => console.error('Error fetching product:', error));
-  }, [productId]);
+    if (productId) {
+      const productIdNumber = parseInt(productId);
+      if (!isNaN(productIdNumber)) {
+        if (products) {
+          const cachedProduct = products.find((p) => p.id === productIdNumber);
+          if (cachedProduct) {
+            setProduct(cachedProduct);
+          } else {
+            dispatch(actions.fetchProductDetails(accessToken, productIdNumber));
+            shortDescription = productsList.find(
+              (p) => p.id === productIdNumber,
+            )
+              ? shortDescription
+              : '';
+          }
+        } else {
+          dispatch(actions.fetchProductDetails(accessToken, productIdNumber));
+          shortDescription = productsList.find((p) => p.id === productIdNumber)
+            ? shortDescription
+            : '';
+        }
+      }
+    }
+  }, [dispatch, productId, products]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -40,11 +68,11 @@ const ProductDetails = (): JSX.Element => {
             <ProductDescription
               name={product.name}
               provider={product.provider}
-              shortDescription={product.shortDescription}
+              shortDescription={shortDescription}
               volume={product.volume}
               brand={product.brand}
-              rating={product.rating}
-              isLiked={product.isLiked}
+              rating={5}
+              isLiked={false}
               largeImageUrl={product.largeImageUrl}
             />
             <div className="sections-card-container">

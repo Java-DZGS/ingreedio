@@ -2,14 +2,16 @@
 
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductTile from '../../components/ProductTile/ProductTile';
-import products from '../../ProductsExample.json';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
+import { RootState } from '../../store/reducers';
+import actions from '../../store/actions';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
@@ -23,7 +25,12 @@ const ProductList = (): ReactElement => {
     .split(',')
     .map((ingredient) => ingredient.trim());
 
+  const dispatch = useDispatch();
+  const { productsList } = useSelector((state: RootState) => state.product);
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
   const navigate = useNavigate();
+  const [products, setProducts] = useState(productsList);
   const [product, setProduct] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
@@ -34,21 +41,28 @@ const ProductList = (): ReactElement => {
       ingredients: ingredients.join(','),
       category,
     };
+
+    dispatch(actions.fetchProductsList(accessToken));
+    setProducts(productsList);
     navigate(getUrl(params, ROUTES.PRODUCTS));
   };
 
   useEffect(() => {
-    // Fetch products using productName and ingredientNames
-  }, [productName, ingredientNames]);
+    dispatch(actions.fetchProductsList(accessToken));
+    setProducts(productsList);
+    navigate(ROUTES.PRODUCTS);
+  }, [dispatch]);
+
 
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
         <ul className="product-grid">
-          {products.map((product) => (
+          {products && products.map((product) => (
             <li key={product.id} className="product">
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/products/${product.id}`}>
                 <ProductTile
+                  id={product.id}
                   name={product.name}
                   provider={product.provider}
                   smallImageUrl={product.smallImageUrl}

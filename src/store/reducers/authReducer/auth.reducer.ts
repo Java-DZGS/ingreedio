@@ -74,7 +74,7 @@ export const auth = (state: State = initialState, action: AnyAction)
         signupSuccessful: null,
       };
 
-    default:
+    default: 
       return state;
   }
 };

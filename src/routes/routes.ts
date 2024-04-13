@@ -4,5 +4,5 @@ export enum ROUTES {
   REGISTRATION = '/signup',
   PROFILE = '/profile',
   PRODUCTS = '/products',
-  PRODUCT = '/product/:productId'
+  PRODUCT = '/products/:productId'
 }
