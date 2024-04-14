@@ -32,7 +32,7 @@ export const getProductsListApi = (
 
 export const getProductDetailsApi = (
   accessToken: string,
-  id: number
+  id: number,
 ): Promise<AxiosResponse<ProductDetailsResponse>> => axios.get(`${productsApiUrl}/${id}`, {
   headers: {
     Authorization: `Bearer ${accessToken}`,
