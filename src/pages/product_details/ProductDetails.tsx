@@ -11,23 +11,37 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import productJson from '../../ProductExample.json';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
+import { RootState } from '../../store/reducers';
+import { ProductDetailsResponse, getProductDetailsApi } from '../../services/productService/product.service';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
-  const [product, setProduct] = useState(productJson);
+  const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const shortDescription = '';
+
+  const fetchProduct = async () => {
+    try {
+      const productIdNumber = Number(productId);
+      const response = await getProductDetailsApi(accessToken, productIdNumber);
+      if (response && response.data) {
+        setProduct(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   useEffect(() => {
-    // Fetch product details based on productId
-    // Example:
-    // fetchProduct(productId)
-    //   .then((product) => setProduct(product))
-    //   .catch((error) => console.error('Error fetching product:', error));
-  }, [productId]);
+    fetchProduct();
+  }, [dispatch, productId]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -40,11 +54,11 @@ const ProductDetails = (): JSX.Element => {
             <ProductDescription
               name={product.name}
               provider={product.provider}
-              shortDescription={product.shortDescription}
+              shortDescription={shortDescription}
               volume={product.volume}
               brand={product.brand}
-              rating={product.rating}
-              isLiked={product.isLiked}
+              rating={5}
+              isLiked={false}
               largeImageUrl={product.largeImageUrl}
             />
             <div className="sections-card-container">

@@ -25,7 +25,13 @@
     "react/require-default-props": "off",
     "@typescript-eslint/no-empty-function": "off",
     "jsx-a11y/click-events-have-key-events": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "@typescript-eslint/no-explicit-any": [
+      "error",
+      {
+        "ignoreRestArgs": true
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

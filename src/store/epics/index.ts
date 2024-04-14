@@ -11,9 +11,7 @@ const signInEpic = (
   state$: StateObservable<RootState>,
 ) => action$.pipe(
   ofType(types.SIGN_IN_REQUEST),
-  switchMap(({ payload }) => from(
-    services.signInApi(payload.username, payload.password),
-  ).pipe(
+  switchMap(({ payload }) => from(services.signInApi(payload.username, payload.password)).pipe(
     map((response) => actions.signInSuccess(response.data)),
     catchError((error) => of(actions.signInFailure(error.message))),
   )),
@@ -26,7 +24,10 @@ const signUpEpic = (
   ofType(types.SIGN_UP_REQUEST),
   switchMap(({
     payload: {
-      username, displayName, email, password,
+      username,
+      displayName,
+      email,
+      password,
     },
   }) => from(services.signUpApi(username, displayName, email, password)).pipe(
     map((response) => actions.signUpSuccess()),

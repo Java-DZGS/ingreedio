@@ -34,11 +34,13 @@ const signUpRequest = (
   displayName: string,
   email: string,
   password: string,
-)
-  : AnyAction => ({
+): AnyAction => ({
   type: types.SIGN_UP_REQUEST,
   payload: {
-    username, displayName, email, password,
+    username,
+    displayName,
+    email,
+    password,
   },
 });
 

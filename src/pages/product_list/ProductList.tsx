@@ -2,14 +2,16 @@
 
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductTile from '../../components/ProductTile/ProductTile';
-import products from '../../ProductsExample.json';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
+import { RootState } from '../../store/reducers';
+import { ProductResponse, getProductsListApi } from '../../services/productService/product.service';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
@@ -23,10 +25,24 @@ const ProductList = (): ReactElement => {
     .split(',')
     .map((ingredient) => ingredient.trim());
 
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
   const navigate = useNavigate();
+  const [products, setProducts] = useState<ProductResponse[]>([]);
   const [product, setProduct] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProductsListApi(accessToken);
+      if (response && response.data) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const handleSearch = () => {
     const params = {
@@ -34,20 +50,22 @@ const ProductList = (): ReactElement => {
       ingredients: ingredients.join(','),
       category,
     };
+    fetchProducts();
     navigate(getUrl(params, ROUTES.PRODUCTS));
   };
 
   useEffect(() => {
-    // Fetch products using productName and ingredientNames
-  }, [productName, ingredientNames]);
+    fetchProducts();
+  }, [accessToken]);
 
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
         <ul className="product-grid">
-          {products.map((product) => (
+          {products
+          && products.map((product) => (
             <li key={product.id} className="product">
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/products/${product.id}`}>
                 <ProductTile
                   name={product.name}
                   provider={product.provider}
