@@ -12,6 +12,7 @@ import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
 import { RootState } from '../../store/reducers';
 import actions from '../../store/actions';
+import { ProductResponse, getProductsListApi } from '../../services/productService/product.service';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
@@ -26,14 +27,24 @@ const ProductList = (): ReactElement => {
     .map((ingredient) => ingredient.trim());
 
   const dispatch = useDispatch();
-  const { productsList } = useSelector((state: RootState) => state.product);
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState(productsList);
+  const [products, setProducts] = useState<ProductResponse[]>([]);
   const [product, setProduct] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProductsListApi(accessToken);
+      if (response && response.data) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const handleSearch = () => {
     const params = {
@@ -41,38 +52,34 @@ const ProductList = (): ReactElement => {
       ingredients: ingredients.join(','),
       category,
     };
-
-    dispatch(actions.fetchProductsList(accessToken));
-    setProducts(productsList);
+    fetchProducts();
     navigate(getUrl(params, ROUTES.PRODUCTS));
   };
 
   useEffect(() => {
-    dispatch(actions.fetchProductsList(accessToken));
-    setProducts(productsList);
-    navigate(ROUTES.PRODUCTS);
-  }, [dispatch]);
-
+    fetchProducts();
+  }, [accessToken]);
 
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
         <ul className="product-grid">
-          {products && products.map((product) => (
-            <li key={product.id} className="product">
-              <Link to={`/products/${product.id}`}>
-                <ProductTile
-                  id={product.id}
-                  name={product.name}
-                  provider={product.provider}
-                  smallImageUrl={product.smallImageUrl}
-                  shortDescription={product.shortDescription}
-                  rating={3}
-                  isLiked
-                />
-              </Link>
-            </li>
-          ))}
+          {products &&
+            products.map((product) => (
+              <li key={product.id} className="product">
+                <Link to={`/products/${product.id}`}>
+                  <ProductTile
+                    id={product.id}
+                    name={product.name}
+                    provider={product.provider}
+                    smallImageUrl={product.smallImageUrl}
+                    shortDescription={product.shortDescription}
+                    rating={3}
+                    isLiked
+                  />
+                </Link>
+              </li>
+            ))}
         </ul>
       </ScrollBar>
       <div className="filters-container">
@@ -90,9 +97,11 @@ const ProductList = (): ReactElement => {
               label="Ingredients"
               placeholder="e.g. shea butter"
               initialValue={ingredientNames.join(', ')}
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
+              onChange={(value) =>
+                setIngredients(
+                  value.split(',').map((ingredient) => ingredient.trim()),
+                )
+              }
             />
           </div>
           <div className="category-search-container">

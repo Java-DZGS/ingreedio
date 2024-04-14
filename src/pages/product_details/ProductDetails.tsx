@@ -17,8 +17,7 @@ import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { RootState } from '../../store/reducers';
-import actions from '../../store/actions';
-import { ProductDetailsResponse } from '../../services/productService/product.service';
+import { ProductDetailsResponse, getProductDetailsApi } from '../../services/productService/product.service';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
@@ -26,36 +25,23 @@ const ProductDetails = (): JSX.Element => {
 
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state: RootState) => state.auth);
-  const { products, productsList } = useSelector(
-    (state: RootState) => state.product,
-  );
-  var shortDescription = '';
+  const shortDescription = '';
+
+  const fetchProduct = async () => {
+    try {
+      const productIdNumber = Number(productId);
+      const response = await getProductDetailsApi(accessToken, productIdNumber);
+      if (response && response.data) {
+        setProduct(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   useEffect(() => {
-    if (productId) {
-      const productIdNumber = parseInt(productId);
-      if (!isNaN(productIdNumber)) {
-        if (products) {
-          const cachedProduct = products.find((p) => p.id === productIdNumber);
-          if (cachedProduct) {
-            setProduct(cachedProduct);
-          } else {
-            dispatch(actions.fetchProductDetails(accessToken, productIdNumber));
-            shortDescription = productsList.find(
-              (p) => p.id === productIdNumber,
-            )
-              ? shortDescription
-              : '';
-          }
-        } else {
-          dispatch(actions.fetchProductDetails(accessToken, productIdNumber));
-          shortDescription = productsList.find((p) => p.id === productIdNumber)
-            ? shortDescription
-            : '';
-        }
-      }
-    }
-  }, [dispatch, productId, products]);
+    fetchProduct();
+  }, [dispatch, productId]);
 
   if (!product) {
     return <div>Loading...</div>;

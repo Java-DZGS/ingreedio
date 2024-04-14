@@ -35,42 +35,8 @@ const signUpEpic = (
     ),
   );
 
-const fetchProductsListEpic = (
-  action$: Observable<AnyAction>,
-  state$: StateObservable<RootState>,
-) =>
-  action$.pipe(
-    ofType(types.FETCH_PRODUCTS_LIST),
-    switchMap(({ payload: accessToken }) =>
-      from(services.getProductsListApi(accessToken)).pipe(
-        map((response: any) => actions.fetchProductsListSuccess(response)),
-        catchError((error) =>
-          of(actions.fetchProductsListFailure(error.message)),
-        ),
-      ),
-    ),
-  );
-
-  const fetchProductDetailsEpic = (
-    action$: Observable<AnyAction>,
-    state$: StateObservable<RootState>,
-  ) =>
-    action$.pipe(
-      ofType(types.FETCH_PRODUCT_DETAILS),
-      switchMap(({ payload: {accessToken, id} }) =>
-        from(services.getProductDetailsApi(accessToken, id)).pipe(
-          map((response: any) => actions.fetchProductDetailsSuccess(response)),
-          catchError((error) =>
-            of(actions.fetchProductDetailsFailure(error.message)),
-          ),
-        ),
-      ),
-    );
-
 // Combine epics
 export const rootEpic = combineEpics(
   signInEpic,
   signUpEpic,
-  fetchProductsListEpic,
-  fetchProductDetailsEpic
 );
