@@ -40,16 +40,13 @@ const ProductDescription = ({
       <p className="product-brand">{brand}</p>
       <p className="product-distributor">{provider}</p>
 
-      <p className="product-long-description">{shortDescription}</p>
+      <p className="product-short-description">{shortDescription}</p>
       <p className="product-volume">
         {volume}
         ml
       </p>
       <div className="star-rating-container">
         <StarRating rating={rating} />
-      </div>
-      <div>
-
       </div>
     </div>
   </div>

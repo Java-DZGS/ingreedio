@@ -64,22 +64,22 @@ const ProductList = (): ReactElement => {
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
         <ul className="product-grid">
-          {products &&
-            products.map((product) => (
-              <li key={product.id} className="product">
-                <Link to={`/products/${product.id}`}>
-                  <ProductTile
-                    id={product.id}
-                    name={product.name}
-                    provider={product.provider}
-                    smallImageUrl={product.smallImageUrl}
-                    shortDescription={product.shortDescription}
-                    rating={3}
-                    isLiked
-                  />
-                </Link>
-              </li>
-            ))}
+          {products
+          && products.map((product) => (
+            <li key={product.id} className="product">
+              <Link to={`/products/${product.id}`}>
+                <ProductTile
+                  id={product.id}
+                  name={product.name}
+                  provider={product.provider}
+                  smallImageUrl={product.smallImageUrl}
+                  shortDescription={product.shortDescription}
+                  rating={3}
+                  isLiked
+                />
+              </Link>
+            </li>
+          ))}
         </ul>
       </ScrollBar>
       <div className="filters-container">
@@ -97,11 +97,9 @@ const ProductList = (): ReactElement => {
               label="Ingredients"
               placeholder="e.g. shea butter"
               initialValue={ingredientNames.join(', ')}
-              onChange={(value) =>
-                setIngredients(
-                  value.split(',').map((ingredient) => ingredient.trim()),
-                )
-              }
+              onChange={(value) => setIngredients(
+                value.split(',').map((ingredient) => ingredient.trim()),
+              )}
             />
           </div>
           <div className="category-search-container">
