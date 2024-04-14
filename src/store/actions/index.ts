@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux';
 import { AxiosError } from 'axios';
 import { AuthResponse } from '../../services/authService/auth.service';
-import { ProductResponse } from '../../services/productService/product.service';
 
 export const types = {
   SIGN_IN_REQUEST: 'SIGN_IN_REQUEST',
@@ -11,7 +10,8 @@ export const types = {
   SIGN_UP_SUCCESS: 'SIGN_UP_SUCCESS',
   SIGN_UP_FAILURE: 'SIGN_UP_FAILURE',
   SIGN_OUT: 'SIGN_OUT',
-  END_AUTH_ACTION: 'END_AUTH_ACTION',};
+  END_AUTH_ACTION: 'END_AUTH_ACTION',
+};
 
 const signInRequest = (username: string, password: string): AnyAction => ({
   type: types.SIGN_IN_REQUEST,

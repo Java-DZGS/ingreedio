@@ -20,7 +20,7 @@ export interface ProductDetailsResponse {
   longDescription: string,
   volume: number,
   ingredients: string[],
-} 
+}
 
 export const getProductsListApi = (
   accessToken: string,

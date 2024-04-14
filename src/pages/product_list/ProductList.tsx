@@ -11,7 +11,6 @@ import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
 import { RootState } from '../../store/reducers';
-import actions from '../../store/actions';
 import { ProductResponse, getProductsListApi } from '../../services/productService/product.service';
 
 const ProductList = (): ReactElement => {
@@ -26,7 +25,6 @@ const ProductList = (): ReactElement => {
     .split(',')
     .map((ingredient) => ingredient.trim());
 
-  const dispatch = useDispatch();
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   const navigate = useNavigate();
@@ -69,7 +67,6 @@ const ProductList = (): ReactElement => {
             <li key={product.id} className="product">
               <Link to={`/products/${product.id}`}>
                 <ProductTile
-                  id={product.id}
                   name={product.name}
                   provider={product.provider}
                   smallImageUrl={product.smallImageUrl}

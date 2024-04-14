@@ -5,7 +5,6 @@ import StarRating from '../StarRating/StarRating';
 import heart from '../../assets/icons/heart.svg';
 
 type ProductTileProps = {
-  id: number,
   name: string;
   provider: string;
   shortDescription: string;
