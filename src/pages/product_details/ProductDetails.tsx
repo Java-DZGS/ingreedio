@@ -30,7 +30,7 @@ const ProductDetails = (): JSX.Element => {
   const fetchProduct = async () => {
     try {
       const productIdNumber = Number(productId);
-      const response = await getProductDetailsApi(accessToken, productIdNumber);
+      const response = await getProductDetailsApi(productIdNumber);
       if (response && response.data) {
         setProduct(response.data);
       }
