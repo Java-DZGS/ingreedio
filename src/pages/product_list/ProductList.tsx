@@ -29,8 +29,6 @@ const ProductList = (): ReactElement => {
     .split(',')
     .map((ingredient) => ingredient.trim());
 
-  const { accessToken } = useSelector((state: RootState) => state.auth);
-
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [name, setName] = useState(productName);
