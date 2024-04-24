@@ -24,7 +24,6 @@ const ProductDetails = (): JSX.Element => {
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
 
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((state: RootState) => state.auth);
   const shortDescription = '';
 
   const fetchProduct = async () => {
