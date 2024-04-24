@@ -24,13 +24,12 @@ const ProductDetails = (): JSX.Element => {
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
 
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((state: RootState) => state.auth);
   const shortDescription = '';
 
   const fetchProduct = async () => {
     try {
       const productIdNumber = Number(productId);
-      const response = await getProductDetailsApi(accessToken, productIdNumber);
+      const response = await getProductDetailsApi(productIdNumber);
       if (response && response.data) {
         setProduct(response.data);
       }

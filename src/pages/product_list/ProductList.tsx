@@ -1,5 +1,3 @@
-// ProductList.tsx
-
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,8 +8,12 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
-import { RootState } from '../../store/reducers';
-import { ProductResponse, getProductsListApi } from '../../services/productService/product.service';
+import {
+  ProductResponse,
+  getProductsListApi,
+  getFilteredProductsListApi,
+  ProductFilters,
+} from '../../services/productService/product.service';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
@@ -19,23 +21,38 @@ const ProductList = (): ReactElement => {
 
   const productName = queryParams.get('product') || '';
   const categoryName = queryParams.get('category') || '';
+  const providerName = queryParams.get('provider') || '';
+  const brandName = queryParams.get('brand') || '';
 
   const ingredientsString = queryParams.get('ingredients') || '';
   const ingredientNames = ingredientsString
     .split(',')
     .map((ingredient) => ingredient.trim());
 
-  const { accessToken } = useSelector((state: RootState) => state.auth);
-
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductResponse[]>([]);
-  const [product, setProduct] = useState(productName);
+  const [name, setName] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
+  const [provider, setProvider] = useState(providerName);
+  const [brand, setBrand] = useState(brandName);
+  const [volumeFrom, setVolumeFrom] = useState<string>('0');
+  const [volumeTo, setVolumeTo] = useState<string>('1000'); // default maximum value
+
+  const fetchFilteredProducts = async (params: ProductFilters) => {
+    try {
+      const response = await getFilteredProductsListApi(params);
+      if (response && response.data) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching filtered products:', error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
-      const response = await getProductsListApi(accessToken);
+      const response = await getProductsListApi();
       if (response && response.data) {
         setProducts(response.data);
       }
@@ -46,37 +63,53 @@ const ProductList = (): ReactElement => {
 
   const handleSearch = () => {
     const params = {
-      product,
-      ingredients: ingredients.join(','),
-      category,
+      name,
+      provider,
+      brand,
+      volumeFrom,
+      volumeTo,
     };
-    fetchProducts();
+    const volumeFromNumber = parseInt(volumeFrom, 10);
+    const volumeToNumber = parseInt(volumeTo, 10);
+
+    if (Number.isNaN(volumeFromNumber) || Number.isNaN(volumeToNumber)) {
+      console.error('Invalid volume values');
+      return;
+    }
+    const filterParams = {
+      name,
+      provider,
+      brand,
+      volumeFrom: volumeFromNumber,
+      volumeTo: volumeToNumber,
+    };
+    fetchFilteredProducts(filterParams);
     navigate(getUrl(params, ROUTES.PRODUCTS));
   };
 
   useEffect(() => {
     fetchProducts();
-  }, [accessToken]);
+  }, []);
 
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
         <ul className="product-grid">
           {products
-          && products.map((product) => (
-            <li key={product.id} className="product">
-              <Link to={`/products/${product.id}`}>
-                <ProductTile
-                  name={product.name}
-                  provider={product.provider}
-                  smallImageUrl={product.smallImageUrl}
-                  shortDescription={product.shortDescription}
-                  rating={3}
-                  isLiked
-                />
-              </Link>
-            </li>
-          ))}
+            && products.map((product) => (
+              <li key={product.id} className="product">
+                <Link to={`/products/${product.id}`}>
+                  <ProductTile
+                    name={product.name}
+                    provider={product.provider}
+                    smallImageUrl={product.smallImageUrl}
+                    shortDescription={product.shortDescription}
+                    rating={3}
+                    isLiked
+                  />
+                </Link>
+              </li>
+            ))}
         </ul>
       </ScrollBar>
       <div className="filters-container">
@@ -86,7 +119,21 @@ const ProductList = (): ReactElement => {
               label="Product"
               placeholder="e.g. shampoo"
               initialValue={productName}
-              onChange={(value) => setProduct(value)}
+              onChange={(value) => setName(value)}
+            />
+          </div>
+          <div className="provider-search-container">
+            <SearchBar
+              label="Provider"
+              placeholder="e.g. rossmann"
+              onChange={(value) => setProvider(value)}
+            />
+          </div>
+          <div className="brand-search-container">
+            <SearchBar
+              label="Brand"
+              placeholder="e.g. lovely"
+              onChange={(value) => setBrand(value)}
             />
           </div>
           <div className="ingredient-search-container">
@@ -104,6 +151,21 @@ const ProductList = (): ReactElement => {
               label="Category"
               placeholder="e.g. skin care"
               onChange={(value) => setCategory(value)}
+            />
+          </div>
+          <div className="volume-input-container">
+            <p>Volume:</p>
+            <input
+              type="number"
+              value={volumeFrom}
+              onChange={(e) => setVolumeFrom(e.target.value)}
+              placeholder="From"
+            />
+            <input
+              type="number"
+              value={volumeTo}
+              onChange={(e) => setVolumeTo(e.target.value)}
+              placeholder="To"
             />
           </div>
           <div className="search-button-container">
