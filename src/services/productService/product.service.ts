@@ -53,4 +53,3 @@ export const getFilteredProductsListApi = (
 export const getProductDetailsApi = (
   id: number,
 ): Promise<AxiosResponse<ProductDetailsResponse>> => axios.get(`${productsApiUrl}/${id}`);
-
