@@ -29,6 +29,8 @@ const ProductList = (): ReactElement => {
     .split(',')
     .map((ingredient) => ingredient.trim());
 
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [name, setName] = useState(productName);
@@ -53,6 +55,17 @@ const ProductList = (): ReactElement => {
   const fetchProducts = async () => {
     try {
       const response = await getProductsListApi();
+      if (response && response.data) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getProductsListApi(accessToken);
       if (response && response.data) {
         setProducts(response.data);
       }
