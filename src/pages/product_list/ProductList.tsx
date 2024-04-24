@@ -63,17 +63,6 @@ const ProductList = (): ReactElement => {
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      const response = await getProductsListApi(accessToken);
-      if (response && response.data) {
-        setProducts(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
   const handleSearch = () => {
     const params = {
       name,
