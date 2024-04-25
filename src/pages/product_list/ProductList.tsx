@@ -105,7 +105,7 @@ const ProductList = (): ReactElement => {
                     smallImageUrl={product.smallImageUrl}
                     shortDescription={product.shortDescription}
                     rating={3}
-                    isLiked
+                    isLiked 
                   />
                 </Link>
               </li>
