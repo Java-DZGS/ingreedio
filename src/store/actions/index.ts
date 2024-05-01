@@ -25,7 +25,6 @@ export const types = {
   NO_OP: 'NO_OP',
 };
 
-// Define action creators for liking ingredients
 export const likeIngredient = (ingredient: string): AnyAction => ({
   type: types.LIKE_INGREDIENT,
   payload: ingredient,
@@ -47,13 +46,11 @@ export const dislikeSuccess = (ingredient: string): AnyAction => ({
 });
 
 export const likeFailure = (error: AxiosError): AnyAction => ({
-  // Action creator for like failure
   type: types.LIKE_FAILURE,
   payload: error,
 });
 
 export const dislikeFailure = (error: AxiosError): AnyAction => ({
-  // Action creator for dislike failure
   type: types.DISLIKE_FAILURE,
   payload: error,
 });
