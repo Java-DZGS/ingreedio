@@ -27,6 +27,6 @@ jobs:
     - name: Run linting
       uses: reviewdog/action-eslint@v1
       with:
-        level: error
+        level: warning
         filter_mode: file
         fail_on_error: true
