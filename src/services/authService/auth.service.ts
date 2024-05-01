@@ -20,7 +20,7 @@ export const signUpApi = (
   password: string,
 ):
   Promise<AxiosResponse<AuthResponse>> => axios.post(
-  `${authApiUrl}/register`, {
+  `${apiUrl}/users`, {
     username, displayName, email, password,
   },
 );

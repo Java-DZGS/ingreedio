@@ -5,7 +5,7 @@ import './TagList.scss';
 type TagListProps = {
   tags: string[];
   color?: string;
-  onDelete: (index: number) => void;
+  onDelete: (ingredient: string) => void;
 };
 
 const TagList = ({
@@ -14,12 +14,12 @@ const TagList = ({
   onDelete,
 }: TagListProps): JSX.Element => (
   <div className="tag-list">
-    {tags.map((tag, index) => (
+    {tags.map((tag) => (
       <Tag
         key={tag.split(' ').join('-')}
         text={tag}
         color={color}
-        onDelete={() => onDelete(index)}
+        onDelete={() => onDelete(tag)}
       />
     ))}
   </div>

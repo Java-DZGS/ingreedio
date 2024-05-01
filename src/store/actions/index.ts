@@ -11,7 +11,76 @@ export const types = {
   SIGN_UP_FAILURE: 'SIGN_UP_FAILURE',
   SIGN_OUT: 'SIGN_OUT',
   END_AUTH_ACTION: 'END_AUTH_ACTION',
+  LIKE_INGREDIENT: 'LIKE_INGREDIENT',
+  DISLIKE_INGREDIENT: 'DISLIKE_INGREDIENT',
+  LIKE_SUCCESS: 'LIKE_SUCCESS',
+  DISLIKE_SUCCESS: 'DISLIKE_SUCCESS',
+  LIKE_FAILURE: 'LIKE_FAILURE',
+  DISLIKE_FAILURE: 'DISLIKE_FAILURE',
+  UNLIKE_INGREDIENT: 'UNLIKE_INGREDIENT',
+  UNDISLIKE_INGREDIENT: 'UNDISLIKE_INGREDIENT',
+  UNLIKE_SUCCESS: 'UNLIKE_SUCCESS',
+  UNDISLIKE_SUCCESS: 'UNDISLIKE_SUCCESS',
+  CLEAR_USER_DATA: 'CLEAR_USER_DATA',
+  NO_OP: 'NO_OP',
 };
+
+// Define action creators for liking ingredients
+export const likeIngredient = (ingredient: string): AnyAction => ({
+  type: types.LIKE_INGREDIENT,
+  payload: ingredient,
+});
+
+export const dislikeIngredient = (ingredient: string): AnyAction => ({
+  type: types.DISLIKE_INGREDIENT,
+  payload: ingredient,
+});
+
+export const likeSuccess = (ingredient: string): AnyAction => ({
+  type: types.LIKE_SUCCESS,
+  payload: ingredient,
+});
+
+export const dislikeSuccess = (ingredient: string): AnyAction => ({
+  type: types.DISLIKE_SUCCESS,
+  payload: ingredient,
+});
+
+export const likeFailure = (error: AxiosError): AnyAction => ({
+  // Action creator for like failure
+  type: types.LIKE_FAILURE,
+  payload: error,
+});
+
+export const dislikeFailure = (error: AxiosError): AnyAction => ({
+  // Action creator for dislike failure
+  type: types.DISLIKE_FAILURE,
+  payload: error,
+});
+
+export const unlikeIngredient = (ingredient: string): AnyAction => ({
+  type: types.UNLIKE_INGREDIENT,
+  payload: ingredient,
+});
+
+export const undislikeIngredient = (ingredient: string): AnyAction => ({
+  type: types.UNDISLIKE_INGREDIENT,
+  payload: ingredient,
+});
+
+export const unlikeSuccess = (ingredient: string): AnyAction => ({
+  type: types.UNLIKE_SUCCESS,
+  payload: ingredient,
+});
+
+export const undislikeSuccess = (ingredient: string): AnyAction => ({
+  type: types.UNDISLIKE_SUCCESS,
+  payload: ingredient,
+});
+
+export const clearUserData = (): AnyAction => ({
+  type: types.CLEAR_USER_DATA,
+});
 
 const signInRequest = (username: string, password: string): AnyAction => ({
   type: types.SIGN_IN_REQUEST,
@@ -70,4 +139,13 @@ export default {
   signUpFailure,
   signOut,
   endAuthAction,
+  likeIngredient,
+  dislikeIngredient,
+  likeSuccess,
+  dislikeSuccess,
+  unlikeIngredient,
+  undislikeIngredient,
+  unlikeSuccess,
+  undislikeSuccess,
+  clearUserData,
 };
