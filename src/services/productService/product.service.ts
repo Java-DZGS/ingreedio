@@ -26,8 +26,6 @@ export interface ProductFilters {
   name: string;
   provider: string;
   brand: string;
-  volumeFrom: number;
-  volumeTo: number;
 }
 
 export const getProductsListApi = (): Promise<

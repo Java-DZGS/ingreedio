@@ -1,0 +1,52 @@
+@import '../../theme/theme.scss';
+
+.product-ingredient-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #333;
+    font-weight: 600;
+  }
+
+  &.liked {
+    font-weight: 600; 
+    color: $primary-blue;
+  }
+
+  &.disliked {
+    font-weight: 600; 
+    color: $primary-orange;
+  }
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-left: 5px;
+      cursor: pointer;
+      transition: color 0.3s;
+      color: #666;
+      padding: 1px;
+      border-radius: 3px;
+
+      &.liked {
+        font-weight: 600; 
+        color: $primary-blue;
+      }
+
+      &.disliked {
+        font-weight: 600; 
+        color: $primary-orange;
+      }
+
+      &:hover {
+        color: $primary-green;
+      }
+    }
+  }
+}

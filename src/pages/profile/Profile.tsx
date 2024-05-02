@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './Profile.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -9,7 +9,8 @@ import ProfileSection from '../../components/ProfileSection/ProfileSection';
 import UserDetails from '../../components/UserDetails/UserDetails';
 import TagList from '../../components/TagList/TagList';
 import { ROUTES } from '../../routes/routes';
-import actions from '../../store/actions';
+import actions, { undislikeIngredient, unlikeIngredient } from '../../store/actions';
+import { RootState } from '../../store/reducers';
 
 // eslint-disable-next-line arrow-body-style
 const Profile = (): ReactElement => {
@@ -19,34 +20,20 @@ const Profile = (): ReactElement => {
     { title: 'Email', value: 'johndoe@example.com' },
   ];
 
-  const tags = [
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-    'dupa',
-  ];
+  const { likedIngredients, dislikedIngredients } = useSelector(
+    (state: RootState) => state.like,
+  );
 
   const navigate = useNavigate();
   const signOut = useSignOut();
   const dispatch = useDispatch();
 
-  const handleDeleteTag = (index: number) => {
-    // Implement delete tag logic here
-    console.log('Deleting tag at index', index);
+  const handleDeleteLiked = (ingredient: string) => {
+    dispatch(unlikeIngredient(ingredient));
+  };
+
+  const handleDeleteDisliked = (ingredient: string) => {
+    dispatch(undislikeIngredient(ingredient));
   };
 
   const handleSignOut = () => {
@@ -63,10 +50,7 @@ const Profile = (): ReactElement => {
             <div className="card-header">
               <div className="card-header-text">Your profile</div>
               <div className="logout-button">
-                <FilledButton
-                  reverseGradient
-                  onClick={handleSignOut}
-                >
+                <FilledButton reverseGradient onClick={handleSignOut}>
                   Log out
                 </FilledButton>
               </div>
@@ -79,8 +63,8 @@ const Profile = (): ReactElement => {
             <ProfileSection title="Liked ingredients">
               <div className="inner-tags-container">
                 <TagList
-                  tags={tags}
-                  onDelete={handleDeleteTag}
+                  tags={likedIngredients}
+                  onDelete={handleDeleteLiked}
                   color="rgba(135, 185, 255, 0.47)"
                 />
               </div>
@@ -88,8 +72,8 @@ const Profile = (): ReactElement => {
             <ProfileSection title="Disliked ingredients">
               <div className="inner-tags-container">
                 <TagList
-                  tags={tags}
-                  onDelete={handleDeleteTag}
+                  tags={dislikedIngredients}
+                  onDelete={handleDeleteDisliked}
                   color="rgba(255, 171, 135, 0.47)"
                 />
               </div>

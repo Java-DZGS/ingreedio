@@ -31,7 +31,8 @@
       {
         "ignoreRestArgs": true
       }
-    ]
+    ],
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
   },
   "settings": {
     "import/resolver": {

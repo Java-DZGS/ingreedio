@@ -1,15 +1,15 @@
 import { AnyAction } from 'redux';
-import { types } from '../../actions';
+import { types } from '../actions';
 
-type State = {
-  loginSuccessful: boolean | null,
-  signupSuccessful: boolean | null,
-  accessToken: string,
-  refreshToken: string,
-  buttonLoading: boolean,
-}
+type AuthState = {
+  loginSuccessful: boolean | null;
+  signupSuccessful: boolean | null;
+  accessToken: string;
+  refreshToken: string;
+  buttonLoading: boolean;
+};
 
-const initialState: State = {
+const initialState: AuthState = {
   loginSuccessful: null,
   signupSuccessful: null,
   accessToken: '',
@@ -17,8 +17,10 @@ const initialState: State = {
   buttonLoading: false,
 };
 
-export const auth = (state: State = initialState, action: AnyAction)
-  : typeof initialState => {
+export const auth = (
+  state: AuthState = initialState,
+  action: AnyAction,
+): typeof initialState => {
   switch (action.type) {
     case types.SIGN_IN_REQUEST:
       return {

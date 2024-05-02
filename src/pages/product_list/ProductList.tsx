@@ -36,8 +36,6 @@ const ProductList = (): ReactElement => {
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
   const [provider, setProvider] = useState(providerName);
   const [brand, setBrand] = useState(brandName);
-  const [volumeFrom, setVolumeFrom] = useState<string>('0');
-  const [volumeTo, setVolumeTo] = useState<string>('1000'); // default maximum value
 
   const fetchFilteredProducts = async (params: ProductFilters) => {
     try {
@@ -66,22 +64,12 @@ const ProductList = (): ReactElement => {
       name,
       provider,
       brand,
-      volumeFrom,
-      volumeTo,
     };
-    const volumeFromNumber = parseInt(volumeFrom, 10);
-    const volumeToNumber = parseInt(volumeTo, 10);
 
-    if (Number.isNaN(volumeFromNumber) || Number.isNaN(volumeToNumber)) {
-      console.error('Invalid volume values');
-      return;
-    }
     const filterParams = {
       name,
       provider,
       brand,
-      volumeFrom: volumeFromNumber,
-      volumeTo: volumeToNumber,
     };
     fetchFilteredProducts(filterParams);
     navigate(getUrl(params, ROUTES.PRODUCTS));
@@ -141,9 +129,7 @@ const ProductList = (): ReactElement => {
               label="Ingredients"
               placeholder="e.g. shea butter"
               initialValue={ingredientNames.join(', ')}
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
+              onChange={(value) => setIngredients(value.split(',').map((ingredient) => ingredient.trim()))}
             />
           </div>
           <div className="category-search-container">
@@ -151,21 +137,6 @@ const ProductList = (): ReactElement => {
               label="Category"
               placeholder="e.g. skin care"
               onChange={(value) => setCategory(value)}
-            />
-          </div>
-          <div className="volume-input-container">
-            <p>Volume:</p>
-            <input
-              type="number"
-              value={volumeFrom}
-              onChange={(e) => setVolumeFrom(e.target.value)}
-              placeholder="From"
-            />
-            <input
-              type="number"
-              value={volumeTo}
-              onChange={(e) => setVolumeTo(e.target.value)}
-              placeholder="To"
             />
           </div>
           <div className="search-button-container">

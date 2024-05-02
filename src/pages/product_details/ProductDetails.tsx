@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  CircularProgress,
   Tab,
   TabIndicator,
   TabList,
@@ -17,11 +18,18 @@ import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { RootState } from '../../store/reducers';
-import { ProductDetailsResponse, getProductDetailsApi } from '../../services/productService/product.service';
+import {
+  ProductDetailsResponse,
+  getProductDetailsApi,
+} from '../../services/productService/product.service';
+import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+  const { likedIngredients, dislikedIngredients } = useSelector(
+    (state: RootState) => state.like,
+  );
 
   const dispatch = useDispatch();
   const shortDescription = '';
@@ -43,8 +51,13 @@ const ProductDetails = (): JSX.Element => {
   }, [dispatch, productId]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <div className="product-details-container">
+        <CircularProgress isIndeterminate color="green" trackColor="none" />
+      </div>
+    );
   }
+
   return (
     <div className="product-details-container">
       <div className="card-wrapper">
@@ -84,7 +97,15 @@ const ProductDetails = (): JSX.Element => {
                             <ul>
                               {product.ingredients.map((ingredient) => (
                                 <li key={ingredient + Math.random()}>
-                                  {ingredient}
+                                  <ProductDetailsIngredient
+                                    ingredient={ingredient}
+                                    isLiked={likedIngredients.includes(
+                                      ingredient,
+                                    )}
+                                    isDisliked={dislikedIngredients.includes(
+                                      ingredient,
+                                    )}
+                                  />
                                 </li>
                               ))}
                             </ul>
