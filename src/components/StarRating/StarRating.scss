@@ -4,19 +4,19 @@
 
   .stars {
     margin-right: 5px;
+    display: flex;
+    flex-direction: row;
+
     .star {
       color: rgb(184, 184, 184);
 
-      &.full-star {
-        color: gold;
-      }
-      &.half-star {
+      &.full-star, &.half-star {
         color: gold;
       }
     }
   }
 
   .rating-text {
-    font-size: 60%;
+    font-size: 80%;
   }
 }

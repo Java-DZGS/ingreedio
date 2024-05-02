@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import './StarRating.scss';
 
 interface StarRatingProps {
@@ -11,26 +12,17 @@ const StarRating: React.FC<StarRatingProps> = ({ rating }) => {
   const fullStars = Math.floor(rating / 2);
   const hasHalfStar = roundedRating !== fullStars;
 
-  // Create an array of stars
   const starsArray = Array.from({ length: 5 }, (_, index) => {
     if (index < fullStars) {
-      return (
-        <span key={index} className="star full-star">
-          &#9733;
-        </span>
-      ); // Full star
+      return <FaStar key={index} className="star full-star" />;
     }
     if (hasHalfStar && index === fullStars) {
       return (
-        <span key={index} className="star half-star">
-          &#9733;
-        </span>
-      ); // Half star
+        <FaStarHalfAlt key={index} className="star half-star" />
+      );
     }
     return (
-      <span key={index} className="star">
-        &#9734;
-      </span>
+      <FaRegStar key={index} className="star empty-star" />
     ); // Empty star
   });
 
