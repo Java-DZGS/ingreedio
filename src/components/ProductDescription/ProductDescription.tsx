@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProductDescription.scss';
 import StarRating from '../StarRating/StarRating';
-import heart from '../../assets/icons/heart.svg';
+import HeartComponent from '../HeartComponent/HeartComponent';
 
 type ProductDescriptionProps = {
   name: string;
@@ -12,6 +12,9 @@ type ProductDescriptionProps = {
   rating: number;
   isLiked: boolean;
   largeImageUrl: string;
+  showLike: boolean;
+  handleLike: () => void;
+  handleUnlike: () => void;
 };
 
 const ProductDescription = ({
@@ -23,14 +26,18 @@ const ProductDescription = ({
   largeImageUrl,
   volume,
   brand,
+  showLike,
+  handleLike,
+  handleUnlike,
 }: ProductDescriptionProps): JSX.Element => (
   <div className="product-description-container">
     <div className="product-image-container">
-      {isLiked && (
-        <img
-          src={heart}
-          alt="Liked"
-          className="heart-icon"
+      {showLike && (
+        <HeartComponent
+          isLiked={isLiked}
+          className="heart-button"
+          onLike={handleLike}
+          onUnlike={handleUnlike}
         />
       )}
       <img src={largeImageUrl} alt={name} className="product-image" />

@@ -24,10 +24,11 @@ jobs:
     - name: Install dependencies
       run: yarn install --frozen-lockfile
 
-    - name: Run linting
+    - name: Run reviewdog
       uses: reviewdog/action-eslint@v1
       with:
-        eslint_flags: "--quiet --cache"
-        level: error
-        fail_on_error: true
+        level: ''
         filter_mode: file
+    
+    - name: Run linting
+      run: yarn lint

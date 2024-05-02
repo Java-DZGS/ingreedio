@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -13,11 +13,12 @@ import {
   getProductsListApi,
   getFilteredProductsListApi,
   ProductFilters,
-} from '../../services/productService/product.service';
+} from '../../services/product.service';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+  const isAuthenticated = useIsAuthenticated();
 
   const productName = queryParams.get('product') || '';
   const categoryName = queryParams.get('category') || '';
@@ -93,7 +94,8 @@ const ProductList = (): ReactElement => {
                     smallImageUrl={product.smallImageUrl}
                     shortDescription={product.shortDescription}
                     rating={3}
-                    isLiked
+                    showLike={isAuthenticated}
+                    isLiked={!!product.isLiked}
                   />
                 </Link>
               </li>
@@ -129,7 +131,9 @@ const ProductList = (): ReactElement => {
               label="Ingredients"
               placeholder="e.g. shea butter"
               initialValue={ingredientNames.join(', ')}
-              onChange={(value) => setIngredients(value.split(',').map((ingredient) => ingredient.trim()))}
+              onChange={(value) => setIngredients(
+                value.split(',').map((ingredient) => ingredient.trim()),
+              )}
             />
           </div>
           <div className="category-search-container">
