@@ -18,6 +18,5 @@ export const unlikeProductApi = async (productId: string) => {
     setTimeout(() => {
       console.log(`Unike ${productId}`);
       resolve();
-    }, 100),
-  );
+    }, 100),);
 };
