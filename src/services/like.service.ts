@@ -8,8 +8,7 @@ export const likeProductApi = async (productId: string) => {
     setTimeout(() => {
       console.log(`Like ${productId}`);
       resolve();
-    }, 100),
-  );
+    }, 100),);
 };
 
 export const unlikeProductApi = async (productId: string) => {
