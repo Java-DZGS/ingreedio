@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  CircularProgress,
   Tab,
   TabIndicator,
   TabList,
@@ -50,8 +51,13 @@ const ProductDetails = (): JSX.Element => {
   }, [dispatch, productId]);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <div className="product-details-container">
+        <CircularProgress isIndeterminate color="green" trackColor="none" />
+      </div>
+    );
   }
+
   return (
     <div className="product-details-container">
       <div className="card-wrapper">
