@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { AxiosError } from 'axios';
-import { AuthResponse } from '../../services/authService/auth.service';
+import { AuthResponse } from '../../services/auth.service';
 
 export const types = {
   SIGN_IN_REQUEST: 'SIGN_IN_REQUEST',

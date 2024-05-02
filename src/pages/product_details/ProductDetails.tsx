@@ -12,6 +12,7 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
@@ -21,23 +22,35 @@ import { RootState } from '../../store/reducers';
 import {
   ProductDetailsResponse,
   getProductDetailsApi,
-} from '../../services/productService/product.service';
+} from '../../services/product.service';
 import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
+import { likeProductApi, unlikeProductApi } from '../../services/like.service';
 
 const ProductDetails = (): JSX.Element => {
+  const dispatch = useDispatch();
+
   const { productId } = useParams<{ productId: string }>();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+  const isAuthenticated = useIsAuthenticated();
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
 
-  const dispatch = useDispatch();
+  const likeProduct = () => {
+    if (productId) likeProductApi(productId).then(() => setIsLiked(true));
+  };
+
+  const unlikeProduct = () => {
+    if (productId) unlikeProductApi(productId).then(() => setIsLiked(false));
+  };
+
   const shortDescription = '';
 
   const fetchProduct = async () => {
     try {
-      const productIdNumber = Number(productId);
-      const response = await getProductDetailsApi(productIdNumber);
+      if (!productId) return;
+      const response = await getProductDetailsApi(productId);
       if (response && response.data) {
         setProduct(response.data);
       }
@@ -70,8 +83,11 @@ const ProductDetails = (): JSX.Element => {
               volume={product.volume}
               brand={product.brand}
               rating={5}
-              isLiked={false}
+              isLiked={isLiked}
               largeImageUrl={product.largeImageUrl}
+              showLike={isAuthenticated}
+              handleLike={likeProduct}
+              handleUnlike={unlikeProduct}
             />
             <div className="sections-card-container">
               <Card>

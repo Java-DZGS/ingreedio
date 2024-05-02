@@ -1,18 +1,19 @@
 import axios, { AxiosResponse } from 'axios';
-import { apiUrl } from '../../config/config';
+import { apiUrl } from '../config/config';
 
 const productsApiUrl = `${apiUrl}/products`;
 
 export interface ProductResponse {
-  id: number;
+  id: string;
   name: string;
   smallImageUrl: string;
   provider: string;
   shortDescription: string;
+  isLiked?: boolean;
 }
 
 export interface ProductDetailsResponse {
-  id: number;
+  id: string;
   name: string;
   largeImageUrl: string;
   provider: string;
@@ -49,5 +50,5 @@ export const getFilteredProductsListApi = (
 };
 
 export const getProductDetailsApi = (
-  id: number,
+  id: string,
 ): Promise<AxiosResponse<ProductDetailsResponse>> => axios.get(`${productsApiUrl}/${id}`);

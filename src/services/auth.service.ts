@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { apiUrl } from '../../config/config';
+import { apiUrl } from '../config/config';
 
 const authApiUrl = `${apiUrl}/auth`;
 

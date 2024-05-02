@@ -1,8 +1,8 @@
 import React from 'react';
+import { FaHeart } from 'react-icons/fa';
 import Card from '../Card/Card';
 import './ProductTile.scss';
 import StarRating from '../StarRating/StarRating';
-import heart from '../../assets/icons/heart.svg';
 
 type ProductTileProps = {
   name: string;
@@ -10,6 +10,7 @@ type ProductTileProps = {
   shortDescription: string;
   rating: number;
   isLiked: boolean;
+  showLike: boolean;
   smallImageUrl: string;
 };
 
@@ -19,6 +20,7 @@ const ProductTile = ({
   shortDescription,
   rating,
   isLiked,
+  showLike,
   smallImageUrl,
 }: ProductTileProps): JSX.Element => (
   <Card>
@@ -29,7 +31,11 @@ const ProductTile = ({
       <div className="product-details">
         <div className="product-name-container">
           <h2 className="product-name">{name}</h2>
-          {isLiked && <img src={heart} alt="Liked" className="heart-icon" />}
+          {showLike && isLiked && (
+            <button aria-label="Liked" type="button" className="heart-icon">
+              <FaHeart />
+            </button>
+          )}
         </div>
 
         <p className="product-distributor">{provider}</p>
