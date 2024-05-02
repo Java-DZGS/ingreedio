@@ -22,7 +22,7 @@ export const types = {
   UNLIKE_SUCCESS: 'UNLIKE_SUCCESS',
   UNDISLIKE_SUCCESS: 'UNDISLIKE_SUCCESS',
   CLEAR_USER_DATA: 'CLEAR_USER_DATA',
-  NO_OP: 'NO_OP' ,
+  NO_OP: 'NO_OP',
 };
 
 export const likeIngredient = (ingredient: string): AnyAction => ({
