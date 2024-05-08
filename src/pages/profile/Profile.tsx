@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
@@ -25,7 +24,6 @@ const Profile = (): ReactElement => {
   );
 
   const navigate = useNavigate();
-  const signOut = useSignOut();
   const dispatch = useDispatch();
 
   const handleDeleteLiked = (ingredient: string) => {
@@ -38,7 +36,8 @@ const Profile = (): ReactElement => {
 
   const handleSignOut = () => {
     dispatch(actions.signOut());
-    signOut();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     navigate(ROUTES.HOME);
   };
 

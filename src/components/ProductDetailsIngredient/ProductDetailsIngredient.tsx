@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MdOutlineThumbUp, MdOutlineThumbDown } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   likeIngredient,
   dislikeIngredient,
@@ -9,6 +8,7 @@ import {
   unlikeIngredient,
 } from '../../store/actions';
 import './ProductDetailsIngredient.scss';
+import { RootState } from '../../store/reducers';
 
 type ProductDetailsIngredientProps = {
   ingredient: string;
@@ -23,7 +23,9 @@ const ProductDetailsIngredient = ({
 }: ProductDetailsIngredientProps): JSX.Element => {
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const isAuthenticated = useIsAuthenticated();
+  const {
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth);
 
   const toggleLike = () => {
     if (isLiked) {

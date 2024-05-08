@@ -12,7 +12,6 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
@@ -32,7 +31,11 @@ const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
-  const isAuthenticated = useIsAuthenticated();
+
+  const {
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth);
+
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
