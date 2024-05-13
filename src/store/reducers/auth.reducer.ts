@@ -7,6 +7,7 @@ type AuthState = {
   accessToken: string;
   refreshToken: string;
   buttonLoading: boolean;
+  isAuthenticated: boolean,
 };
 
 const initialState: AuthState = {
@@ -15,6 +16,7 @@ const initialState: AuthState = {
   accessToken: '',
   refreshToken: '',
   buttonLoading: false,
+  isAuthenticated: false,
 };
 
 export const auth = (
@@ -35,6 +37,7 @@ export const auth = (
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
         buttonLoading: false,
+        isAuthenticated: true,
       };
 
     case types.SIGN_IN_FAILURE:
@@ -44,6 +47,7 @@ export const auth = (
         accessToken: '',
         refreshToken: '',
         buttonLoading: false,
+        isAuthenticated: false,
       };
 
     case types.SIGN_UP_REQUEST:
@@ -67,7 +71,10 @@ export const auth = (
       };
 
     case types.SIGN_OUT:
-      return state;
+      return {
+        ...state,
+        isAuthenticated: false,
+      };
 
     case types.END_AUTH_ACTION:
       return {

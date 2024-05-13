@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -13,12 +13,16 @@ import {
   getProductsListApi,
   getFilteredProductsListApi,
   ProductFilters,
+  ProductObject,
 } from '../../services/product.service';
+import { RootState } from '../../store/reducers';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isAuthenticated = useIsAuthenticated();
+  const {
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth);
 
   const productName = queryParams.get('product') || '';
   const categoryName = queryParams.get('category') || '';
@@ -31,7 +35,7 @@ const ProductList = (): ReactElement => {
     .map((ingredient) => ingredient.trim());
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [products, setProducts] = useState<ProductObject[]>([]);
   const [name, setName] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
@@ -42,7 +46,7 @@ const ProductList = (): ReactElement => {
     try {
       const response = await getFilteredProductsListApi(params);
       if (response && response.data) {
-        setProducts(response.data);
+        setProducts(response.data.products);
       }
     } catch (error) {
       console.error('Error fetching filtered products:', error);
@@ -53,7 +57,7 @@ const ProductList = (): ReactElement => {
     try {
       const response = await getProductsListApi();
       if (response && response.data) {
-        setProducts(response.data);
+        setProducts(response.data.products);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -79,7 +83,6 @@ const ProductList = (): ReactElement => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">

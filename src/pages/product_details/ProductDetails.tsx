@@ -12,7 +12,6 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
@@ -32,17 +31,27 @@ const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
-  const isAuthenticated = useIsAuthenticated();
+
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
 
   const likeProduct = () => {
-    if (productId) likeProductApi(productId).then(() => setIsLiked(true));
+    if (productId) {
+      likeProductApi(productId)
+        .then(() => setIsLiked(true))
+        .catch((error) => console.error(error));
+    }
   };
 
   const unlikeProduct = () => {
-    if (productId) unlikeProductApi(productId).then(() => setIsLiked(false));
+    if (productId) {
+      unlikeProductApi(productId)
+        .then(() => setIsLiked(false))
+        .catch((error) => console.error(error));
+    }
   };
 
   const shortDescription = '';

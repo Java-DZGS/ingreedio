@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import { useSelector } from 'react-redux';
 import FilledButton from './FilledButton/FilledButton';
 import logo from '../assets/logo.svg';
 import './Header.scss';
 import TextButton from './TextButton/TextButton';
 import { ROUTES } from '../routes/routes';
 import profileIcon from '../assets/icons/profile.svg';
+import { RootState } from '../store/reducers';
 
 const Header = (): ReactElement => {
   const navigate = useNavigate();
-  const isAuthenticated = useIsAuthenticated();
+  const {
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="header">
