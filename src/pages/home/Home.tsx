@@ -7,6 +7,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
 import { getUrl } from '../../utils/navigation';
+import AutoCompleteSearchBar from '../../components/AutocompleteSearchBar/AutoCompleteSearchBar';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
@@ -41,13 +42,16 @@ const Home = (): ReactElement => {
             />
           </div>
           <div className="ingredient-search-container">
-            <SearchBar
+            <AutoCompleteSearchBar
               id="ingredient-search"
               label="Ingredients"
               placeholder="e.g. shea butter"
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
+              onChange={(value) =>
+                setIngredients(
+                  value.split(',').map((ingredient) => ingredient.trim()),
+                )
+              }
+              autocompletionValues={['abc', 'bcd', 'a']}
             />
           </div>
           <div className="search-button-container">
