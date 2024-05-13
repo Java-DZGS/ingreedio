@@ -1,21 +1,13 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable implicit-arrow-linebreak */
+import { AxiosResponse } from 'axios';
+import api from '../config/api';
+import { apiUrl } from '../config/config';
 
-export const likeProductApi = async (productId: string) => {
-  // todo when backend feature is implemented
-  await new Promise<void>((resolve) =>
-    setTimeout(() => {
-      console.log(`Like ${productId}`);
-      resolve();
-    }, 100));
-};
+const getApiUrl = (productId: string): string => `/products/${productId}/likes`;
 
-export const unlikeProductApi = async (productId: string) => {
-  // todo when backend feature is implemented
-  await new Promise<void>((resolve) =>
-    setTimeout(() => {
-      console.log(`Unike ${productId}`);
-      resolve();
-    }, 100));
-};
+export const likeProductApi = async (
+  productId: string,
+): Promise<AxiosResponse<void>> => api.post(getApiUrl(productId));
+
+export const unlikeProductApi = async (
+  productId: string,
+): Promise<AxiosResponse<void>> => api.delete(getApiUrl(productId));

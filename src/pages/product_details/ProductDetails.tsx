@@ -32,20 +32,26 @@ const ProductDetails = (): JSX.Element => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
 
-  const {
-    isAuthenticated,
-  } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
 
   const likeProduct = () => {
-    if (productId) likeProductApi(productId).then(() => setIsLiked(true));
+    if (productId) {
+      likeProductApi(productId)
+        .then(() => setIsLiked(true))
+        .catch((error) => console.error(error));
+    }
   };
 
   const unlikeProduct = () => {
-    if (productId) unlikeProductApi(productId).then(() => setIsLiked(false));
+    if (productId) {
+      unlikeProductApi(productId)
+        .then(() => setIsLiked(false))
+        .catch((error) => console.error(error));
+    }
   };
 
   const shortDescription = '';

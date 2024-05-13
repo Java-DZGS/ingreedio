@@ -13,6 +13,7 @@ import {
   getProductsListApi,
   getFilteredProductsListApi,
   ProductFilters,
+  ProductObject,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
 
@@ -34,7 +35,7 @@ const ProductList = (): ReactElement => {
     .map((ingredient) => ingredient.trim());
 
   const navigate = useNavigate();
-  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [products, setProducts] = useState<ProductObject[]>([]);
   const [name, setName] = useState(productName);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
@@ -45,7 +46,7 @@ const ProductList = (): ReactElement => {
     try {
       const response = await getFilteredProductsListApi(params);
       if (response && response.data) {
-        setProducts(response.data);
+        setProducts(response.data.products);
       }
     } catch (error) {
       console.error('Error fetching filtered products:', error);
@@ -56,7 +57,7 @@ const ProductList = (): ReactElement => {
     try {
       const response = await getProductsListApi();
       if (response && response.data) {
-        setProducts(response.data);
+        setProducts(response.data.products);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -82,7 +83,6 @@ const ProductList = (): ReactElement => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
