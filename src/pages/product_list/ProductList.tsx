@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -14,11 +14,14 @@ import {
   getFilteredProductsListApi,
   ProductFilters,
 } from '../../services/product.service';
+import { RootState } from '../../store/reducers';
 
 const ProductList = (): ReactElement => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isAuthenticated = useIsAuthenticated();
+  const {
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth);
 
   const productName = queryParams.get('product') || '';
   const categoryName = queryParams.get('category') || '';

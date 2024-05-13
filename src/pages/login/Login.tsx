@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import './Login.scss';
 import { Button, FormControl } from '@chakra-ui/react';
-import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
@@ -12,13 +11,12 @@ import { RootState } from '../../store/reducers';
 const Login = (): ReactElement => {
   // Navigate hook
   const navigate = useNavigate();
-  // Sign in hook
-  const signIn = useSignIn();
 
   const dispatch = useDispatch();
   const {
     loginSuccessful,
     accessToken,
+    refreshToken,
     buttonLoading,
   } = useSelector((state: RootState) => state.auth);
 
@@ -31,15 +29,8 @@ const Login = (): ReactElement => {
     if (!loggingIn || loginSuccessful == null) return;
 
     if (loginSuccessful) {
-      signIn({
-        auth: {
-          token: accessToken,
-        },
-        userState: { name: username },
-        // todo: refresh tokens
-        // refresh: refreshToken,
-      });
-
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
       navigate(ROUTES.HOME);
     } else {
       // todo: proper error message
@@ -78,7 +69,7 @@ const Login = (): ReactElement => {
                 type="password"
                 label="Password"
                 onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
+                // minLength={6}
                 required
               />
             </FormControl>
