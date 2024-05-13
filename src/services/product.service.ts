@@ -3,13 +3,18 @@ import { apiUrl } from '../config/config';
 
 const productsApiUrl = `${apiUrl}/products`;
 
-export interface ProductResponse {
+export interface ProductObject {
   id: string;
   name: string;
   smallImageUrl: string;
   provider: string;
   shortDescription: string;
   isLiked?: boolean;
+}
+
+export interface ProductResponse {
+  products: ProductObject[];
+  totalPages: number;
 }
 
 export interface ProductDetailsResponse {
@@ -30,12 +35,12 @@ export interface ProductFilters {
 }
 
 export const getProductsListApi = (): Promise<
-  AxiosResponse<ProductResponse[]>
+  AxiosResponse<ProductResponse>
 > => axios.get(`${productsApiUrl}`);
 
 export const getFilteredProductsListApi = (
   params: ProductFilters,
-): Promise<AxiosResponse<ProductResponse[]>> => {
+): Promise<AxiosResponse<ProductResponse>> => {
   const filteredParams = Object.fromEntries(
     Object.entries(params).filter(([_, value]) => value !== ''),
   );
