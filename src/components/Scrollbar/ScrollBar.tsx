@@ -6,9 +6,13 @@ type ScrollBarProps = {
   children?: ReactNode;
 };
 
-const ScrollBar = ({ children, className = '' }: ScrollBarProps): JSX.Element => (
+const ScrollBar = ({
+  children,
+  className = '',
+}: ScrollBarProps): JSX.Element => (
   <Scrollbars
     className={className}
+    renderTrackHorizontal={() => <div style={{ display: 'none' }} />}
     renderThumbVertical={({ style, ...props }) => (
       <div
         // eslint-disable-next-line react/jsx-props-no-spreading

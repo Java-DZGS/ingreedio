@@ -24,6 +24,7 @@ import {
 } from '../../services/product.service';
 import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
+import Opinion from '../../components/Opinion/Opinion';
 
 const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -142,10 +143,25 @@ const ProductDetails = (): JSX.Element => {
                           <p>{product.longDescription}</p>
                         </div>
                       </TabPanel>
-                      <TabPanel>
-                        <div className="opinions-container">
-                          <p>opinions</p>
-                        </div>
+                      <TabPanel
+                        style={{ display: 'flex', flex: 1, width: '100%' }}
+                      >
+                        <ScrollBar>
+                          <div>Add your opinion!</div>
+                          <div className="opinions-list">
+                            <ul>
+                              <li>
+                                <Opinion />
+                              </li>
+                              <li>
+                                <Opinion />
+                              </li>
+                              <li>
+                                <Opinion />
+                              </li>
+                            </ul>
+                          </div>
+                        </ScrollBar>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
