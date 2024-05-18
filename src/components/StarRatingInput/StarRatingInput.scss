@@ -1,0 +1,17 @@
+/* StarRating.scss */
+
+.star-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.star {
+    color: #ffc107; /* Star color when selected */
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .star:hover {
+    color: #ffc107; /* Star color when hovered */
+  }
+  
