@@ -29,3 +29,45 @@
   //   padding-left: 20px;
   // }
 }
+
+.search-bar-container {
+    position: relative;
+  }
+  
+  .suggestions-list {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  
+  .suggestion-item {
+    border: 1px solid #f0f0f0;
+  }
+  
+    .suggestion-button {
+        padding: 8px 12px;
+        width: 100%;
+        height: 100%;
+  }
+  
+  .relative-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  } 
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
+
+  .suggestions-hitbox {
+    position: absolute;
+    top: -0.05px;
+    padding-top: 87px;
+    width: 100%;
+    max-height: 200px;
+  }
