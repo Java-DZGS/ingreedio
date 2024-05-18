@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 // StarRatingInput.tsx
 
 import React, { useState } from 'react';
@@ -23,7 +24,7 @@ const StarRatingInput: React.FC<StarRatingInputProps> = ({ onChange }) => {
         const rating = index + 1;
         return (
           <FaStar
-            key={index}
+            key={`star-${index}`}
             size={24}
             color={rating <= (hover || selectedRating) ? '#ffc107' : '#e4e5e9'}
             style={{ marginRight: 10, cursor: 'pointer' }}
