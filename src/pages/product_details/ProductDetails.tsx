@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 // ProductDetails.tsx
 
 import React, { useEffect, useState } from 'react';
@@ -11,6 +10,8 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Button,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
@@ -24,6 +25,46 @@ import {
 } from '../../services/product.service';
 import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
+import Opinion from '../../components/Opinion/Opinion';
+import OpinionModal from '../../components/OpinionModal/OpinionModal';
+
+const opinions = [
+  {
+    username: 'JohnDoe',
+    rating: 8,
+    date: '2024-05-17',
+    content:
+      'This is an example opinion content. It is just a placeholder for the actual opinion text.',
+  },
+  {
+    username: 'JaneSmith',
+    rating: 9,
+    date: '2024-05-16',
+    content:
+      'Great experience, highly recommended! The service was excellent and the staff was friendly.',
+  },
+  {
+    username: 'User123',
+    rating: 7,
+    date: '2024-05-15',
+    content:
+      'Good value for the money, but there were a few issues with the room cleanliness.',
+  },
+  {
+    username: 'Traveler456',
+    rating: 10,
+    date: '2024-05-14',
+    content:
+      'Absolutely amazing! Everything was perfect and exceeded our expectations.',
+  },
+  {
+    username: 'Reviewer789',
+    rating: 6,
+    date: '2024-05-13',
+    content:
+      'It was okay, but I had better experiences elsewhere. The food could be improved.',
+  },
+];
 
 const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -37,6 +78,8 @@ const ProductDetails = (): JSX.Element => {
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const likeProduct = () => {
     if (productId) {
@@ -66,6 +109,23 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('Error fetching products:', error);
     }
+  };
+
+  const onSubmitOpinion = (opinionRating: number, opinionContent: string) => {
+    // todo backend POST
+    console.log('Opinion submitted:', opinionRating, opinionContent);
+  };
+
+  const handleLikeOpinion = () => {
+    console.log('Like button clicked');
+  };
+
+  const handleDislikeOpinion = () => {
+    console.log('Dislike button clicked');
+  };
+
+  const handleReportOpinion = () => {
+    console.log('Report button clicked');
   };
 
   useEffect(() => {
@@ -103,7 +163,7 @@ const ProductDetails = (): JSX.Element => {
                 <div className="sections-card-content-container">
                   <Tabs variant="unstyled" position="relative" width="100%">
                     <TabList gap={5}>
-                      <Tab fontSize={20}>Ingreedients</Tab>
+                      <Tab fontSize={20}>Ingredients</Tab>
                       <Tab fontSize={20}>Description</Tab>
                       <Tab fontSize={20}>Opinions</Tab>
                     </TabList>
@@ -142,10 +202,33 @@ const ProductDetails = (): JSX.Element => {
                           <p>{product.longDescription}</p>
                         </div>
                       </TabPanel>
-                      <TabPanel>
-                        <div className="opinions-container">
-                          <p>opinions</p>
-                        </div>
+                      <TabPanel
+                        style={{ display: 'flex', flex: 1, width: '100%' }}
+                      >
+                        <ScrollBar>
+                          {isAuthenticated && (
+                            <Button onClick={onOpen} variant="link">
+                              Add your opinion
+                            </Button>
+                          )}
+                          <div className="opinions-list">
+                            <ul>
+                              {opinions.map((opinion) => (
+                                <li key={`${opinion.username}-${product.id}`}>
+                                  <Opinion
+                                    username={opinion.username}
+                                    rating={opinion.rating}
+                                    date={opinion.date}
+                                    content={opinion.content}
+                                    onLike={handleLikeOpinion}
+                                    onDislike={handleDislikeOpinion}
+                                    onReport={handleReportOpinion}
+                                  />
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </ScrollBar>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
@@ -155,6 +238,11 @@ const ProductDetails = (): JSX.Element => {
           </div>
         </Card>
       </div>
+      <OpinionModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSubmit={onSubmitOpinion}
+      />
     </div>
   );
 };

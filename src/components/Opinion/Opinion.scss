@@ -1,0 +1,75 @@
+/* Opinion.scss */
+.opinion {
+    border: 1px solid rgba(135, 185, 255, 0.47);
+    background-color: transparent;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+  
+    .header {
+      display: flex;  /* Changed to inline-flex to fit contents */
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 0;
+      width: 100%;
+      block-size: fit-content;
+  
+      .user-info {
+        display: flex;
+        align-items: center;
+  
+        .username {
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+        }
+  
+        .rating {
+          padding: 0px 5px;
+        }
+        
+        .star {
+            color: gold;  
+          }
+      }
+  
+      .date {
+        font-size: 0.9em;
+        color: #666;
+      }
+    }
+  
+    .content {
+      margin-bottom: 12px;
+      text-align: left;  /* Ensure content is left-aligned */
+    }
+  
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #98A099;
+  
+      .report-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-size: 0.9em;
+      }
+  
+      .icons {
+        display: flex;
+        align-items: center;
+        color: rgb(83, 83, 83);
+  
+        .icon {
+          cursor: pointer;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+  
