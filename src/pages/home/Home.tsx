@@ -3,23 +3,37 @@
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import { AxiosResponse } from 'axios';
+import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
 import { getUrl } from '../../utils/navigation';
+import {
+  IngredientObject,
+  getIngredientsApi,
+} from '../../services/ingredients.service';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
   const [product, setProduct] = useState('');
-  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [ingredients, setIngredients] = useState<IngredientObject[] | null>(
+    null,
+  );
 
   const handleSearch = () => {
     const params = {
       product,
-      ingredients: ingredients.join(','),
     };
     navigate(getUrl(params, ROUTES.PRODUCTS));
+  };
+
+  const onSearchBarChange = (query: string) => {
+    getIngredientsApi(query, 10).then(
+      (value: AxiosResponse<IngredientObject[]>) => {
+        setIngredients(value.data);
+      },
+    );
   };
 
   return (
@@ -45,9 +59,15 @@ const Home = (): ReactElement => {
               id="ingredient-search"
               label="Ingredients"
               placeholder="e.g. shea butter"
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
+              suggestions={
+                ingredients?.map((ingredient: IngredientObject): Suggestion => {
+                  return {
+                    id: ingredient.id,
+                    text: ingredient.name,
+                  };
+                }) ?? undefined
+              }
+              onChange={onSearchBarChange}
             />
           </div>
           <div className="search-button-container">

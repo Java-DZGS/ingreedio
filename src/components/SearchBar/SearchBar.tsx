@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import './SearchBar.scss';
 
-type Suggestion = {
+export type Suggestion = {
   id: string;
   text: string;
 };
@@ -12,6 +12,7 @@ type SearchBarProps = {
   id?: string;
   initialValue?: string;
   suggestions?: Suggestion[];
+  fetchSuggestions?: (value: Suggestion) => void;
   onChange?: (value: string) => void;
   onSuggestionClick?: (suggestion: Suggestion) => void;
 };
@@ -26,14 +27,16 @@ const SearchBar = ({
   onSuggestionClick = () => {},
 }: SearchBarProps): JSX.Element => {
   const [value, setValue] = useState(initialValue);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const hitboxRef = useRef<HTMLDivElement | null>(null);
 
-  suggestions = [
-    { id: 't', text: 'test' },
-    { id: 'tr2', text: 'testr2' },
-  ];
+  console.log(suggestions);
+
+  const [suggestionsIn, setSuggestionsIn] = useState<Suggestion[] | undefined>([
+    { id: 'gowno', text: 'test1' },
+    { id: 'gowno1', text: 'test2 },
+  ]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -43,22 +46,35 @@ const SearchBar = ({
 
   const handleFocus = () => {
     setIsFocused(true);
-    // inputRef.current?.focus();
+    inputRef.current?.focus();
   };
 
   const handleUnfocus = () => {
-    console.log(`${label} unfocused ${isFocused}`);
-    if (!isFocused) {
-      return;
-    }
-    // setIsFocused(false);
+    setIsFocused(false);
+    inputRef.current?.blur();
   };
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
+    setSuggestionsIn(undefined);
     onSuggestionClick(suggestion);
     handleUnfocus();
-    console.log(`${label} suggestion clicked`);
   };
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (
+      hitboxRef.current &&
+      !hitboxRef.current.contains(event.target as Node)
+    ) {
+      handleUnfocus();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <div className="search-bar-container">
@@ -74,17 +90,23 @@ const SearchBar = ({
           value={value}
         />
       </label>
-      <div role="button" ref={hitboxRef} className="suggestions-hitbox">
-        {suggestions != null && isFocused && (
+      <div
+        role="button"
+        ref={hitboxRef}
+        className="suggestions-hitbox"
+        tabIndex={-1}
+        onClick={handleFocus}
+      >
+        {suggestionsIn != null && (
           <ul className="suggestions-list">
-            {suggestions.map((suggestion: Suggestion) => (
-              <li key={suggestion.id} className="suggestion-item">
+            {suggestionsIn.map((suggestionIn: Suggestion) => (
+              <li key={suggestionIn.id} className="suggestion-item">
                 <button
                   className="suggestion-button"
                   type="button"
-                  onClick={() => handleSuggestionClick(suggestion)}
+                  onClick={() => handleSuggestionClick(suggestionIn)}
                 >
-                  {suggestion.text}
+                  {suggestionIn.text}
                 </button>
               </li>
             ))}

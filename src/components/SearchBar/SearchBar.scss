@@ -66,8 +66,9 @@
 
   .suggestions-hitbox {
     position: absolute;
-    top: -0.05px;
-    padding-top: 87px;
+    // top: 36px;
+    // padding-top: 50px;
     width: 100%;
     max-height: 200px;
+    cursor: 'text';
   }
