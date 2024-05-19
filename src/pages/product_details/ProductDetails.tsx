@@ -206,9 +206,11 @@ const ProductDetails = (): JSX.Element => {
                         style={{ display: 'flex', flex: 1, width: '100%' }}
                       >
                         <ScrollBar>
-                          <Button onClick={onOpen} variant="link">
-                            Add your opinion
-                          </Button>
+                          {isAuthenticated && (
+                            <Button onClick={onOpen} variant="link">
+                              Add your opinion
+                            </Button>
+                          )}
                           <div className="opinions-list">
                             <ul>
                               {opinions.map((opinion) => (
