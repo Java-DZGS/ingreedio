@@ -1,7 +1,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 import { Epic, ofType, combineEpics } from 'redux-observable';
 import { mergeMap } from 'rxjs/operators';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
 import { RootState } from '../reducers';
 import { types } from '../actions';

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -11,7 +10,6 @@ import {
   ModalBody,
   ModalFooter,
   Textarea,
-  Input,
 } from '@chakra-ui/react';
 import StarRatingInput from '../StarRatingInput/StarRatingInput';
 import './OpinionModal.scss';
