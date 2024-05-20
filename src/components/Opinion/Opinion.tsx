@@ -6,7 +6,7 @@ import { FaThumbsUp, FaThumbsDown, FaStar } from 'react-icons/fa';
 interface OpinionProps {
   username: string;
   rating: number;
-  // date: string;
+  createdAt: string;
   content: string;
   onLike: () => void;
   onDislike: () => void;
@@ -16,7 +16,7 @@ interface OpinionProps {
 const Opinion = ({
   username,
   rating,
-  // date,
+  createdAt,
   content,
   onLike,
   onDislike,
@@ -29,7 +29,7 @@ const Opinion = ({
         <span className="rating">· {rating / 2}/5 </span>
         <FaStar className="star" />
       </div>
-      {/* <span className="date">{date}</span> */}
+      <span className="date">{createdAt}</span>
     </div>
     <div className="content">{content}</div>
     <div className="footer">

@@ -23,18 +23,6 @@ export const types = {
   UNDISLIKE_SUCCESS: 'UNDISLIKE_SUCCESS',
   CLEAR_USER_DATA: 'CLEAR_USER_DATA',
   NO_OP: 'NO_OP',
-  ADD_REVIEW: 'ADD_REVIEW',
-  ADD_REVIEW_SUCCESS: 'ADD_REVIEW_SUCCESS',
-  ADD_REVIEW_FAILURE: 'ADD_REVIEW_FAILURE',
-  EDIT_REVIEW: 'EDIT_REVIEW',
-  EDIT_REVIEW_SUCCESS: 'EDIT_REVIEW_SUCCESS',
-  EDIT_REVIEW_FAILURE: 'EDIT_REVIEW_FAILURE',
-  DELETE_REVIEW: 'DELETE_REVIEW',
-  DELETE_REVIEW_SUCCESS: 'DELETE_REVIEW_SUCCESS',
-  DELETE_REVIEW_FAILURE: 'DELETE_REVIEW_FAILURE',
-  GET_REVIEWS: 'GET_REVIEWS',
-  GET_REVIEWS_SUCCESS: 'GET_REVIEWS_SUCCESS',
-  GET_REVIEWS_FAILURE: 'GET_REVIEWS_FAILURE',
 };
 
 export const likeIngredient = (ingredient: string): AnyAction => ({
@@ -139,58 +127,6 @@ const endAuthAction = (): AnyAction => ({
   type: types.END_AUTH_ACTION,
 });
 
-const addReview = (): AnyAction => ({
-  type: types.ADD_REVIEW,
-});
-
-const addReviewSuccess = (): AnyAction => ({
-  type: types.ADD_REVIEW_SUCCESS,
-});
-
-const addReviewFailure = (error: AxiosError): AnyAction => ({
-  type: types.ADD_REVIEW_FAILURE,
-  payload: error,
-});
-
-const editReview = (): AnyAction => ({
-  type: types.EDIT_REVIEW,
-});
-
-const editReviewSuccess = (): AnyAction => ({
-  type: types.EDIT_REVIEW_SUCCESS,
-});
-
-const editReviewFailure = (error: AxiosError): AnyAction => ({
-  type: types.EDIT_REVIEW_FAILURE,
-  payload: error,
-});
-
-const deleteReview = (): AnyAction => ({
-  type: types.DELETE_REVIEW,
-});
-
-const deleteReviewSuccess = (): AnyAction => ({
-  type: types.DELETE_REVIEW_SUCCESS,
-});
-
-const deleteReviewFailure = (error: AxiosError): AnyAction => ({
-  type: types.DELETE_REVIEW_FAILURE,
-  payload: error,
-});
-
-const getReviews = (): AnyAction => ({
-  type: types.GET_REVIEWS,
-});
-
-const getReviewsSuccess = (): AnyAction => ({
-  type: types.GET_REVIEWS_SUCCESS,
-});
-
-const getReviewsFailure = (error: AxiosError): AnyAction => ({
-  type: types.GET_REVIEWS_FAILURE,
-  payload: error,
-});
-
 export default {
   signInRequest,
   signInSuccess,
@@ -209,16 +145,4 @@ export default {
   unlikeSuccess,
   undislikeSuccess,
   clearUserData,
-  addReview,
-  addReviewSuccess,
-  addReviewFailure,
-  editReview,
-  editReviewSuccess,
-  editReviewFailure,
-  deleteReview,
-  deleteReviewSuccess,
-  deleteReviewFailure,
-  getReviews,
-  getReviewsSuccess,
-  getReviewsFailure,
 };

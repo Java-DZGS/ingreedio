@@ -9,10 +9,12 @@ export interface ReviewObject {
 }
 
 export interface ReviewResponse {
+    userId: string,
     displayName: string,
     productId: string,
     rating: number,
-    content: string
+    content: string,
+    createdAt: string
 }
 
 export const getProductReviewsApi = async (
@@ -22,15 +24,17 @@ export const getProductReviewsApi = async (
 export const postProductReviewApi = async (
   id: string,
   review: ReviewObject,
-): Promise<AxiosResponse<void>> => api.post(getApiUrl(id), {
-  rating: review.rating, content: review.content,
+): Promise<AxiosResponse<ReviewResponse>> => api.post(getApiUrl(id), {
+  rating: review.rating,
+  content: review.content,
 });
 
 export const putProductReviewApi = async (
   id: string,
   review: ReviewObject,
-): Promise<AxiosResponse<void>> => api.put(getApiUrl(id), {
-  rating: review.rating, content: review.content,
+): Promise<AxiosResponse<ReviewResponse>> => api.put(getApiUrl(id), {
+  rating: review.rating,
+  content: review.content,
 });
 
 export const deleteProductReviewApi = async (

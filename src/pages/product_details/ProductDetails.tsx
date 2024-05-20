@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AxiosResponse } from 'axios';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
@@ -125,14 +126,19 @@ const ProductDetails = (): JSX.Element => {
     }
   };
 
-  const onSubmitOpinion = (opinionRating: number, opinionContent: string) => {
-    if (productId) {
-      postProductReviewApi(productId, { rating: 2 * opinionRating, content: opinionContent })
-        .then(() => { })
-        .catch((error) => console.error(error));
-      productReviews.push({
-        rating: 2 * opinionRating, content: opinionContent, displayName: '', productId,
+  const onSubmitOpinion = async (opinionRating: number, opinionContent: string) => {
+    if (!productId) return;
+    try {
+      const newReviewResponse: AxiosResponse<ReviewResponse> = await
+      postProductReviewApi(productId, {
+        rating: 2 * opinionRating,
+        content: opinionContent,
       });
+
+      const newReview = newReviewResponse.data;
+      setProductReviews((reviews) => [...reviews, newReview]);
+    } catch (error) {
+      console.error('An error occurred while adding review:', error);
     }
     console.log('Opinion submitted:', opinionRating, opinionContent);
   };
@@ -242,7 +248,7 @@ const ProductDetails = (): JSX.Element => {
                                   <Opinion
                                     username={opinion.displayName}
                                     rating={opinion.rating}
-                                    // date={opinion.date}
+                                    createdAt={opinion.createdAt}
                                     content={opinion.content}
                                     onLike={handleLikeOpinion}
                                     onDislike={handleDislikeOpinion}
