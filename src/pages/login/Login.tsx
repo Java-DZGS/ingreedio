@@ -14,10 +14,7 @@ const Login = (): ReactElement => {
 
   const dispatch = useDispatch();
   const {
-    loginSuccessful,
-    accessToken,
-    refreshToken,
-    buttonLoading,
+    loginSuccessful, accessToken, refreshToken, buttonLoading,
   } = useSelector((state: RootState) => state.auth);
 
   // States
@@ -31,6 +28,7 @@ const Login = (): ReactElement => {
     if (loginSuccessful) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('username', username);
       navigate(ROUTES.HOME);
     } else {
       // todo: proper error message

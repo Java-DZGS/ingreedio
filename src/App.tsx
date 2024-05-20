@@ -9,8 +9,11 @@ import Registration from './pages/registraton/Registration';
 import Profile from './pages/profile/Profile';
 import ProductList from './pages/product_list/ProductList';
 import ProductDetails from './pages/product_details/ProductDetails';
+import useLoginAutomatically from './hooks/useLoginAutomatically';
 
 function App(): ReactElement {
+  useLoginAutomatically();
+
   return (
     <div className="app">
       <Header />

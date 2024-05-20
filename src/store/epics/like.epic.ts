@@ -4,7 +4,7 @@ import { mergeMap } from 'rxjs/operators';
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
 import { RootState } from '../reducers';
-import { types } from '../actions';
+import actions, { types } from '../actions';
 import api from '../../config/api';
 
 const getLikeApiUrl = (productId: string): string =>
@@ -86,9 +86,24 @@ const undislikeIngredientEpic: Epic<AnyAction, AnyAction, RootState> = (
     }),
   );
 
+export const getLikedDislikedEpic: Epic<AnyAction, AnyAction, RootState> = (
+  action$,
+) =>
+  action$.pipe(
+    ofType(types.GET_USER_INFO_SUCCESS),
+    mergeMap((action) => {
+      const { likedIngredients, allergens } = action.payload;
+      return [
+        actions.getLikesSuccess(likedIngredients),
+        actions.getDislikesSuccess(allergens),
+      ];
+    }),
+  );
+
 export const likeEpic = combineEpics(
   likeIngredientEpic,
   dislikeIngredientEpic,
   unlikeIngredientEpic,
   undislikeIngredientEpic,
+  getLikedDislikedEpic,
 );

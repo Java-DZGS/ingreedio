@@ -10,7 +10,7 @@ const initialState: LikeState = {
   dislikedIngredients: [],
 };
 
-export const like = (
+const like = (
   state: LikeState = initialState,
   action: AnyAction,
 ): typeof initialState => {
@@ -39,9 +39,21 @@ export const like = (
           (ingredient) => ingredient !== (action.payload as string),
         ),
       };
+    case types.GET_LIKES:
+      return {
+        ...state,
+        likedIngredients: [...state.likedIngredients, ...action.payload],
+      };
+    case types.GET_DISLIKES:
+      return {
+        ...state,
+        dislikedIngredients: [...state.dislikedIngredients, ...action.payload],
+      };
     case types.CLEAR_USER_DATA:
       return initialState;
     default:
       return state;
   }
 };
+
+export default like;
