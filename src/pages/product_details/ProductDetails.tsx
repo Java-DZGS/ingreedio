@@ -28,45 +28,11 @@ import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
 import Opinion from '../../components/Opinion/Opinion';
 import OpinionModal from '../../components/OpinionModal/OpinionModal';
-import { ReviewResponse, getProductReviewsApi, postProductReviewApi } from '../../services/review.service';
-
-const opinions = [
-  {
-    username: 'JohnDoe',
-    rating: 8,
-    date: '2024-05-17',
-    content:
-      'This is an example opinion content. It is just a placeholder for the actual opinion text.',
-  },
-  {
-    username: 'JaneSmith',
-    rating: 9,
-    date: '2024-05-16',
-    content:
-      'Great experience, highly recommended! The service was excellent and the staff was friendly.',
-  },
-  {
-    username: 'User123',
-    rating: 7,
-    date: '2024-05-15',
-    content:
-      'Good value for the money, but there were a few issues with the room cleanliness.',
-  },
-  {
-    username: 'Traveler456',
-    rating: 10,
-    date: '2024-05-14',
-    content:
-      'Absolutely amazing! Everything was perfect and exceeded our expectations.',
-  },
-  {
-    username: 'Reviewer789',
-    rating: 6,
-    date: '2024-05-13',
-    content:
-      'It was okay, but I had better experiences elsewhere. The food could be improved.',
-  },
-];
+import {
+  ReviewResponse,
+  getProductReviewsApi,
+  postProductReviewApi,
+} from '../../services/review.service';
 
 const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -126,14 +92,18 @@ const ProductDetails = (): JSX.Element => {
     }
   };
 
-  const onSubmitOpinion = async (opinionRating: number, opinionContent: string) => {
+  const onSubmitOpinion = async (
+    opinionRating: number,
+    opinionContent: string,
+  ) => {
     if (!productId) return;
     try {
-      const newReviewResponse: AxiosResponse<ReviewResponse> = await
-      postProductReviewApi(productId, {
-        rating: 2 * opinionRating,
-        content: opinionContent,
-      });
+      // eslint-disable-next-line operator-linebreak
+      const newReviewResponse: AxiosResponse<ReviewResponse> =
+        await postProductReviewApi(productId, {
+          rating: 2 * opinionRating,
+          content: opinionContent,
+        });
 
       const newReview = newReviewResponse.data;
       setProductReviews((reviews) => [...reviews, newReview]);
