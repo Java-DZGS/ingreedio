@@ -9,10 +9,8 @@ import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
 import {
-  ProductResponse,
   getProductsListApi,
-  getFilteredProductsListApi,
-  ProductFilters,
+  ProductCriteria,
   ProductObject,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
@@ -24,7 +22,7 @@ const ProductList = (): ReactElement => {
     isAuthenticated,
   } = useSelector((state: RootState) => state.auth);
 
-  const productName = queryParams.get('product') || '';
+  const phraseString = queryParams.get('phrase') || '';
   const categoryName = queryParams.get('category') || '';
   const providerName = queryParams.get('provider') || '';
   const brandName = queryParams.get('brand') || '';
@@ -36,15 +34,15 @@ const ProductList = (): ReactElement => {
 
   const navigate = useNavigate();
   const [products, setProducts] = useState<ProductObject[]>([]);
-  const [name, setName] = useState(productName);
+  const [phrase, setPhrase] = useState(phraseString);
   const [category, setCategory] = useState(categoryName);
   const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
   const [provider, setProvider] = useState(providerName);
   const [brand, setBrand] = useState(brandName);
 
-  const fetchFilteredProducts = async (params: ProductFilters) => {
+  const fetchFilteredProducts = async (params: ProductCriteria) => {
     try {
-      const response = await getFilteredProductsListApi(params);
+      const response = await getProductsListApi(params);
       if (response && response.data) {
         setProducts(response.data.products);
       }
@@ -65,19 +63,9 @@ const ProductList = (): ReactElement => {
   };
 
   const handleSearch = () => {
-    const params = {
-      name,
-      provider,
-      brand,
-    };
-
-    const filterParams = {
-      name,
-      provider,
-      brand,
-    };
-    fetchFilteredProducts(filterParams);
-    navigate(getUrl(params, ROUTES.PRODUCTS));
+    // TODO
+    // fetchFilteredProducts(phrase);
+    // navigate(getUrl(phrase, ROUTES.PRODUCTS));
   };
 
   useEffect(() => {
@@ -111,8 +99,8 @@ const ProductList = (): ReactElement => {
             <SearchBar
               label="Product"
               placeholder="e.g. shampoo"
-              initialValue={productName}
-              onChange={(value) => setName(value)}
+              initialValue={phrase}
+              onChange={(value) => setPhrase(value)}
             />
           </div>
           <div className="provider-search-container">

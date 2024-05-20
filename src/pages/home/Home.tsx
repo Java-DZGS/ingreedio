@@ -17,7 +17,7 @@ import Tag from '../../components/Tag/Tag';
 const Home = (): ReactElement => {
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
-  const [product, setProduct] = useState('');
+  const [product, setProduct] = useState<string>('');
   const [ingredientsSuggestions, setIngredientsSuggestions] = useState<IngredientObject[] | null>(
     null,
   );
