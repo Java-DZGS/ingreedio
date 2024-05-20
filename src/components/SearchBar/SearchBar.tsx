@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent, useEffect, useRef, useState,
+} from 'react';
 import './SearchBar.scss';
 
 export type Suggestion = {
@@ -12,7 +14,6 @@ type SearchBarProps = {
   id?: string;
   initialValue?: string;
   suggestions?: Suggestion[];
-  fetchSuggestions?: (value: Suggestion) => void;
   onChange?: (value: string) => void;
   onSuggestionClick?: (suggestion: Suggestion) => void;
 };
@@ -27,16 +28,10 @@ const SearchBar = ({
   onSuggestionClick = () => {},
 }: SearchBarProps): JSX.Element => {
   const [value, setValue] = useState(initialValue);
-  const [isFocused, setIsFocused] = useState<boolean>(true);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  useState<boolean>(true);
+  const [isSuggestionsDisplayed, setIsSuggestionsDisplayed] = useState<boolean>(false);
   const hitboxRef = useRef<HTMLDivElement | null>(null);
-
-  console.log(suggestions);
-
-  const [suggestionsIn, setSuggestionsIn] = useState<Suggestion[] | undefined>([
-    { id: 'gowno', text: 'test1' },
-    { id: 'gowno1', text: 'test2 },
-  ]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -44,35 +39,33 @@ const SearchBar = ({
     onChange(inputValue);
   };
 
-  const handleFocus = () => {
-    setIsFocused(true);
-    inputRef.current?.focus();
-  };
-
-  const handleUnfocus = () => {
-    setIsFocused(false);
-    inputRef.current?.blur();
+  const handleInputFieldFocus = () => {
+    setIsSuggestionsDisplayed(true);
   };
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
-    setSuggestionsIn(undefined);
     onSuggestionClick(suggestion);
-    handleUnfocus();
+    setIsSuggestionsDisplayed(false);
   };
 
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (
-      hitboxRef.current &&
-      !hitboxRef.current.contains(event.target as Node)
-    ) {
-      handleUnfocus();
+  const handleMouseClick = (event: MouseEvent) => {
+    const clickInInputField: boolean = (!hitboxRef.current
+        || hitboxRef.current.contains(event.target as Node))
+        ?? false;
+
+    const clickInSuggestions: boolean = (!inputRef.current
+        || inputRef.current.contains(event.target as Node))
+        ?? false;
+
+    if (!clickInInputField && !clickInSuggestions) {
+      setIsSuggestionsDisplayed(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('click', handleMouseClick);
     return () => {
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('click', handleMouseClick);
     };
   }, []);
 
@@ -87,26 +80,21 @@ const SearchBar = ({
           ref={inputRef}
           placeholder={placeholder}
           onChange={handleChange}
+          onFocus={handleInputFieldFocus}
           value={value}
         />
       </label>
-      <div
-        role="button"
-        ref={hitboxRef}
-        className="suggestions-hitbox"
-        tabIndex={-1}
-        onClick={handleFocus}
-      >
-        {suggestionsIn != null && (
+      <div role="button" ref={hitboxRef} className="suggestions-hitbox">
+        {suggestions && suggestions.length > 0 && isSuggestionsDisplayed && (
           <ul className="suggestions-list">
-            {suggestionsIn.map((suggestionIn: Suggestion) => (
-              <li key={suggestionIn.id} className="suggestion-item">
+            {suggestions.map((suggestion: Suggestion) => (
+              <li key={suggestion.id} className="suggestion-item">
                 <button
                   className="suggestion-button"
                   type="button"
-                  onClick={() => handleSuggestionClick(suggestionIn)}
+                  onClick={() => handleSuggestionClick(suggestion)}
                 >
-                  {suggestionIn.text}
+                  {suggestion.text}
                 </button>
               </li>
             ))}

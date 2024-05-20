@@ -28,10 +28,15 @@
         color: $text-green;
       }
     }
+
     .search-container {
-      display: flex;
-      flex-direction: row;
-      gap: 15px;
+      display: grid;
+      grid-template-columns: 2fr 3fr 0.5fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      .ingredients-tags {
+        max-width: calc(100%);
+      }
       .product-search-container,
       .ingredient-search-container {
         flex: 1;
@@ -46,14 +51,15 @@
         align-items: flex-end;
 
         .inner-search-button-container {
-          padding-left: 5px;
           padding-bottom: 6px;
           display: flex;
           align-items: center;
           height: 60%;
+          flex: 1;
 
           .search-button {
             display: flex;
+            flex: 1;
             height: 90%;
           }
         }

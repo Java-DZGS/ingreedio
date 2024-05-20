@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
+import { IngredientObject } from './ingredients.service';
 
 const productsApiUrl = `${apiUrl}/products`;
 
@@ -28,30 +29,18 @@ export interface ProductDetailsResponse {
   ingredients: string[];
 }
 
-export interface ProductFilters {
-  name: string;
-  provider: string;
-  brand: string;
+export interface ProductCriteria {
+    ingredientsToInclude: IngredientObject[];
+    ingredientsToExclude: IngredientObject[];
+    phrase: string;
 }
 
-export const getProductsListApi = (): Promise<
-  AxiosResponse<ProductResponse>
-> => axios.get(`${productsApiUrl}`);
-
-export const getFilteredProductsListApi = (
-  params: ProductFilters,
+export const getProductsListApi = (
+  params?: ProductCriteria,
 ): Promise<AxiosResponse<ProductResponse>> => {
-  const filteredParams = Object.fromEntries(
-    Object.entries(params).filter(([_, value]) => value !== ''),
-  );
-
-  const queryParams = new URLSearchParams(
-    filteredParams as Record<string, string>,
-  ).toString();
-
-  const url = `${productsApiUrl}${queryParams ? `?${queryParams}` : ''}`;
-
-  return axios.get(url);
+    if (params === undefined) {
+        return axios.get(`${productsApiUrl}`);
+    }
 };
 
 export const getProductDetailsApi = (

@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
+import { WithId } from '../types/types';
 
 const ingredientsApiUrl = `${apiUrl}/ingredients`;
 
-export interface IngredientObject {
-  id: string;
+export interface IngredientObject extends WithId {
   name: string;
 }
 
