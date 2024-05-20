@@ -27,6 +27,7 @@ import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
 import Opinion from '../../components/Opinion/Opinion';
 import OpinionModal from '../../components/OpinionModal/OpinionModal';
+import { ReviewResponse, getProductReviewsApi, postProductReviewApi } from '../../services/review.service';
 
 const opinions = [
   {
@@ -72,6 +73,7 @@ const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+  const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
@@ -111,8 +113,27 @@ const ProductDetails = (): JSX.Element => {
     }
   };
 
+  const fetchProductReviews = async () => {
+    try {
+      if (!productId) return;
+      const response = await getProductReviewsApi(productId);
+      if (response && response.data) {
+        setProductReviews(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching product reviews:', error);
+    }
+  };
+
   const onSubmitOpinion = (opinionRating: number, opinionContent: string) => {
-    // todo backend POST
+    if (productId) {
+      postProductReviewApi(productId, { rating: 2 * opinionRating, content: opinionContent })
+        .then(() => { })
+        .catch((error) => console.error(error));
+      productReviews.push({
+        rating: 2 * opinionRating, content: opinionContent, displayName: '', productId,
+      });
+    }
     console.log('Opinion submitted:', opinionRating, opinionContent);
   };
 
@@ -130,6 +151,7 @@ const ProductDetails = (): JSX.Element => {
 
   useEffect(() => {
     fetchProduct();
+    fetchProductReviews();
   }, [dispatch, productId]);
 
   if (!product) {
@@ -151,7 +173,7 @@ const ProductDetails = (): JSX.Element => {
               shortDescription={shortDescription}
               volume={product.volume}
               brand={product.brand}
-              rating={5}
+              rating={product.rating}
               isLiked={isLiked}
               largeImageUrl={product.largeImageUrl}
               showLike={isAuthenticated}
@@ -213,12 +235,14 @@ const ProductDetails = (): JSX.Element => {
                           )}
                           <div className="opinions-list">
                             <ul>
-                              {opinions.map((opinion) => (
-                                <li key={`${opinion.username}-${product.id}`}>
+                              {productReviews.map((opinion) => (
+                                <li
+                                  key={`${opinion.displayName}-${product.id}`}
+                                >
                                   <Opinion
-                                    username={opinion.username}
+                                    username={opinion.displayName}
                                     rating={opinion.rating}
-                                    date={opinion.date}
+                                    // date={opinion.date}
                                     content={opinion.content}
                                     onLike={handleLikeOpinion}
                                     onDislike={handleDislikeOpinion}

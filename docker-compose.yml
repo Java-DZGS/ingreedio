@@ -17,8 +17,6 @@ services:
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_USERNAME=compose-mongo
       - SPRING_DATA_MONGODB_PASSWORD=compose-mongo
-      # - SECURITY.ACCESS-TOKEN-LIFETIME=1000
-      # - SECURITY.REFRESH-TOKEN-LIFETIME=2000
 
   postgres:
     image: 'postgres:13.1-alpine'
