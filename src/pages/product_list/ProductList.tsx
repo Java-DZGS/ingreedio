@@ -61,10 +61,11 @@ const ProductList = (): ReactElement => {
 
   const handleSearch = () => {
     const criteria: ProductCriteria = {
+      phrase,
       ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
     };
-    navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
     fetchProducts(criteria);
+    navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
   useEffect(() => {
