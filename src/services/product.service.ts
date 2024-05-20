@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
-import { IngredientObject } from './ingredients.service';
-import toIdSetString from '../utils/toIdSetString';
 import RequestWithParamsBuilder from '../utils/reqeustWithParamsBuilder';
+import api from '../config/api';
 
 const productsApiUrl = `${apiUrl}/products`;
 
@@ -42,47 +41,80 @@ export interface ProductDetailsResponse {
 }
 
 export interface ProductCriteria {
-    ingredientsToInclude?: IngredientObject[];
-    ingredientsToExclude?: IngredientObject[];
-    minRating?: number;
     phrase?: string;
-    liked?: boolean;
+    ingredientsToIncludeIds?: string[];
+    ingredientsToExcludeIds?: string[];
+    minRating?: number;
+    // TODO: SORT BY
 }
 
-export const getProductsListApi = (
-  params?: ProductCriteria,
-  pageNumber?: number,
-): Promise<AxiosResponse<ProductResponse>> => {
-  const builder = new RequestWithParamsBuilder(productsApiUrl);
-  builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+export const urlToProductCriteria = (url: string): ProductCriteria => {
+  const queryParams = new URLSearchParams(url);
+  const minRatingStr = queryParams.get(ProductListRequestParams.MIN_RATING);
+  let minRating: number | undefined = minRatingStr !== null
+    ? parseInt(minRatingStr, 10) : undefined;
 
-  if (params === undefined) {
-    return axios.get(builder.build());
+  if (Number.isNaN(minRating as number)) {
+    minRating = undefined;
   }
 
-  if (params.ingredientsToInclude) {
+  const criteria: ProductCriteria = {
+    phrase: queryParams.get(ProductListRequestParams.PHRASE) ?? undefined,
+    // eslint-disable-next-line max-len
+    ingredientsToExcludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_EXCLUDE)?.split(',') ?? undefined,
+    // eslint-disable-next-line max-len
+    ingredientsToIncludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_INCLUDE)?.split(',') ?? undefined,
+    minRating,
+    // TODO: SORT BY
+  };
+
+  return criteria;
+};
+
+export const productCriteriaToUrlBuilder = (
+  baseUrl: string,
+  criteria: ProductCriteria,
+): RequestWithParamsBuilder => {
+  const builder = new RequestWithParamsBuilder(baseUrl);
+
+  if (criteria.phrase) {
+    builder.setParam(ProductListRequestParams.PHRASE, criteria.phrase.toString());
+  }
+
+  if (criteria.ingredientsToIncludeIds) {
     builder.setParam(ProductListRequestParams.INGREDIENTS_INCLUDE,
-      toIdSetString(params.ingredientsToInclude));
+      criteria.ingredientsToIncludeIds.join(','));
   }
 
-  if (params.ingredientsToExclude) {
+  if (criteria.ingredientsToExcludeIds) {
     builder.setParam(ProductListRequestParams.INGREDIENTS_EXCLUDE,
-      toIdSetString(params.ingredientsToExclude));
+      criteria.ingredientsToExcludeIds.join(','));
   }
 
-  if (params.minRating) {
-    builder.setParam(ProductListRequestParams.MIN_RATING, params.minRating.toString());
-  }
-
-  if (params.phrase) {
-    builder.setParam(ProductListRequestParams.PHRASE, params.phrase.toString());
-  }
-
-  if (params.liked) {
-    builder.setParam(ProductListRequestParams.LIKED, params.liked.toString());
+  if (criteria.minRating) {
+    builder.setParam(ProductListRequestParams.MIN_RATING, criteria.minRating.toString());
   }
 
   // TODO: SORT_BY
+
+  return builder;
+};
+
+// eslint-disable-next-line max-len
+export const productCriteriaToUrl = (baseUrl: string, criteria: ProductCriteria): string => productCriteriaToUrlBuilder(baseUrl, criteria).build();
+
+export const getProductsListApi = (
+  criteria?: ProductCriteria,
+  pageNumber?: number,
+): Promise<AxiosResponse<ProductResponse>> => {
+  if (criteria === undefined) {
+    const builder = new RequestWithParamsBuilder(productsApiUrl);
+    builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+    return axios.get(builder.build());
+  }
+
+  const builder = productCriteriaToUrlBuilder(productsApiUrl, criteria);
+  builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
 
   return axios.get(builder.build());
 };
@@ -90,3 +122,12 @@ export const getProductsListApi = (
 export const getProductDetailsApi = (
   id: string,
 ): Promise<AxiosResponse<ProductDetailsResponse>> => axios.get(`${productsApiUrl}/${id}`);
+
+export const getLikedProductsApi = (
+  pageNumber?: number,
+): Promise<AxiosResponse<ProductResponse>> => {
+  const builder = new RequestWithParamsBuilder(productsApiUrl);
+  builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+  builder.setParam(ProductListRequestParams.LIKED, 'true');
+  return api.get(builder.build());
+};

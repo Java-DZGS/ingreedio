@@ -6,54 +6,37 @@ import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
-import { getUrl } from '../../utils/navigation';
 import { ROUTES } from '../../routes/routes';
 import {
   getProductsListApi,
   ProductCriteria,
+  productCriteriaToUrl,
   ProductObject,
+  urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
+import { IngredientObject, getIngredientsByIdsApi } from '../../services/ingredients.service';
 
 const ProductList = (): ReactElement => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
   const {
     isAuthenticated,
   } = useSelector((state: RootState) => state.auth);
 
-  const phraseString = queryParams.get('phrase') || '';
-  const categoryName = queryParams.get('category') || '';
-  const providerName = queryParams.get('provider') || '';
-  const brandName = queryParams.get('brand') || '';
+  // Get product criteria basing on the page url
+  const queryProductCriteria: ProductCriteria = urlToProductCriteria(location.search);
 
-  const ingredientsString = queryParams.get('ingredients') || '';
-  const ingredientNames = ingredientsString
-    .split(',')
-    .map((ingredient) => ingredient.trim());
-
-  const navigate = useNavigate();
+  // Current products displayed
   const [products, setProducts] = useState<ProductObject[]>([]);
-  const [phrase, setPhrase] = useState(phraseString);
-  const [category, setCategory] = useState(categoryName);
-  const [ingredients, setIngredients] = useState<string[]>(ingredientNames);
-  const [provider, setProvider] = useState(providerName);
-  const [brand, setBrand] = useState(brandName);
 
-  const fetchFilteredProducts = async (params: ProductCriteria) => {
-    try {
-      const response = await getProductsListApi(params);
-      if (response && response.data) {
-        setProducts(response.data.products);
-      }
-    } catch (error) {
-      console.error('Error fetching filtered products:', error);
-    }
-  };
+  // Data recreated basing ont the query url
+  const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (criteria: ProductCriteria) => {
     try {
-      const response = await getProductsListApi();
+      const response = await getProductsListApi(criteria);
       if (response && response.data) {
         setProducts(response.data.products);
       }
@@ -62,15 +45,34 @@ const ProductList = (): ReactElement => {
     }
   };
 
+  const fetchSelectedIngredients = async () => {
+    if (queryProductCriteria.ingredientsToIncludeIds) {
+      try {
+        // eslint-disable-next-line max-len
+        const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
+        if (response && response.data) {
+          setSelectedIngredients(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    }
+  };
+
   const handleSearch = () => {
-    // TODO
-    // fetchFilteredProducts(phrase);
-    // navigate(getUrl(phrase, ROUTES.PRODUCTS));
+    const criteria: ProductCriteria = {
+      ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
+    };
+    navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
+    fetchProducts(criteria);
   };
 
   useEffect(() => {
-    fetchProducts();
+    // fetch products
+    fetchProducts(queryProductCriteria);
+    fetchSelectedIngredients();
   }, []);
+
   return (
     <div className="product-list-page">
       <ScrollBar className="scrollbar-container">
@@ -107,31 +109,28 @@ const ProductList = (): ReactElement => {
             <SearchBar
               label="Provider"
               placeholder="e.g. rossmann"
-              onChange={(value) => setProvider(value)}
+              onChange={(value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="brand-search-container">
             <SearchBar
               label="Brand"
               placeholder="e.g. lovely"
-              onChange={(value) => setBrand(value)}
+              onChange={(value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="ingredient-search-container">
             <SearchBar
               label="Ingredients"
               placeholder="e.g. shea butter"
-              initialValue={ingredientNames.join(', ')}
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
+              onChange={(value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="category-search-container">
             <SearchBar
               label="Category"
               placeholder="e.g. skin care"
-              onChange={(value) => setCategory(value)}
+              onChange={(value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="search-button-container">

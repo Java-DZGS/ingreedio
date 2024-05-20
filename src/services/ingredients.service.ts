@@ -11,3 +11,11 @@ export interface IngredientObject extends WithId {
 export const getIngredientsApi = (query: string, count: number): Promise<
   AxiosResponse<IngredientObject[]>
 > => axios.get(`${ingredientsApiUrl}?count=${count}&query=${query}`);
+
+export const getIngredientsByIdsStringApi = (ids: string): Promise<
+  AxiosResponse<IngredientObject[]>
+> => axios.get(`${ingredientsApiUrl}/get-by?${ids}`);
+
+export const getIngredientsByIdsApi = (ids: string[]): Promise<
+  AxiosResponse<IngredientObject[]>
+> => axios.get(`${ingredientsApiUrl}/get-by?${ids.join(',')}`);

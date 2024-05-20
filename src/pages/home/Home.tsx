@@ -13,11 +13,12 @@ import {
   getIngredientsApi,
 } from '../../services/ingredients.service';
 import Tag from '../../components/Tag/Tag';
+import { ProductCriteria, productCriteriaToUrl } from '../../services/product.service';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
-  const [product, setProduct] = useState<string>('');
+  const [phrase, setPhrase] = useState<string>('');
   const [ingredientsSuggestions, setIngredientsSuggestions] = useState<
     IngredientObject[] | null
   >(null);
@@ -27,10 +28,11 @@ const Home = (): ReactElement => {
   >([]);
 
   const handleSearch = () => {
-    const params = {
-      product,
+    const criteria: ProductCriteria = {
+      phrase,
+      ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
     };
-    navigate(getUrl(params, ROUTES.PRODUCTS));
+    navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
   const onSearchBarChange = (query: string) => {
@@ -60,9 +62,8 @@ const Home = (): ReactElement => {
   };
 
   const handleRemoveIngredient = (id: string) => {
-    setSelectedIngredients((prevIngredients: IngredientObject[]) =>
-      prevIngredients.filter((ingredient) => ingredient.id !== id),
-    );
+    // eslint-disable-next-line max-len
+    setSelectedIngredients((prevIngredients: IngredientObject[]) => prevIngredients.filter((ingredient) => ingredient.id !== id));
   };
 
   return (
@@ -79,7 +80,7 @@ const Home = (): ReactElement => {
             id="product-search"
             label="Product"
             placeholder="e.g. shampoo"
-            onChange={(value) => setProduct(value)}
+            onChange={(value) => setPhrase(value)}
           />
           <SearchBar
             id="ingredient-search"
