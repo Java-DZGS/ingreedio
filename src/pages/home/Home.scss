@@ -34,9 +34,17 @@
       grid-template-columns: 2fr 3fr 0.5fr;
       grid-template-rows: 1fr 1fr;
       gap: 10px;
-      .ingredients-tags {
-        max-width: calc(100%);
+
+      .ingredient-tag-container{
+        position: relative;
       }
+      .ingredients-tags {
+        position: absolute;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
       .product-search-container,
       .ingredient-search-container {
         flex: 1;

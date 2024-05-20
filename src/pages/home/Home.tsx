@@ -18,11 +18,13 @@ const Home = (): ReactElement => {
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
   const [product, setProduct] = useState<string>('');
-  const [ingredientsSuggestions, setIngredientsSuggestions] = useState<IngredientObject[] | null>(
-    null,
-  );
+  const [ingredientsSuggestions, setIngredientsSuggestions] = useState<
+    IngredientObject[] | null
+  >(null);
 
-  const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[]>([]);
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    IngredientObject[]
+  >([]);
 
   const handleSearch = () => {
     const params = {
@@ -44,14 +46,23 @@ const Home = (): ReactElement => {
   };
 
   const onIngredientClick = (suggestion: Suggestion) => {
-    if (selectedIngredients.find((value: IngredientObject) => value.id === suggestion.id)) {
+    if (
+      selectedIngredients.find(
+        (value: IngredientObject) => value.id === suggestion.id,
+      )
+    ) {
       return;
     }
-    setSelectedIngredients((prevIngredients: IngredientObject[]) => [...prevIngredients, { id: suggestion.id, name: suggestion.text }]);
+    setSelectedIngredients((prevIngredients: IngredientObject[]) => [
+      ...prevIngredients,
+      { id: suggestion.id, name: suggestion.text },
+    ]);
   };
 
   const handleRemoveIngredient = (id: string) => {
-    setSelectedIngredients((prevIngredients: IngredientObject[]) => prevIngredients.filter((ingredient) => ingredient.id !== id));
+    setSelectedIngredients((prevIngredients: IngredientObject[]) =>
+      prevIngredients.filter((ingredient) => ingredient.id !== id),
+    );
   };
 
   return (
@@ -75,11 +86,13 @@ const Home = (): ReactElement => {
             label="Ingredients"
             placeholder="e.g. shea butter"
             suggestions={
-                ingredientsSuggestions?.map((ingredient: IngredientObject): Suggestion => ({
+              ingredientsSuggestions?.map(
+                (ingredient: IngredientObject): Suggestion => ({
                   id: ingredient.id,
                   text: ingredient.name,
-                })) ?? undefined
-              }
+                }),
+              ) ?? undefined
+            }
             onChange={onSearchBarChange}
             onSuggestionClick={onIngredientClick}
           />
@@ -91,14 +104,17 @@ const Home = (): ReactElement => {
             </div>
           </div>
           <div />
-          <div className="ingredients-tags">
-            {selectedIngredients.map((ingredient) => (
-              <Tag
-                key={ingredient.id}
-                text={ingredient.name}
-                onDelete={() => handleRemoveIngredient(ingredient.id)}
-              />
-            ))}
+          <div className="ingredient-tag-container">
+            <div className="ingredients-tags">
+              {selectedIngredients.map((ingredient) => (
+                <Tag
+                  key={ingredient.id}
+                  text={ingredient.name}
+                  color="rgba(255,219,119,0.80)"
+                  onDelete={() => handleRemoveIngredient(ingredient.id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
