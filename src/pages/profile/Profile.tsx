@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../../components/Card/Card';
@@ -8,30 +8,33 @@ import ProfileSection from '../../components/ProfileSection/ProfileSection';
 import UserDetails from '../../components/UserDetails/UserDetails';
 import TagList from '../../components/TagList/TagList';
 import { ROUTES } from '../../routes/routes';
-import actions, { undislikeIngredient, unlikeIngredient } from '../../store/actions';
+import actions from '../../store/actions';
 import { RootState } from '../../store/reducers';
 
 // eslint-disable-next-line arrow-body-style
 const Profile = (): ReactElement => {
-  const userData = [
-    { title: 'Display Name', value: 'John Doe' },
-    { title: 'Username', value: 'johndoe123' },
-    { title: 'Email', value: 'johndoe@example.com' },
-  ];
-
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
+  );
+  const { displayName, email } = useSelector((state: RootState) => state.user);
+  const userData = useMemo(
+    () => [
+      { title: 'Display Name', value: displayName },
+      { title: 'Username', value: 'johndoe123' },
+      { title: 'Email', value: email },
+    ],
+    [displayName, email],
   );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleDeleteLiked = (ingredient: string) => {
-    dispatch(unlikeIngredient(ingredient));
+    dispatch(actions.unlikeIngredient(ingredient));
   };
 
   const handleDeleteDisliked = (ingredient: string) => {
-    dispatch(undislikeIngredient(ingredient));
+    dispatch(actions.undislikeIngredient(ingredient));
   };
 
   const handleSignOut = () => {

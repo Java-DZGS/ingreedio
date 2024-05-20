@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 // ProductDetails.tsx
 
 import React, { useEffect, useState } from 'react';
@@ -11,8 +10,11 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Button,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AxiosResponse } from 'axios';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
 import ProductDescription from '../../components/ProductDescription/ProductDescription';
@@ -24,6 +26,13 @@ import {
 } from '../../services/product.service';
 import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
+import Opinion from '../../components/Opinion/Opinion';
+import OpinionModal from '../../components/OpinionModal/OpinionModal';
+import {
+  ReviewResponse,
+  getProductReviewsApi,
+  postProductReviewApi,
+} from '../../services/review.service';
 
 const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -31,12 +40,15 @@ const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+  const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const likeProduct = () => {
     if (productId) {
@@ -68,8 +80,54 @@ const ProductDetails = (): JSX.Element => {
     }
   };
 
+  const fetchProductReviews = async () => {
+    try {
+      if (!productId) return;
+      const response = await getProductReviewsApi(productId);
+      if (response && response.data) {
+        setProductReviews(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching product reviews:', error);
+    }
+  };
+
+  const onSubmitOpinion = async (
+    opinionRating: number,
+    opinionContent: string,
+  ) => {
+    if (!productId) return;
+    try {
+      // eslint-disable-next-line operator-linebreak
+      const newReviewResponse: AxiosResponse<ReviewResponse> =
+        await postProductReviewApi(productId, {
+          rating: 2 * opinionRating,
+          content: opinionContent,
+        });
+
+      const newReview = newReviewResponse.data;
+      setProductReviews((reviews) => [...reviews, newReview]);
+    } catch (error) {
+      console.error('An error occurred while adding review:', error);
+    }
+    console.log('Opinion submitted:', opinionRating, opinionContent);
+  };
+
+  const handleLikeOpinion = () => {
+    console.log('Like button clicked');
+  };
+
+  const handleDislikeOpinion = () => {
+    console.log('Dislike button clicked');
+  };
+
+  const handleReportOpinion = () => {
+    console.log('Report button clicked');
+  };
+
   useEffect(() => {
     fetchProduct();
+    fetchProductReviews();
   }, [dispatch, productId]);
 
   if (!product) {
@@ -91,7 +149,7 @@ const ProductDetails = (): JSX.Element => {
               shortDescription={shortDescription}
               volume={product.volume}
               brand={product.brand}
-              rating={5}
+              rating={product.rating}
               isLiked={isLiked}
               largeImageUrl={product.largeImageUrl}
               showLike={isAuthenticated}
@@ -103,7 +161,7 @@ const ProductDetails = (): JSX.Element => {
                 <div className="sections-card-content-container">
                   <Tabs variant="unstyled" position="relative" width="100%">
                     <TabList gap={5}>
-                      <Tab fontSize={20}>Ingreedients</Tab>
+                      <Tab fontSize={20}>Ingredients</Tab>
                       <Tab fontSize={20}>Description</Tab>
                       <Tab fontSize={20}>Opinions</Tab>
                     </TabList>
@@ -142,10 +200,35 @@ const ProductDetails = (): JSX.Element => {
                           <p>{product.longDescription}</p>
                         </div>
                       </TabPanel>
-                      <TabPanel>
-                        <div className="opinions-container">
-                          <p>opinions</p>
-                        </div>
+                      <TabPanel
+                        style={{ display: 'flex', flex: 1, width: '100%' }}
+                      >
+                        <ScrollBar>
+                          {isAuthenticated && (
+                            <Button onClick={onOpen} variant="link">
+                              Add your opinion
+                            </Button>
+                          )}
+                          <div className="opinions-list">
+                            <ul>
+                              {productReviews.map((opinion) => (
+                                <li
+                                  key={`${opinion.displayName}-${product.id}`}
+                                >
+                                  <Opinion
+                                    username={opinion.displayName}
+                                    rating={opinion.rating}
+                                    createdAt={opinion.createdAt}
+                                    content={opinion.content}
+                                    onLike={handleLikeOpinion}
+                                    onDislike={handleDislikeOpinion}
+                                    onReport={handleReportOpinion}
+                                  />
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </ScrollBar>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
@@ -155,6 +238,11 @@ const ProductDetails = (): JSX.Element => {
           </div>
         </Card>
       </div>
+      <OpinionModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSubmit={onSubmitOpinion}
+      />
     </div>
   );
 };

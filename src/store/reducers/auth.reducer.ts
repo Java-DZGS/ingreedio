@@ -7,7 +7,7 @@ type AuthState = {
   accessToken: string;
   refreshToken: string;
   buttonLoading: boolean;
-  isAuthenticated: boolean,
+  isAuthenticated: boolean;
 };
 
 const initialState: AuthState = {
@@ -19,11 +19,19 @@ const initialState: AuthState = {
   isAuthenticated: false,
 };
 
-export const auth = (
+const auth = (
   state: AuthState = initialState,
   action: AnyAction,
 ): typeof initialState => {
   switch (action.type) {
+    case types.LOG_USER:
+      return {
+        ...state,
+        accessToken: action.payload,
+        isAuthenticated: true,
+        loginSuccessful: true,
+      };
+
     case types.SIGN_IN_REQUEST:
       return {
         ...state,
@@ -87,3 +95,5 @@ export const auth = (
       return state;
   }
 };
+
+export default auth;

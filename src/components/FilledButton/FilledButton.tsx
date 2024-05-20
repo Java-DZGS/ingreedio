@@ -4,6 +4,7 @@ import Button from '../Button/Button';
 
 type FilledButtonProps = {
   children?: ReactNode;
+  isDisabled?: boolean;
   reverseGradient?: boolean;
   onClick?: () => void;
 };
@@ -11,11 +12,13 @@ type FilledButtonProps = {
 const FilledButton = ({
   children,
   reverseGradient = false,
+  isDisabled = false,
   onClick = () => {},
 }: FilledButtonProps): JSX.Element => (
   <Button
-    onClick={onClick}
-    className={`button ${reverseGradient ? 'reverse-gradient' : 'gradient'}`}
+    onClick={!isDisabled ? onClick : () => {}}
+    // eslint-disable-next-line no-nested-ternary
+    className={`button ${isDisabled ? 'disabled' : reverseGradient ? 'reverse-gradient' : 'gradient'}`}
   >
     {children}
   </Button>

@@ -1,5 +1,6 @@
+/* eslint-disable max-len */
 import { StateObservable, combineEpics, ofType } from 'redux-observable';
-import { switchMap, catchError, map } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 import { from, of, Observable } from 'rxjs';
 import { AnyAction } from 'redux';
 import actions, { types } from '../actions';
@@ -11,8 +12,12 @@ const signInEpic = (
   _state$: StateObservable<RootState>,
 ) => action$.pipe(
   ofType(types.SIGN_IN_REQUEST),
-  switchMap(({ payload }) => from(services.signInApi(payload.username, payload.password)).pipe(
-    map((response) => actions.signInSuccess(response.data)),
+  switchMap(({ payload: { username, password } }) => from(services.signInApi(username, password)).pipe(
+    switchMap((response) => [
+      actions.signInSuccess(response.data),
+      actions.getUserInfoRequest(username),
+      actions.setUsername(username),
+    ]),
     catchError((error) => of(actions.signInFailure(error.message))),
   )),
 );
@@ -24,13 +29,14 @@ const signUpEpic = (
   ofType(types.SIGN_UP_REQUEST),
   switchMap(({
     payload: {
-      username,
-      displayName,
-      email,
-      password,
+      username, displayName, email, password,
     },
   }) => from(services.signUpApi(username, displayName, email, password)).pipe(
-    map((_response) => actions.signUpSuccess()),
+    switchMap((_response) => [
+      actions.signUpSuccess(),
+      actions.getUserInfoRequest(username),
+      actions.setUsername(username),
+    ]),
     catchError((error) => of(actions.signUpFailure(error.message))),
   )),
 );

@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { MdOutlineThumbUp, MdOutlineThumbDown } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  likeIngredient,
-  dislikeIngredient,
-  undislikeIngredient,
-  unlikeIngredient,
-} from '../../store/actions';
+import actions from '../../store/actions';
 import './ProductDetailsIngredient.scss';
 import { RootState } from '../../store/reducers';
 
@@ -29,23 +24,23 @@ const ProductDetailsIngredient = ({
 
   const toggleLike = () => {
     if (isLiked) {
-      dispatch(unlikeIngredient(ingredient));
+      dispatch(actions.unlikeIngredient(ingredient));
     } else {
       if (isDisliked) {
-        dispatch(undislikeIngredient(ingredient));
+        dispatch(actions.undislikeIngredient(ingredient));
       }
-      dispatch(likeIngredient(ingredient));
+      dispatch(actions.likeIngredient(ingredient));
     }
   };
 
   const toggleDislike = () => {
     if (isDisliked) {
-      dispatch(undislikeIngredient(ingredient));
+      dispatch(actions.undislikeIngredient(ingredient));
     } else {
       if (isLiked) {
-        dispatch(unlikeIngredient(ingredient));
+        dispatch(actions.unlikeIngredient(ingredient));
       }
-      dispatch(dislikeIngredient(ingredient));
+      dispatch(actions.dislikeIngredient(ingredient));
     }
   };
 
