@@ -10,20 +10,21 @@ import TagList from '../../components/TagList/TagList';
 import { ROUTES } from '../../routes/routes';
 import actions from '../../store/actions';
 import { RootState } from '../../store/reducers';
+import { IngredientObject } from '../../services/ingredients.service';
 
 // eslint-disable-next-line arrow-body-style
 const Profile = (): ReactElement => {
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
-  const { displayName, email } = useSelector((state: RootState) => state.user);
+  const { displayName, email, username } = useSelector((state: RootState) => state.user);
   const userData = useMemo(
     () => [
       { title: 'Display Name', value: displayName },
-      { title: 'Username', value: 'johndoe123' },
+      { title: 'Username', value: username },
       { title: 'Email', value: email },
     ],
-    [displayName, email],
+    [displayName, username, email],
   );
 
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const Profile = (): ReactElement => {
             <ProfileSection title="Liked ingredients">
               <div className="inner-tags-container">
                 <TagList
-                  tags={likedIngredients}
+                  tags={likedIngredients.map((ingr: IngredientObject) => ingr.name)}
                   onDelete={handleDeleteLiked}
                   color="rgba(135, 185, 255, 0.47)"
                 />
@@ -74,7 +75,7 @@ const Profile = (): ReactElement => {
             <ProfileSection title="Disliked ingredients">
               <div className="inner-tags-container">
                 <TagList
-                  tags={dislikedIngredients}
+                  tags={dislikedIngredients.map((ingr: IngredientObject) => ingr.name)}
                   onDelete={handleDeleteDisliked}
                   color="rgba(255, 171, 135, 0.47)"
                 />

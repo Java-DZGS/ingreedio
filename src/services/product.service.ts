@@ -47,7 +47,7 @@ export interface ProductCriteria {
     ingredientsToIncludeIds?: string[];
     ingredientsToExcludeIds?: string[];
     minRating?: number;
-    // TODO: SORT BY
+    // TODO: sort by, brands, providers, categories
 }
 
 export const urlToProductCriteria = (url: string): ProductCriteria => {
@@ -62,12 +62,10 @@ export const urlToProductCriteria = (url: string): ProductCriteria => {
 
   const criteria: ProductCriteria = {
     phrase: queryParams.get(ProductListRequestParams.PHRASE) ?? undefined,
-    // eslint-disable-next-line max-len
     ingredientsToExcludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_EXCLUDE)?.split(',') ?? undefined,
-    // eslint-disable-next-line max-len
     ingredientsToIncludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_INCLUDE)?.split(',') ?? undefined,
     minRating,
-    // TODO: SORT BY
+    // TODO: sort by, brands, providers, categories
   };
 
   return criteria;
@@ -97,13 +95,15 @@ export const productCriteriaToUrlBuilder = (
     builder.setParam(ProductListRequestParams.MIN_RATING, criteria.minRating.toString());
   }
 
-  // TODO: SORT_BY
+  // TODO: sort by, brands, providers, categories
 
   return builder;
 };
 
-// eslint-disable-next-line max-len
-export const productCriteriaToUrl = (baseUrl: string, criteria: ProductCriteria): string => productCriteriaToUrlBuilder(baseUrl, criteria).build();
+export const productCriteriaToUrl = (
+  baseUrl: string,
+  criteria: ProductCriteria,
+): string => productCriteriaToUrlBuilder(baseUrl, criteria).build();
 
 export const getProductsListApi = (
   criteria?: ProductCriteria,

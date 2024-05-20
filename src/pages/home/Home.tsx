@@ -7,7 +7,6 @@ import { AxiosResponse } from 'axios';
 import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
-import { getUrl } from '../../utils/navigation';
 import {
   IngredientObject,
   getIngredientsApi,

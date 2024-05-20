@@ -30,9 +30,23 @@ const ProductList = (): ReactElement => {
   // Current products displayed
   const [products, setProducts] = useState<ProductObject[]>([]);
 
-  // Data recreated basing ont the query url
+  // Data recreated basing on the query product criteria
   const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
+
+  const fetchSelectedIngredients = async () => {
+    if (queryProductCriteria.ingredientsToIncludeIds) {
+      try {
+        const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
+        if (response && response.data) {
+          setSelectedIngredients(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    }
+  };
 
   const fetchProducts = async (criteria: ProductCriteria) => {
     try {
@@ -42,20 +56,6 @@ const ProductList = (): ReactElement => {
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-    }
-  };
-
-  const fetchSelectedIngredients = async () => {
-    if (queryProductCriteria.ingredientsToIncludeIds) {
-      try {
-        // eslint-disable-next-line max-len
-        const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
-        if (response && response.data) {
-          setSelectedIngredients(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
     }
   };
 
@@ -109,28 +109,28 @@ const ProductList = (): ReactElement => {
             <SearchBar
               label="Provider"
               placeholder="e.g. rossmann"
-              onChange={(value) => console.log('Not implemented yet')}
+              onChange={(_value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="brand-search-container">
             <SearchBar
               label="Brand"
               placeholder="e.g. lovely"
-              onChange={(value) => console.log('Not implemented yet')}
+              onChange={(_value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="ingredient-search-container">
             <SearchBar
               label="Ingredients"
               placeholder="e.g. shea butter"
-              onChange={(value) => console.log('Not implemented yet')}
+              onChange={(_value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="category-search-container">
             <SearchBar
               label="Category"
               placeholder="e.g. skin care"
-              onChange={(value) => console.log('Not implemented yet')}
+              onChange={(_value) => console.log('Not implemented yet')}
             />
           </div>
           <div className="search-button-container">
