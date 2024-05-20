@@ -29,7 +29,9 @@ const Opinion = ({
         <span className="rating">· {rating / 2}/5 </span>
         <FaStar className="star" />
       </div>
-      <span className="date">{createdAt}</span>
+      <span className="date">
+        {new Date(createdAt).toLocaleDateString('sv-SE')}
+      </span>
     </div>
     <div className="content">{content}</div>
     <div className="footer">
