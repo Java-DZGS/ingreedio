@@ -96,7 +96,7 @@ const ProductList = (): ReactElement => {
                     provider={product.provider}
                     smallImageUrl={product.smallImageUrl}
                     shortDescription={product.shortDescription}
-                    rating={3}
+                    rating={product.rating}
                     showLike={isAuthenticated}
                     isLiked={!!product.isLiked}
                   />

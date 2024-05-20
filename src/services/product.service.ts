@@ -10,6 +10,7 @@ export interface ProductObject {
   provider: string;
   shortDescription: string;
   isLiked?: boolean;
+  rating: number
 }
 
 export interface ProductResponse {
@@ -26,6 +27,7 @@ export interface ProductDetailsResponse {
   longDescription: string;
   volume: number;
   ingredients: string[];
+  rating: number
 }
 
 export interface ProductFilters {
