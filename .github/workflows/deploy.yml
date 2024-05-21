@@ -34,10 +34,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Pull latest develop Backend image
+      - name: Pull latest master Backend image
         run: |-
-           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:develop
-           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:develop ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/docker-dev/ingreedio
+           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master
+           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:master ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/docker-dev/ingreedio
         
       - name: Google auth
         id: auth
