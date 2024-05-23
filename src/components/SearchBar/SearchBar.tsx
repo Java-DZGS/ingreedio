@@ -28,7 +28,6 @@ const SearchBar = ({
   onSuggestionClick = () => {},
 }: SearchBarProps): JSX.Element => {
   const [value, setValue] = useState(initialValue);
-  useState<boolean>(true);
   const [isSuggestionsDisplayed, setIsSuggestionsDisplayed] = useState<boolean>(false);
   const hitboxRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);

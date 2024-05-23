@@ -53,11 +53,13 @@ export interface ProductCriteria {
 export const urlToProductCriteria = (url: string): ProductCriteria => {
   const queryParams = new URLSearchParams(url);
   const minRatingStr = queryParams.get(ProductListRequestParams.MIN_RATING);
-  let minRating: number | undefined = minRatingStr !== null
-    ? parseInt(minRatingStr, 10) : undefined;
+  let minRating: number | undefined;
 
-  if (Number.isNaN(minRating as number)) {
-    minRating = undefined;
+  if (minRatingStr !== null) {
+    const parsedRating = parseInt(minRatingStr, 10);
+    if (!Number.isNaN(parsedRating)) {
+      minRating = parsedRating;
+    }
   }
 
   const criteria: ProductCriteria = {
