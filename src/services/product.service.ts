@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
 import RequestUrlBuilder from '../utils/requestBuilder';
 import api from '../config/api';
+import { stringToUrlString } from '../utils/stringToUrlString';
 
 const productsApiUrl = `${apiUrl}/products`;
 
@@ -52,11 +53,11 @@ export interface ProductCriteria {
 
 export const urlToProductCriteria = (url: string): ProductCriteria => {
   const queryParams = new URLSearchParams(url);
-  const minRatingStr = queryParams.get(ProductListRequestParams.MIN_RATING);
-  let minRating: number | undefined;
 
-  if (minRatingStr !== null) {
-    const parsedRating = parseInt(minRatingStr, 10);
+  const minRatingParam = queryParams.get(ProductListRequestParams.MIN_RATING);
+  let minRating: number | undefined;
+  if (minRatingParam) {
+    const parsedRating = parseInt(minRatingParam, 10);
     if (!Number.isNaN(parsedRating)) {
       minRating = parsedRating;
     }
@@ -80,7 +81,9 @@ export const productCriteriaToUrlBuilder = (
   const builder = new RequestUrlBuilder(baseUrl);
 
   if (criteria.phrase) {
-    builder.setParam(ProductListRequestParams.PHRASE, criteria.phrase.toString());
+    // The phrase has the uneccessary spaces removed
+    // and the rest of the spaces are replaced with '%20'
+    builder.setParam(ProductListRequestParams.PHRASE, stringToUrlString(criteria.phrase));
   }
 
   if (criteria.ingredientsToIncludeIds && criteria.ingredientsToIncludeIds.length > 0) {
