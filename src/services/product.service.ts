@@ -79,6 +79,7 @@ export const productCriteriaToUrlBuilder = (
   criteria: ProductCriteria,
 ): RequestUrlBuilder => {
   const builder = new RequestUrlBuilder(baseUrl);
+  console.log(criteria);
 
   if (criteria.phrase) {
     // The phrase has the uneccessary spaces removed

@@ -1,0 +1,17 @@
+.search-bar-selector {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .ingredient-tag-container {
+    position: relative;
+    max-width: 100%;
+    .ingredients-tags {
+      position: absolute;
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+}

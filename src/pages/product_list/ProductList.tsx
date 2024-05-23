@@ -15,7 +15,12 @@ import {
   urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
-import { IngredientObject, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import SearchBarSelector from '../../components/SearchBarWithTags/SearchBarSelector';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
+import { TagColor } from '../../theme/tagColor';
+
+const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
   const navigate = useNavigate();
@@ -34,6 +39,15 @@ const ProductList = (): ReactElement => {
   const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
 
+  const fetchIngredientsSuggestions = async (query: string):
+  Promise<ObjectWithNameAndId[] | null> => {
+    if (query.length === 0) {
+      return null;
+    }
+    const ingredientsResponse = await getIngredientsApi(query, MAX_INGREDIENTS_SUGGESTIONS);
+    return ingredientsResponse.data;
+  };
+
   const fetchSelectedIngredients = async () => {
     if (queryProductCriteria.ingredientsToIncludeIds) {
       try {
@@ -48,6 +62,7 @@ const ProductList = (): ReactElement => {
   };
 
   const fetchProducts = async (criteria: ProductCriteria) => {
+    console.log(criteria);
     try {
       const response = await getProductsListApi(criteria);
       if (response && response.data) {
@@ -105,7 +120,24 @@ const ProductList = (): ReactElement => {
               onChange={(value) => setPhrase(value)}
             />
           </div>
-          <div className="provider-search-container">
+          <div className="ingredient-search-container">
+            <SearchBarSelector
+              getSuggestions={fetchIngredientsSuggestions}
+              onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
+                (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
+              )}
+              onElementRemoved={(id: string) => setSelectedIngredients(
+                (old: IngredientObject[] | null) => old?.filter(
+                  (ingredient: IngredientObject) => ingredient.id !== id,
+                ) ?? null,
+              )}
+              selectedElements={selectedIngredients ?? undefined}
+              label="Ingredients"
+              placeholder="e.g. shea butter"
+              tagsColor={TagColor.INGREDIENT}
+            />
+          </div>
+          {/* <div className="provider-search-container">
             <SearchBar
               label="Provider"
               placeholder="e.g. rossmann"
@@ -119,20 +151,14 @@ const ProductList = (): ReactElement => {
               onChange={(_value) => console.log('Not implemented yet')}
             />
           </div>
-          <div className="ingredient-search-container">
-            <SearchBar
-              label="Ingredients"
-              placeholder="e.g. shea butter"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
+
           <div className="category-search-container">
             <SearchBar
               label="Category"
               placeholder="e.g. skin care"
               onChange={(_value) => console.log('Not implemented yet')}
             />
-          </div>
+          </div> */}
           <div className="search-button-container">
             <FilledButton onClick={handleSearch}>Search</FilledButton>
           </div>

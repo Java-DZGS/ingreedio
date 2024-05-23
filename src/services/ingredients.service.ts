@@ -1,13 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
-import { WithId } from '../types/types';
 import RequestUrlBuilder from '../utils/requestBuilder';
+import { ObjectWithNameAndId } from '../types/objectWithNameAndId';
 
 const ingredientsApiUrl = `${apiUrl}/ingredients`;
 
-export interface IngredientObject extends WithId {
-  name: string;
-}
+export type IngredientObject = ObjectWithNameAndId
 
 export const getIngredientsApi = (query: string, count: number): Promise<
   AxiosResponse<IngredientObject[]>

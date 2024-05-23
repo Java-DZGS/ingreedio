@@ -4,7 +4,7 @@ import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
 import { AxiosResponse } from 'axios';
-import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -13,6 +13,8 @@ import {
 } from '../../services/ingredients.service';
 import Tag from '../../components/Tag/Tag';
 import { ProductCriteria, productCriteriaToUrl } from '../../services/product.service';
+import { TagColor } from '../../theme/tagColor';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ const Home = (): ReactElement => {
     );
   };
 
-  const onIngredientClick = (suggestion: Suggestion) => {
+  const onIngredientClick = (suggestion: ObjectWithNameAndId) => {
     if (
       selectedIngredients.find(
         (value: IngredientObject) => value.id === suggestion.id,
@@ -56,7 +58,7 @@ const Home = (): ReactElement => {
     }
     setSelectedIngredients((prevIngredients: IngredientObject[]) => [
       ...prevIngredients,
-      { id: suggestion.id, name: suggestion.text },
+      suggestion,
     ]);
   };
 
@@ -85,14 +87,7 @@ const Home = (): ReactElement => {
             id="ingredient-search"
             label="Ingredients"
             placeholder="e.g. shea butter"
-            suggestions={
-              ingredientsSuggestions?.map(
-                (ingredient: IngredientObject): Suggestion => ({
-                  id: ingredient.id,
-                  text: ingredient.name,
-                }),
-              ) ?? undefined
-            }
+            suggestions={ingredientsSuggestions ?? undefined}
             onChange={onSearchBarChange}
             onSuggestionClick={onIngredientClick}
           />
@@ -110,7 +105,7 @@ const Home = (): ReactElement => {
                 <Tag
                   key={ingredient.id}
                   text={ingredient.name}
-                  color="rgba(255,219,119,0.80)"
+                  color={TagColor.INGREDIENT}
                   onDelete={() => handleRemoveIngredient(ingredient.id)}
                 />
               ))}

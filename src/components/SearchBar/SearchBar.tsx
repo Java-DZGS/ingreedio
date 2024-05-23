@@ -2,23 +2,19 @@ import React, {
   ChangeEvent, useEffect, useRef, useState,
 } from 'react';
 import './SearchBar.scss';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 
 const DEBOUNCING_TIME_MS = 275;
 
-export type Suggestion = {
-    id: string;
-    text: string;
-  };
-
-  type SearchBarProps = {
-    label?: string;
-    placeholder?: string;
-    id?: string;
-    initialValue?: string;
-    suggestions?: Suggestion[];
-    onChange?: (value: string) => void;
-    onSuggestionClick?: (suggestion: Suggestion) => void;
-  };
+type SearchBarProps = {
+  label?: string;
+  placeholder?: string;
+  id?: string;
+  initialValue?: string;
+  suggestions?: ObjectWithNameAndId[];
+  onChange?: (value: string) => void;
+  onSuggestionClick?: (suggestion: ObjectWithNameAndId) => void;
+};
 
 const SearchBar = ({
   label = '',
@@ -52,7 +48,7 @@ const SearchBar = ({
     setIsSuggestionsDisplayed(true);
   };
 
-  const handleSuggestionClick = (suggestion: Suggestion) => {
+  const handleSuggestionClick = (suggestion: ObjectWithNameAndId) => {
     onSuggestionClick(suggestion);
     setValue('');
     setIsSuggestionsDisplayed(false);
@@ -104,14 +100,14 @@ const SearchBar = ({
       <div role="button" ref={hitboxRef} className="suggestions-hitbox">
         {suggestions && suggestions.length > 0 && isSuggestionsDisplayed && (
         <ul className="suggestions-list">
-          {suggestions.map((suggestion: Suggestion) => (
+          {suggestions.map((suggestion: ObjectWithNameAndId) => (
             <li key={suggestion.id} className="suggestion-item">
               <button
                 className="suggestion-button"
                 type="button"
                 onClick={() => handleSuggestionClick(suggestion)}
               >
-                {suggestion.text}
+                {suggestion.name}
               </button>
             </li>
           ))}
