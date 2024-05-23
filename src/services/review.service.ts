@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import api from '../config/api';
 
-const getApiUrl = (productId: string): string => `/products/${productId}/ratings`;
+const getApiUrl = (productId: string): string => `/products/${productId}/reviews`;
 
 export interface ReviewObject {
     rating: number,
