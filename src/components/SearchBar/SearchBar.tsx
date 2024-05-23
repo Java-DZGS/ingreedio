@@ -81,6 +81,8 @@ const SearchBar = ({
           placeholder={placeholder}
           onChange={handleChange}
           onFocus={handleInputFieldFocus}
+          autoComplete="off"
+          name="input_autocomplete_off"
           value={value}
         />
       </label>

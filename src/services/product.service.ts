@@ -81,12 +81,12 @@ export const productCriteriaToUrlBuilder = (
     builder.setParam(ProductListRequestParams.PHRASE, criteria.phrase.toString());
   }
 
-  if (criteria.ingredientsToIncludeIds) {
+  if (criteria.ingredientsToIncludeIds && criteria.ingredientsToIncludeIds.length > 0) {
     builder.setParam(ProductListRequestParams.INGREDIENTS_INCLUDE,
       criteria.ingredientsToIncludeIds.join(','));
   }
 
-  if (criteria.ingredientsToExcludeIds) {
+  if (criteria.ingredientsToExcludeIds && criteria.ingredientsToExcludeIds.length > 0) {
     builder.setParam(ProductListRequestParams.INGREDIENTS_EXCLUDE,
       criteria.ingredientsToExcludeIds.join(','));
   }
