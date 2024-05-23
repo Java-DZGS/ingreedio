@@ -44,6 +44,7 @@ const ProductDetails = (): JSX.Element => {
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { likedIngredients, dislikedIngredients } = useSelector(
     (state: RootState) => state.like,
   );
@@ -182,12 +183,13 @@ const ProductDetails = (): JSX.Element => {
                                 <li key={ingredient + Math.random()}>
                                   <ProductDetailsIngredient
                                     ingredient={ingredient}
-                                    isLiked={likedIngredients.includes(
-                                      ingredient,
-                                    )}
-                                    isDisliked={dislikedIngredients.includes(
-                                      ingredient,
-                                    )}
+                                    // TODO: when backend returns the ingredients id
+                                    // isLiked={likedIngredients.includes(
+                                    //   ingredient,
+                                    // )}
+                                    // isDisliked={dislikedIngredients.includes(
+                                    //   ingredient,
+                                    // )}
                                   />
                                 </li>
                               ))}

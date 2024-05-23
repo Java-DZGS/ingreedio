@@ -1,9 +1,10 @@
 import { AnyAction } from 'redux';
 import { types } from '../actions';
+import { IngredientObject } from '../../services/ingredients.service';
 
 type LikeState = {
-  likedIngredients: string[];
-  dislikedIngredients: string[];
+  likedIngredients: IngredientObject[];
+  dislikedIngredients: IngredientObject[];
 };
 const initialState: LikeState = {
   likedIngredients: [],
@@ -29,14 +30,14 @@ const like = (
       return {
         ...state,
         likedIngredients: state.likedIngredients.filter(
-          (ingredient) => ingredient !== (action.payload as string),
+          (ingredient) => ingredient.id !== (action.payload.id as string),
         ),
       };
     case types.UNDISLIKE_SUCCESS:
       return {
         ...state,
         dislikedIngredients: state.dislikedIngredients.filter(
-          (ingredient) => ingredient !== (action.payload as string),
+          (ingredient) => ingredient.id !== (action.payload.id as string),
         ),
       };
     case types.GET_LIKES:

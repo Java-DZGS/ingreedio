@@ -3,23 +3,66 @@
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import { AxiosResponse } from 'axios';
+import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
-import { getUrl } from '../../utils/navigation';
+import {
+  IngredientObject,
+  getIngredientsApi,
+} from '../../services/ingredients.service';
+import Tag from '../../components/Tag/Tag';
+import { ProductCriteria, productCriteriaToUrl } from '../../services/product.service';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
-  const [product, setProduct] = useState('');
-  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [phrase, setPhrase] = useState<string>('');
+  const [ingredientsSuggestions, setIngredientsSuggestions] = useState<
+    IngredientObject[] | null
+  >(null);
+
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    IngredientObject[]
+  >([]);
 
   const handleSearch = () => {
-    const params = {
-      product,
-      ingredients: ingredients.join(','),
+    const criteria: ProductCriteria = {
+      phrase,
+      ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
     };
-    navigate(getUrl(params, ROUTES.PRODUCTS));
+    navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
+  };
+
+  const onSearchBarChange = (query: string) => {
+    if (query.length === 0) {
+      setIngredientsSuggestions(null);
+      return;
+    }
+    getIngredientsApi(query, 50).then(
+      (value: AxiosResponse<IngredientObject[]>) => {
+        setIngredientsSuggestions(value.data);
+      },
+    );
+  };
+
+  const onIngredientClick = (suggestion: Suggestion) => {
+    if (
+      selectedIngredients.find(
+        (value: IngredientObject) => value.id === suggestion.id,
+      )
+    ) {
+      return;
+    }
+    setSelectedIngredients((prevIngredients: IngredientObject[]) => [
+      ...prevIngredients,
+      { id: suggestion.id, name: suggestion.text },
+    ]);
+  };
+
+  const handleRemoveIngredient = (id: string) => {
+    // eslint-disable-next-line max-len
+    setSelectedIngredients((prevIngredients: IngredientObject[]) => prevIngredients.filter((ingredient) => ingredient.id !== id));
   };
 
   return (
@@ -32,29 +75,45 @@ const Home = (): ReactElement => {
           </h1>
         </div>
         <div className="search-container">
-          <div className="product-search-container">
-            <SearchBar
-              id="product-search"
-              label="Product"
-              placeholder="e.g. shampoo"
-              onChange={(value) => setProduct(value)}
-            />
-          </div>
-          <div className="ingredient-search-container">
-            <SearchBar
-              id="ingredient-search"
-              label="Ingredients"
-              placeholder="e.g. shea butter"
-              onChange={(value) => setIngredients(
-                value.split(',').map((ingredient) => ingredient.trim()),
-              )}
-            />
-          </div>
+          <SearchBar
+            id="product-search"
+            label="Product"
+            placeholder="e.g. shampoo"
+            onChange={(value) => setPhrase(value)}
+          />
+          <SearchBar
+            id="ingredient-search"
+            label="Ingredients"
+            placeholder="e.g. shea butter"
+            suggestions={
+              ingredientsSuggestions?.map(
+                (ingredient: IngredientObject): Suggestion => ({
+                  id: ingredient.id,
+                  text: ingredient.name,
+                }),
+              ) ?? undefined
+            }
+            onChange={onSearchBarChange}
+            onSuggestionClick={onIngredientClick}
+          />
           <div className="search-button-container">
             <div className="inner-search-button-container">
               <div className="search-button">
                 <FilledButton onClick={handleSearch}>Search</FilledButton>
               </div>
+            </div>
+          </div>
+          <div />
+          <div className="ingredient-tag-container">
+            <div className="ingredients-tags">
+              {selectedIngredients.map((ingredient) => (
+                <Tag
+                  key={ingredient.id}
+                  text={ingredient.name}
+                  color="rgba(255,219,119,0.80)"
+                  onDelete={() => handleRemoveIngredient(ingredient.id)}
+                />
+              ))}
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import { signInApi, signUpApi } from './auth.service';
 import {
-  getFilteredProductsListApi,
   getProductDetailsApi,
   getProductsListApi,
 } from './product.service';
@@ -10,5 +9,4 @@ export default {
   signUpApi,
   getProductsListApi,
   getProductDetailsApi,
-  getFilteredProductsListApi,
 };
