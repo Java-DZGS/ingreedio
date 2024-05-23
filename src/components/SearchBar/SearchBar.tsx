@@ -3,20 +3,22 @@ import React, {
 } from 'react';
 import './SearchBar.scss';
 
-export type Suggestion = {
-  id: string;
-  text: string;
-};
+const DEBOUNCING_TIME_MS = 275;
 
-type SearchBarProps = {
-  label?: string;
-  placeholder?: string;
-  id?: string;
-  initialValue?: string;
-  suggestions?: Suggestion[];
-  onChange?: (value: string) => void;
-  onSuggestionClick?: (suggestion: Suggestion) => void;
-};
+export type Suggestion = {
+    id: string;
+    text: string;
+  };
+
+  type SearchBarProps = {
+    label?: string;
+    placeholder?: string;
+    id?: string;
+    initialValue?: string;
+    suggestions?: Suggestion[];
+    onChange?: (value: string) => void;
+    onSuggestionClick?: (suggestion: Suggestion) => void;
+  };
 
 const SearchBar = ({
   label = '',
@@ -31,11 +33,19 @@ const SearchBar = ({
   const [isSuggestionsDisplayed, setIsSuggestionsDisplayed] = useState<boolean>(false);
   const hitboxRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     setValue(inputValue);
-    onChange(inputValue);
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      onChange(inputValue);
+    }, DEBOUNCING_TIME_MS);
   };
 
   const handleInputFieldFocus = () => {
@@ -50,12 +60,12 @@ const SearchBar = ({
 
   const handleMouseClick = (event: MouseEvent) => {
     const clickInInputField: boolean = (!hitboxRef.current
-        || hitboxRef.current.contains(event.target as Node))
-        ?? false;
+          || hitboxRef.current.contains(event.target as Node))
+          ?? false;
 
     const clickInSuggestions: boolean = (!inputRef.current
-        || inputRef.current.contains(event.target as Node))
-        ?? false;
+          || inputRef.current.contains(event.target as Node))
+          ?? false;
 
     if (!clickInInputField && !clickInSuggestions) {
       setIsSuggestionsDisplayed(false);
@@ -67,6 +77,12 @@ const SearchBar = ({
     return () => {
       document.removeEventListener('click', handleMouseClick);
     };
+  }, []);
+
+  useEffect(() => () => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
   }, []);
 
   return (
@@ -87,19 +103,19 @@ const SearchBar = ({
       </label>
       <div role="button" ref={hitboxRef} className="suggestions-hitbox">
         {suggestions && suggestions.length > 0 && isSuggestionsDisplayed && (
-          <ul className="suggestions-list">
-            {suggestions.map((suggestion: Suggestion) => (
-              <li key={suggestion.id} className="suggestion-item">
-                <button
-                  className="suggestion-button"
-                  type="button"
-                  onClick={() => handleSuggestionClick(suggestion)}
-                >
-                  {suggestion.text}
-                </button>
-              </li>
-            ))}
-          </ul>
+        <ul className="suggestions-list">
+          {suggestions.map((suggestion: Suggestion) => (
+            <li key={suggestion.id} className="suggestion-item">
+              <button
+                className="suggestion-button"
+                type="button"
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion.text}
+              </button>
+            </li>
+          ))}
+        </ul>
         )}
       </div>
     </div>
