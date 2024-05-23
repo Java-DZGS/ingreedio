@@ -45,6 +45,7 @@ const SearchBar = ({
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
     onSuggestionClick(suggestion);
+    setValue('');
     setIsSuggestionsDisplayed(false);
   };
 
@@ -82,7 +83,6 @@ const SearchBar = ({
           onChange={handleChange}
           onFocus={handleInputFieldFocus}
           autoComplete="off"
-          name="input_autocomplete_off"
           value={value}
         />
       </label>
