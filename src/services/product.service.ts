@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
-import RequestWithParamsBuilder from '../utils/reqeustWithParamsBuilder';
+import RequestUrlBuilder from '../utils/requestBuilder';
 import api from '../config/api';
 
 const productsApiUrl = `${apiUrl}/products`;
@@ -74,8 +74,8 @@ export const urlToProductCriteria = (url: string): ProductCriteria => {
 export const productCriteriaToUrlBuilder = (
   baseUrl: string,
   criteria: ProductCriteria,
-): RequestWithParamsBuilder => {
-  const builder = new RequestWithParamsBuilder(baseUrl);
+): RequestUrlBuilder => {
+  const builder = new RequestUrlBuilder(baseUrl);
 
   if (criteria.phrase) {
     builder.setParam(ProductListRequestParams.PHRASE, criteria.phrase.toString());
@@ -110,7 +110,7 @@ export const getProductsListApi = (
   pageNumber?: number,
 ): Promise<AxiosResponse<ProductResponse>> => {
   if (criteria === undefined) {
-    const builder = new RequestWithParamsBuilder(productsApiUrl);
+    const builder = new RequestUrlBuilder(productsApiUrl);
     builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
     return axios.get(builder.build());
   }
@@ -128,7 +128,7 @@ export const getProductDetailsApi = (
 export const getLikedProductsApi = (
   pageNumber?: number,
 ): Promise<AxiosResponse<ProductResponse>> => {
-  const builder = new RequestWithParamsBuilder(productsApiUrl);
+  const builder = new RequestUrlBuilder(productsApiUrl);
   builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
   builder.setParam(ProductListRequestParams.LIKED, 'true');
   return api.get(builder.build());

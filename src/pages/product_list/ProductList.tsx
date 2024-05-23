@@ -40,7 +40,6 @@ const ProductList = (): ReactElement => {
         const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
         if (response && response.data) {
           setSelectedIngredients(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         console.error('Error fetching products:', error);

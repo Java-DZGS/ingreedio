@@ -1,4 +1,4 @@
-class RequestWithParamsBuilder {
+class RequestUrlBuilder {
     private baseUrl: string;
 
     private queryParams: { [key: string]: string } = {};
@@ -7,8 +7,9 @@ class RequestWithParamsBuilder {
       this.baseUrl = baseUrl;
     }
 
-    setParam(paramName: string, content: string): void {
+    setParam(paramName: string, content: string): RequestUrlBuilder {
       this.queryParams[paramName] = content;
+      return this;
     }
 
     build(): string {
@@ -17,4 +18,4 @@ class RequestWithParamsBuilder {
     }
 }
 
-export default RequestWithParamsBuilder;
+export default RequestUrlBuilder;
