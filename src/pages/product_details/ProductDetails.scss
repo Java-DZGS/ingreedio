@@ -49,7 +49,11 @@
             width: 100%;
           }
 
-          li {
+          .long-description-container {
+            padding-right: 20px;
+          }
+
+          .ingredients-list li {
             list-style: none;
             text-align: left;
           }
