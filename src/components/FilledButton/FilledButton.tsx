@@ -19,6 +19,7 @@ const FilledButton = ({
     onClick={!isDisabled ? onClick : () => {}}
     // eslint-disable-next-line no-nested-ternary
     className={`button ${isDisabled ? 'disabled' : reverseGradient ? 'reverse-gradient' : 'gradient'}`}
+    type="submit"
   >
     {children}
   </Button>
