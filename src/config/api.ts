@@ -37,8 +37,8 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
       } catch (error) {
-        // todo: proper error handling
-        alert('Could not refresh token');
+        // todo: check what does it to
+        window.location.reload();
       }
     }
     return Promise.reject(error);

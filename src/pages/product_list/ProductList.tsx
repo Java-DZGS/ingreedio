@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProductTile from '../../components/ProductTile/ProductTile';
@@ -16,6 +16,7 @@ import {
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
 import { IngredientObject, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import useEffectSingular from '../../hooks/useEffectSignular';
 
 const ProductList = (): ReactElement => {
   const navigate = useNavigate();
@@ -67,11 +68,10 @@ const ProductList = (): ReactElement => {
     navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
-  useEffect(() => {
-    // fetch products
+  useEffectSingular(() => {
     fetchProducts(queryProductCriteria);
     fetchSelectedIngredients();
-  }, []);
+  });
 
   return (
     <div className="product-list-page">

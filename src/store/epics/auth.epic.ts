@@ -18,7 +18,7 @@ const signInEpic = (
       actions.setUsername(username),
       actions.getUserInfoRequest(username),
     ]),
-    catchError((error) => of(actions.signInFailure(error.message))),
+    catchError((error) => of(actions.signInFailure(error.response.status))),
   )),
 );
 
@@ -35,7 +35,7 @@ const signUpEpic = (
     switchMap((_response) => [
       actions.signUpSuccess(),
     ]),
-    catchError((error) => of(actions.signUpFailure(error.message))),
+    catchError((error) => of(actions.signUpFailure(error.response.status))),
   )),
 );
 
