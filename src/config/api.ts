@@ -37,7 +37,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
       } catch (error) {
-        // todo: check what does it to
+        // todo: check what does it do
         window.location.reload();
       }
     }
