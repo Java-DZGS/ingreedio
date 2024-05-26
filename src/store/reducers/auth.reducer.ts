@@ -29,7 +29,6 @@ const auth = (
         ...state,
         accessToken: action.payload,
         isAuthenticated: true,
-        loginSuccessful: true,
       };
 
     case types.SIGN_IN_REQUEST:

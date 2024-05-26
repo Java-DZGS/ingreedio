@@ -11,6 +11,7 @@ const useLoginAutomatically = (): void => {
     const username = localStorage.getItem('username');
     if (!isUnmountedRef.current && accessToken && username) {
       dispatch(actions.logUser(accessToken, username));
+      dispatch(actions.setUsername(username));
     }
     return () => {
       isUnmountedRef.current = true;

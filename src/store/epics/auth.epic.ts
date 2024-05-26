@@ -15,8 +15,8 @@ const signInEpic = (
   switchMap(({ payload: { username, password } }) => from(services.signInApi(username, password)).pipe(
     switchMap((response) => [
       actions.signInSuccess(response.data),
-      actions.getUserInfoRequest(username),
       actions.setUsername(username),
+      actions.getUserInfoRequest(username),
     ]),
     catchError((error) => of(actions.signInFailure(error.message))),
   )),
@@ -34,8 +34,6 @@ const signUpEpic = (
   }) => from(services.signUpApi(username, displayName, email, password)).pipe(
     switchMap((_response) => [
       actions.signUpSuccess(),
-      actions.getUserInfoRequest(username),
-      actions.setUsername(username),
     ]),
     catchError((error) => of(actions.signUpFailure(error.message))),
   )),
