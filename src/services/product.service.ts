@@ -18,6 +18,7 @@ enum ProductListRequestParams {
 export interface ProductObject {
   id: string;
   name: string;
+  brand: string;
   smallImageUrl: string;
   provider: string;
   shortDescription: string;

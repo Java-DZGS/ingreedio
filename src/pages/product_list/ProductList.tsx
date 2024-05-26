@@ -82,7 +82,7 @@ const ProductList = (): ReactElement => {
               <li key={product.id} className="product">
                 <Link to={`/products/${product.id}`}>
                   <ProductTile
-                    name={product.name}
+                    name={`${product.brand} ${product.name}`}
                     provider={product.provider}
                     smallImageUrl={product.smallImageUrl}
                     shortDescription={product.shortDescription}
