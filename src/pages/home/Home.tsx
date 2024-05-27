@@ -4,7 +4,7 @@ import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
 import { AxiosResponse } from 'axios';
-import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../../services/ingredients.service';
 import Tag from '../../components/Tag/Tag';
 import { ProductCriteria, productCriteriaToUrl } from '../../services/product.service';
+import AutocompleteSearchBar, { Suggestion } from '../../components/AutocompleteSearchBar/AutocompleteSearchBar';
 
 const Home = (): ReactElement => {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ const Home = (): ReactElement => {
             placeholder="e.g. shampoo"
             onChange={(value) => setPhrase(value)}
           />
-          <SearchBar
+          <AutocompleteSearchBar
             id="ingredient-search"
             label="Ingredients"
             placeholder="e.g. shea butter"
