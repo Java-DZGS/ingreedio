@@ -37,8 +37,8 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
       } catch (error) {
-        // todo: check what does it do
         localStorage.clear();
+        localStorage.setItem('forcefullyLoggedOut', 'true');
         window.location.reload();
       }
     }
