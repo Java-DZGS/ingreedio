@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
 import RequestUrlBuilder from '../utils/requestBuilder';
 import api from '../config/api';
@@ -115,18 +115,18 @@ export const getProductsListApi = (
   if (criteria === undefined) {
     const builder = new RequestUrlBuilder(productsApiUrl);
     builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
-    return axios.get(builder.build());
+    return api.get(builder.build());
   }
 
   const builder = productCriteriaToUrlBuilder(productsApiUrl, criteria);
   builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
 
-  return axios.get(builder.build());
+  return api.get(builder.build());
 };
 
 export const getProductDetailsApi = (
   id: string,
-): Promise<AxiosResponse<ProductDetailsResponse>> => axios.get(`${productsApiUrl}/${id}`);
+): Promise<AxiosResponse<ProductDetailsResponse>> => api.get(`${productsApiUrl}/${id}`);
 
 export const getLikedProductsApi = (
   pageNumber?: number,
