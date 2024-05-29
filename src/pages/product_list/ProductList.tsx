@@ -1,4 +1,9 @@
-import React, { ReactElement, useEffect, useState, useCallback } from 'react';
+import React, {
+  ReactElement,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
@@ -65,8 +70,7 @@ const ProductList = (): ReactElement => {
       if (response && response.data) {
         setProducts((prevProducts) => {
           const newProducts = response.data.products.filter(
-            (newProduct) =>
-              !prevProducts.some((product) => product.id === newProduct.id),
+            (newProduct) => !prevProducts.some((product) => product.id === newProduct.id),
           );
           return [...prevProducts, ...newProducts];
         });
