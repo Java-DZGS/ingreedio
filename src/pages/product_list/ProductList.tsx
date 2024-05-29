@@ -129,7 +129,7 @@ const ProductList = (): ReactElement => {
         </ul>
         {isFetching && (
           <div className="loading-indicator">
-            <ClipLoader size={35} color={'#123abc'} loading={true} />
+            <ClipLoader size={35} color="#123abc" loading />
           </div>
         )}
       </ProductListScrollBar>
