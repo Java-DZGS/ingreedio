@@ -1,11 +1,12 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import ScrollBar from '../../components/Scrollbar/ScrollBar';
+import ProductListScrollBar from '../../components/ProductListScrollBar/ProductListScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
   getProductsListApi,
@@ -15,86 +16,123 @@ import {
   urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
-import { IngredientObject, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import {
+  IngredientObject,
+  getIngredientsByIdsApi,
+} from '../../services/ingredients.service';
 
 const ProductList = (): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    isAuthenticated,
-  } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  // Get product criteria basing on the page url
-  const queryProductCriteria: ProductCriteria = urlToProductCriteria(location.search);
+  const queryProductCriteria: ProductCriteria = urlToProductCriteria(
+    location.search,
+  );
 
-  // Current products displayed
   const [products, setProducts] = useState<ProductObject[]>([]);
+  const [phrase, setPhrase] = useState<string>(
+    queryProductCriteria.phrase ?? '',
+  );
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    IngredientObject[] | null
+  >(null);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  // Data recreated basing on the query product criteria
-  const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
-  const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
-
-  const fetchSelectedIngredients = async () => {
+  const fetchSelectedIngredients = useCallback(async () => {
     if (queryProductCriteria.ingredientsToIncludeIds) {
       try {
-        const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
+        const response = await getIngredientsByIdsApi(
+          queryProductCriteria.ingredientsToIncludeIds,
+        );
         if (response && response.data) {
           setSelectedIngredients(response.data);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching ingredients:', error);
       }
     }
-  };
+  }, [queryProductCriteria.ingredientsToIncludeIds]);
 
-  const fetchProducts = async (criteria: ProductCriteria) => {
+  const fetchProducts = async (criteria: ProductCriteria, page: number) => {
+    if (isFetching || page >= totalPages) return;
+
+    setIsFetching(true);
     try {
-      const response = await getProductsListApi(criteria);
+      const response = await getProductsListApi(criteria, page);
       if (response && response.data) {
-        setProducts(response.data.products);
+        setProducts((prevProducts) => {
+          const newProducts = response.data.products.filter(
+            (newProduct) =>
+              !prevProducts.some((product) => product.id === newProduct.id),
+          );
+          return [...prevProducts, ...newProducts];
+        });
+        setTotalPages(response.data.totalPages);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
   const handleSearch = () => {
     const criteria: ProductCriteria = {
       phrase,
-      ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
+      ingredientsToIncludeIds: selectedIngredients?.map(
+        (ingr: IngredientObject) => ingr.id,
+      ),
     };
-    fetchProducts(criteria);
+    setProducts([]);
+    setPageNumber(0);
+    setTotalPages(1);
+    fetchProducts(criteria, 0);
     navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
   useEffect(() => {
-    // fetch products
-    fetchProducts(queryProductCriteria);
+    fetchProducts(queryProductCriteria, pageNumber);
     fetchSelectedIngredients();
-  }, []);
+  }, [pageNumber]);
+
+  const loadMoreProducts = () => {
+    if (!isFetching) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
 
   return (
     <div className="product-list-page">
-      <ScrollBar className="scrollbar-container">
+      <ProductListScrollBar
+        className="scrollbar-container"
+        onLoadMore={loadMoreProducts}
+      >
         <ul className="product-grid">
-          {products
-            && products.map((product) => (
-              <li key={product.id} className="product">
-                <Link to={`/products/${product.id}`}>
-                  <ProductTile
-                    name={`${product.brand} ${product.name}`}
-                    provider={product.provider}
-                    smallImageUrl={product.smallImageUrl}
-                    shortDescription={product.shortDescription}
-                    rating={product.rating}
-                    showLike={isAuthenticated}
-                    isLiked={!!product.isLiked}
-                  />
-                </Link>
-              </li>
-            ))}
+          {products.map((product) => (
+            <li key={product.id} className="product">
+              <Link to={`/products/${product.id}`}>
+                <ProductTile
+                  name={`${product.brand} ${product.name}`}
+                  provider={product.provider}
+                  smallImageUrl={product.smallImageUrl}
+                  shortDescription={product.shortDescription}
+                  rating={product.rating}
+                  showLike={isAuthenticated}
+                  isLiked={!!product.isLiked}
+                />
+              </Link>
+            </li>
+          ))}
         </ul>
-      </ScrollBar>
+        {isFetching && (
+          <div className="loading-indicator">
+            <ClipLoader size={35} color={'#123abc'} loading={true} />
+          </div>
+        )}
+      </ProductListScrollBar>
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">

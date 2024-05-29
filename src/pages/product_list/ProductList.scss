@@ -3,6 +3,12 @@
   padding-top: 50px;
   display: flex;
   flex: 1;
+  .loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  }
   .scrollbar-container {
     width: 70%;
     flex: 10;

@@ -53,6 +53,7 @@ export interface ProductCriteria {
 
 export const urlToProductCriteria = (url: string): ProductCriteria => {
   const queryParams = new URLSearchParams(url);
+
   const minRatingStr = queryParams.get(ProductListRequestParams.MIN_RATING);
   let minRating: number | undefined;
 
