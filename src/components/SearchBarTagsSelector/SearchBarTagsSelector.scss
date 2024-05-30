@@ -1,17 +1,10 @@
-.search-bar-selector {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+.tag-container {
+  max-width: 100%;
+  padding-top: 15px;
 
-  .tag-container {
-    position: relative;
+  .tags {
     max-width: 100%;
-    .tags {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-    }
+    display: flex;
+    flex-wrap: wrap;
   }
 }

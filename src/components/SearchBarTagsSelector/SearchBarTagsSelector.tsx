@@ -6,14 +6,14 @@ import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import './SearchBarTagsSelector.scss';
 
 type SearchBarTagsSelectorProps = {
-    getSuggestions: (input: string) => Promise<ObjectWithNameAndId[] | null>;
-    onElementChosen: (element: ObjectWithNameAndId) => void;
-    onElementRemoved: (elementId: string) => void;
-    selectedElements?: ObjectWithNameAndId[],
-    tagsColor?: string;
-    placeholder?: string;
-    label?: string;
-}
+  getSuggestions: (input: string) => Promise<ObjectWithNameAndId[] | null>;
+  onElementChosen: (element: ObjectWithNameAndId) => void;
+  onElementRemoved: (elementId: string) => void;
+  selectedElements?: ObjectWithNameAndId[];
+  tagsColor?: string;
+  placeholder?: string;
+  label?: string;
+};
 
 const SearchBarTagsSelector = ({
   getSuggestions,
@@ -24,7 +24,9 @@ const SearchBarTagsSelector = ({
   placeholder,
   label,
 }: SearchBarTagsSelectorProps): JSX.Element => {
-  const [suggestions, setSuggestions] = useState<ObjectWithNameAndId[] | null>(null);
+  const [suggestions, setSuggestions] = useState<ObjectWithNameAndId[] | null>(
+    null,
+  );
 
   const onChange = async (value: string) => {
     const newSuggestions = await getSuggestions(value);
@@ -32,7 +34,9 @@ const SearchBarTagsSelector = ({
   };
 
   const onSuggestionClick = (suggestion: ObjectWithNameAndId) => {
-    const isElementPresent = selectedElements.some((element) => element.id === suggestion.id);
+    const isElementPresent = selectedElements.some(
+      (element) => element.id === suggestion.id,
+    );
     if (!isElementPresent) {
       onElementChosen(suggestion);
     }
@@ -47,18 +51,20 @@ const SearchBarTagsSelector = ({
         onChange={onChange}
         onSuggestionClick={onSuggestionClick}
       />
-      <div className="tag-container">
-        <div className="tags">
-          {selectedElements.map((element: ObjectWithNameAndId) => (
-            <Tag
-              key={element.id}
-              text={element.name}
-              color={tagsColor}
-              onDelete={() => onElementRemoved(element.id)}
-            />
-          ))}
+      {selectedElements.length > 0 && (
+        <div className="tag-container">
+          <div className="tags">
+            {selectedElements.map((element: ObjectWithNameAndId) => (
+              <Tag
+                key={element.id}
+                text={element.name}
+                color={tagsColor}
+                onDelete={() => onElementRemoved(element.id)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
