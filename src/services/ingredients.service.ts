@@ -7,9 +7,10 @@ const ingredientsApiUrl = `${apiUrl}/ingredients`;
 
 export type IngredientObject = ObjectWithNameAndId
 
-export const getIngredientsApi = (query: string, count: number): Promise<
+export const getIngredientsApi = (query: string, count: number, skipAllergens?: boolean): Promise<
   AxiosResponse<IngredientObject[]>
-> => axios.get(new RequestUrlBuilder(`${ingredientsApiUrl}`).setParam('count', count.toString()).setParam('query', query).build());
+> => axios.get(new RequestUrlBuilder(`${ingredientsApiUrl}`).setParam('skip-allergens', skipAllergens?.toString() ?? 'false').setParam('count', count.toString()).setParam('query', query)
+  .build());
 
 // Example of the ids string: '5,21,52,10,11'
 export const getIngredientsByIdsStringApi = (ids: string): Promise<

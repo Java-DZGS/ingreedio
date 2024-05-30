@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import SearchBar from '../SearchBar/SearchBar';
+import AutocompleteSearchBar from '../AutocompleteSearchBar/AutocompleteSearchBar';
 import Tag from '../Tag/Tag';
 import { TagColor } from '../../theme/tagColor';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
+import './SearchBarTagsSelector.scss';
 
-type SearchBarSelectorProps = {
+type SearchBarTagsSelectorProps = {
     getSuggestions: (input: string) => Promise<ObjectWithNameAndId[] | null>;
     onElementChosen: (element: ObjectWithNameAndId) => void;
     onElementRemoved: (elementId: string) => void;
@@ -14,7 +15,7 @@ type SearchBarSelectorProps = {
     label?: string;
 }
 
-const SearchBarSelector = ({
+const SearchBarTagsSelector = ({
   getSuggestions,
   onElementChosen,
   onElementRemoved,
@@ -22,7 +23,7 @@ const SearchBarSelector = ({
   tagsColor = TagColor.INGREDIENT,
   placeholder,
   label,
-}: SearchBarSelectorProps): JSX.Element => {
+}: SearchBarTagsSelectorProps): JSX.Element => {
   const [suggestions, setSuggestions] = useState<ObjectWithNameAndId[] | null>(null);
 
   const onChange = async (value: string) => {
@@ -39,7 +40,7 @@ const SearchBarSelector = ({
 
   return (
     <div className="search-bar-selector">
-      <SearchBar
+      <AutocompleteSearchBar
         label={label}
         placeholder={placeholder}
         suggestions={suggestions ?? undefined}
@@ -62,4 +63,4 @@ const SearchBarSelector = ({
   );
 };
 
-export default SearchBarSelector;
+export default SearchBarTagsSelector;

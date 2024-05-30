@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import AutocompleteSearchBar from '../../components/AutocompleteSearchBar/AutocompleteSearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -16,13 +16,16 @@ import {
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
 import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../../services/ingredients.service';
-import SearchBarSelector from '../../components/SearchBarWithTags/SearchBarSelector';
+import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import { TagColor } from '../../theme/tagColor';
 
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
+  const hasAllergens: boolean = useSelector((state: RootState) => state.like.dislikedIngredients)
+    ?.length > 0 ?? false;
+
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -44,7 +47,9 @@ const ProductList = (): ReactElement => {
     if (query.length === 0) {
       return null;
     }
-    const ingredientsResponse = await getIngredientsApi(query, MAX_INGREDIENTS_SUGGESTIONS);
+    const ingredientsResponse = await getIngredientsApi(
+      query, MAX_INGREDIENTS_SUGGESTIONS, hasAllergens,
+    );
     return ingredientsResponse.data;
   };
 
@@ -114,7 +119,7 @@ const ProductList = (): ReactElement => {
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">
-            <SearchBar
+            <AutocompleteSearchBar
               label="Product"
               placeholder="e.g. shampoo"
               initialValue={phrase}
@@ -122,7 +127,7 @@ const ProductList = (): ReactElement => {
             />
           </div>
           <div className="ingredient-search-container">
-            <SearchBarSelector
+            <SearchBarTagsSelector
               getSuggestions={fetchIngredientsSuggestions}
               onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
                 (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
