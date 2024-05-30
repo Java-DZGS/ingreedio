@@ -11,7 +11,7 @@ import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import ProductListScrollBar from '../../components/ProductListScrollBar/ProductListScrollBar';
+import PagingScrollBar from '../../components/PagingScrollBar/PagingScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
   getProductsListApi,
@@ -110,11 +110,14 @@ const ProductList = (): ReactElement => {
 
   return (
     <div className="product-list-page">
-      <ProductListScrollBar
+      <PagingScrollBar
         className="scrollbar-container"
         onLoadMore={loadMoreProducts}
       >
         <ul className="product-grid">
+          {products.length === 0 && !isFetching && (
+            <div className="no-products-message">No products found</div>
+          )}
           {products.map((product) => (
             <li key={product.id} className="product">
               <Link to={`/products/${product.id}`}>
@@ -136,7 +139,7 @@ const ProductList = (): ReactElement => {
             <ClipLoader size={35} color="#123abc" loading />
           </div>
         )}
-      </ProductListScrollBar>
+      </PagingScrollBar>
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">

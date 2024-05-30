@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 import Scrollbars, { positionValues } from 'react-custom-scrollbars-2';
 
 type ScrollBarProps = {
@@ -8,7 +8,7 @@ type ScrollBarProps = {
   onScroll?: () => void;
 };
 
-const ProductListScrollBar = ({
+const PagingScrollBar = ({
   children,
   className = '',
   onLoadMore,
@@ -17,9 +17,8 @@ const ProductListScrollBar = ({
     const { scrollTop, scrollHeight, clientHeight } = values;
 
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-    console.log(distanceFromBottom);
 
-    if (distanceFromBottom < 50) {
+    if (distanceFromBottom < 300) {
       if (onLoadMore) {
         onLoadMore();
       }
@@ -62,4 +61,4 @@ const ProductListScrollBar = ({
   );
 };
 
-export default ProductListScrollBar;
+export default PagingScrollBar;
