@@ -3,11 +3,11 @@
   flex-direction: column;
   position: relative;
 
-  .ingredient-tag-container {
+  .tag-container {
     position: relative;
     max-width: 100%;
-    .ingredients-tags {
-      position: absolute;
+    .tags {
+      position: relative;
       width: 100%;
       max-width: 100%;
       display: flex;

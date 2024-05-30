@@ -47,8 +47,8 @@ const SearchBarTagsSelector = ({
         onChange={onChange}
         onSuggestionClick={onSuggestionClick}
       />
-      <div className="ingredient-tag-container">
-        <div className="ingredients-tags">
+      <div className="tag-container">
+        <div className="tags">
           {selectedElements.map((element: ObjectWithNameAndId) => (
             <Tag
               key={element.id}
