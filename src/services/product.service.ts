@@ -179,7 +179,7 @@ export const getProductsListApi = (
 ): Promise<AxiosResponse<ProductResponse>> => {
   if (criteria === undefined) {
     const builder = new RequestUrlBuilder(productsApiUrl);
-    builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+    builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
     return api.get(builder.build());
   }
 
