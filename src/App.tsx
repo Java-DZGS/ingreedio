@@ -10,6 +10,7 @@ import Profile from './pages/profile/Profile';
 import ProductList from './pages/product_list/ProductList';
 import ProductDetails from './pages/product_details/ProductDetails';
 import useLoginAutomatically from './hooks/useLoginAutomatically';
+import { LoginState, ProtectedRoute } from './routes/ProtectedRoute';
 
 function App(): ReactElement {
   useLoginAutomatically();
@@ -20,9 +21,30 @@ function App(): ReactElement {
       <div className="screen">
         <Routes>
           <Route index element={<Home />} />
-          <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.REGISTRATION} element={<Registration />} />
-          <Route path={ROUTES.PROFILE} element={<Profile />} />
+          <Route
+            path={ROUTES.LOGIN}
+            element={(
+              <ProtectedRoute expectedLoginState={LoginState.LOGGED_OUT}>
+                <Login />
+              </ProtectedRoute>
+            )}
+          />
+          <Route
+            path={ROUTES.REGISTRATION}
+            element={(
+              <ProtectedRoute expectedLoginState={LoginState.LOGGED_OUT}>
+                <Registration />
+              </ProtectedRoute>
+            )}
+          />
+          <Route
+            path={ROUTES.PROFILE}
+            element={(
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            )}
+          />
           <Route path={ROUTES.PRODUCTS} element={<ProductList />} />
           <Route path={ROUTES.PRODUCT} element={<ProductDetails />} />
         </Routes>

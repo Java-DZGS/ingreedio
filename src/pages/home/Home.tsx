@@ -84,7 +84,7 @@ const Home = (): ReactElement => {
             <span className="green-highlight"> ingredients</span>
           </h1>
         </div>
-        <div className="search-container">
+        <form className="search-container" onSubmit={handleSearch}>
           <SearchBar
             id="product-search"
             label="Product"
@@ -119,7 +119,7 @@ const Home = (): ReactElement => {
               ))}
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

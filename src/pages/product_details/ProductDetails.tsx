@@ -33,6 +33,7 @@ import {
   getProductReviewsApi,
   postProductReviewApi,
 } from '../../services/review.service';
+import Description from '../../Description/Description';
 
 const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -108,6 +109,7 @@ const ProductDetails = (): JSX.Element => {
 
       const newReview = newReviewResponse.data;
       setProductReviews((reviews) => [...reviews, newReview]);
+      fetchProduct();
     } catch (error) {
       console.error('An error occurred while adding review:', error);
     }
@@ -139,6 +141,8 @@ const ProductDetails = (): JSX.Element => {
     );
   }
 
+  console.log(product.longDescription);
+
   return (
     <div className="product-details-container">
       <div className="card-wrapper">
@@ -156,6 +160,7 @@ const ProductDetails = (): JSX.Element => {
               showLike={isAuthenticated}
               handleLike={likeProduct}
               handleUnlike={unlikeProduct}
+              handleRatingClick={onOpen}
             />
             <div className="sections-card-container">
               <Card>
@@ -197,10 +202,16 @@ const ProductDetails = (): JSX.Element => {
                           </ScrollBar>
                         </div>
                       </TabPanel>
-                      <TabPanel>
-                        <div className="long-description-container">
-                          <p>{product.longDescription}</p>
-                        </div>
+                      <TabPanel
+                        style={{ display: 'flex', flex: 1, width: '100%' }}
+                      >
+                        <ScrollBar>
+                          <div className="long-description-container">
+                            <Description
+                              description={product.longDescription}
+                            />
+                          </div>
+                        </ScrollBar>
                       </TabPanel>
                       <TabPanel
                         style={{ display: 'flex', flex: 1, width: '100%' }}

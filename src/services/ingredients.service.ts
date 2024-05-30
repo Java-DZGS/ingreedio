@@ -1,7 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
 import RequestUrlBuilder from '../utils/requestBuilder';
 import { ObjectWithNameAndId } from '../types/objectWithNameAndId';
+import api from '../config/api';
 
 const ingredientsApiUrl = `${apiUrl}/ingredients`;
 
@@ -15,7 +16,7 @@ export const getIngredientsApi = (query: string, count: number, skipAllergens?: 
 // Example of the ids string: '5,21,52,10,11'
 export const getIngredientsByIdsStringApi = (ids: string): Promise<
   AxiosResponse<IngredientObject[]>
-> => axios.get(new RequestUrlBuilder(`${ingredientsApiUrl}/get-by`).setParam('ids', ids).build());
+> => api.get(new RequestUrlBuilder(`${ingredientsApiUrl}/get-by`).setParam('ids', ids).build());
 
 export const getIngredientsByIdsApi = (ids: string[]): Promise<
   AxiosResponse<IngredientObject[]>

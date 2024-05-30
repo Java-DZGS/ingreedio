@@ -15,6 +15,7 @@ type ProductDescriptionProps = {
   showLike: boolean;
   handleLike: () => void;
   handleUnlike: () => void;
+  handleRatingClick: () => void;
 };
 
 const ProductDescription = ({
@@ -29,6 +30,7 @@ const ProductDescription = ({
   showLike,
   handleLike,
   handleUnlike,
+  handleRatingClick,
 }: ProductDescriptionProps): JSX.Element => (
   <div className="product-description-container">
     <div className="product-image-container">
@@ -48,11 +50,14 @@ const ProductDescription = ({
       <p className="product-distributor">{provider}</p>
 
       <p className="product-short-description">{shortDescription}</p>
-      <p className="product-volume">
-        {volume}
-        ml
-      </p>
-      <div className="star-rating-container">
+      <p className="product-volume">{volume}</p>
+      <div
+        className="star-rating-container"
+        onClick={handleRatingClick}
+        role="button"
+        tabIndex={0}
+        aria-label="rating"
+      >
         <StarRating rating={rating} />
       </div>
     </div>
