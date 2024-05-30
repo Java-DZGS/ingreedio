@@ -6,19 +6,37 @@ import { stringToUrlString } from '../utils/stringToUrlString';
 
 const productsApiUrl = `${apiUrl}/products`;
 
-enum ProductListRequestParams {
-    PAGE_NUMBER = 'page-number',
-    INGREDIENTS_EXCLUDE = 'ingredients-exclude',
-    INGREDIENTS_INCLUDE = 'ingredients-include',
-    MIN_RATING = 'min-rating',
-    PHRASE = 'phrase',
-    SORT_BY = 'sort-by',
-    LIKED = 'liked'
+enum ProductListRequestParam {
+  PAGE_NUMBER = 'page-number',
+  INGREDIENTS_EXCLUDE = 'ingredients-exclude',
+  INGREDIENTS_INCLUDE = 'ingredients-include',
+  MIN_RATING = 'min-rating',
+  PHRASE = 'phrase',
+  SORT_BY = 'sort-by',
+  LIKED = 'liked'
+}
+
+export enum SortOption {
+  MATCH_SCORE = 'match-score',
+  OPINIONS_COUNT = 'opinions-count',
+  RATES_COUNT = 'rates-count',
+  RATING = 'rating',
+}
+
+export enum SortOrder {
+  ASCENDING = 'a',
+  DESCENDING = 'd'
+}
+
+export interface SortBy {
+  option: SortOption,
+  order: SortOrder
 }
 
 export interface ProductObject {
   id: string;
   name: string;
+  brand: string;
   smallImageUrl: string;
   provider: string;
   shortDescription: string;
@@ -48,13 +66,41 @@ export interface ProductCriteria {
     ingredientsToIncludeIds?: string[];
     ingredientsToExcludeIds?: string[];
     minRating?: number;
+    sortingCriteria?: SortBy[];
     // TODO: sort by, brands, providers, categories
 }
+
+const parseSortBy = (input: string): SortBy | undefined => {
+  const parts = input.split('-');
+  const order = parts[0];
+  const option = parts.slice(1).join('-');
+    console.log(order);
+    console.log(option);
+  if (
+    (order === SortOrder.ASCENDING || order === SortOrder.DESCENDING)
+    && Object.values(SortOption).includes(option as SortOption)
+  ) {
+    return {
+      option: option as SortOption,
+      order: order as SortOrder,
+    };
+  }
+  return undefined;
+};
 
 export const urlToProductCriteria = (url: string): ProductCriteria => {
   const queryParams = new URLSearchParams(url);
 
-  const minRatingParam = queryParams.get(ProductListRequestParams.MIN_RATING);
+  const sortingCriteriaParam = queryParams.get(ProductListRequestParam.SORT_BY);
+  let sortingCriteria: SortBy[] = [];
+  if (sortingCriteriaParam) {
+    sortingCriteria = sortingCriteriaParam
+      .split(',')
+      .map(parseSortBy)
+      .filter((sortBy): sortBy is SortBy => sortBy !== undefined);
+  }
+
+  const minRatingParam = queryParams.get(ProductListRequestParam.MIN_RATING);
   let minRating: number | undefined;
   if (minRatingParam) {
     const parsedRating = parseInt(minRatingParam, 10);
@@ -64,10 +110,11 @@ export const urlToProductCriteria = (url: string): ProductCriteria => {
   }
 
   const criteria: ProductCriteria = {
-    phrase: queryParams.get(ProductListRequestParams.PHRASE) ?? undefined,
-    ingredientsToExcludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_EXCLUDE)?.split(',') ?? undefined,
-    ingredientsToIncludeIds: queryParams.get(ProductListRequestParams.INGREDIENTS_INCLUDE)?.split(',') ?? undefined,
+    phrase: queryParams.get(ProductListRequestParam.PHRASE) ?? undefined,
+    ingredientsToExcludeIds: queryParams.get(ProductListRequestParam.INGREDIENTS_EXCLUDE)?.split(',') ?? undefined,
+    ingredientsToIncludeIds: queryParams.get(ProductListRequestParam.INGREDIENTS_INCLUDE)?.split(',') ?? undefined,
     minRating,
+    sortingCriteria,
     // TODO: sort by, brands, providers, categories
   };
 
@@ -84,21 +131,27 @@ export const productCriteriaToUrlBuilder = (
   if (criteria.phrase) {
     // The phrase has the uneccessary spaces removed
     // and the rest of the spaces are replaced with '%20'
-    builder.setParam(ProductListRequestParams.PHRASE, stringToUrlString(criteria.phrase));
+    builder.setParam(ProductListRequestParam.PHRASE, stringToUrlString(criteria.phrase));
   }
 
   if (criteria.ingredientsToIncludeIds && criteria.ingredientsToIncludeIds.length > 0) {
-    builder.setParam(ProductListRequestParams.INGREDIENTS_INCLUDE,
+    builder.setParam(ProductListRequestParam.INGREDIENTS_INCLUDE,
       criteria.ingredientsToIncludeIds.join(','));
   }
 
   if (criteria.ingredientsToExcludeIds && criteria.ingredientsToExcludeIds.length > 0) {
-    builder.setParam(ProductListRequestParams.INGREDIENTS_EXCLUDE,
+    builder.setParam(ProductListRequestParam.INGREDIENTS_EXCLUDE,
       criteria.ingredientsToExcludeIds.join(','));
   }
 
   if (criteria.minRating) {
-    builder.setParam(ProductListRequestParams.MIN_RATING, criteria.minRating.toString());
+    builder.setParam(ProductListRequestParam.MIN_RATING, criteria.minRating.toString());
+  }
+
+  if (criteria.sortingCriteria && criteria.sortingCriteria.length > 0) {
+    builder.setParam(ProductListRequestParam.SORT_BY, criteria.sortingCriteria.map(
+      (sortBy: SortBy) => `${sortBy.order}-${sortBy.option}`,
+    ).join(','));
   }
 
   // TODO: sort by, brands, providers, categories
@@ -117,12 +170,12 @@ export const getProductsListApi = (
 ): Promise<AxiosResponse<ProductResponse>> => {
   if (criteria === undefined) {
     const builder = new RequestUrlBuilder(productsApiUrl);
-    builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+    builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
     return axios.get(builder.build());
   }
 
   const builder = productCriteriaToUrlBuilder(productsApiUrl, criteria);
-  builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
+  builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
 
   return axios.get(builder.build());
 };
@@ -135,7 +188,7 @@ export const getLikedProductsApi = (
   pageNumber?: number,
 ): Promise<AxiosResponse<ProductResponse>> => {
   const builder = new RequestUrlBuilder(productsApiUrl);
-  builder.setParam(ProductListRequestParams.PAGE_NUMBER, (pageNumber ?? 0).toString());
-  builder.setParam(ProductListRequestParams.LIKED, 'true');
+  builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
+  builder.setParam(ProductListRequestParam.LIKED, 'true');
   return api.get(builder.build());
 };
