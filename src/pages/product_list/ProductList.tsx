@@ -119,58 +119,60 @@ const ProductList = (): ReactElement => {
         </ul>
       </ScrollBar>
       <div className="filters-container">
-        <div className="search-container">
-          <div className="product-search-container">
-            <SearchBar
-              label="Product"
-              placeholder="e.g. shampoo"
-              initialValue={phrase}
-              onChange={(value) => setPhrase(value)}
-            />
-          </div>
-          <div className="ingredient-search-container">
-            <SearchBarTagsSelector
-              getSuggestions={fetchIngredientsSuggestions}
-              onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
-                (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
-              )}
-              onElementRemoved={(id: string) => setSelectedIngredients(
-                (old: IngredientObject[] | null) => old?.filter(
-                  (ingredient: IngredientObject) => ingredient.id !== id,
-                ) ?? null,
-              )}
-              selectedElements={selectedIngredients ?? undefined}
-              label="Ingredients"
-              placeholder="e.g. shea butter"
-              tagsColor={TagColor.INGREDIENT}
-            />
-          </div>
-          <div className="provider-search-container">
-            <SearchBar
-              label="Provider"
-              placeholder="e.g. rossmann"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
-          <div className="brand-search-container">
-            <SearchBar
-              label="Brand"
-              placeholder="e.g. lovely"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
+        <ScrollBar>
+          <div className="search-container">
+            <div className="product-search-container">
+              <SearchBar
+                label="Product"
+                placeholder="e.g. shampoo"
+                initialValue={phrase}
+                onChange={(value) => setPhrase(value)}
+              />
+            </div>
+            <div className="ingredient-search-container">
+              <SearchBarTagsSelector
+                getSuggestions={fetchIngredientsSuggestions}
+                onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
+                  (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
+                )}
+                onElementRemoved={(id: string) => setSelectedIngredients(
+                  (old: IngredientObject[] | null) => old?.filter(
+                    (ingredient: IngredientObject) => ingredient.id !== id,
+                  ) ?? null,
+                )}
+                selectedElements={selectedIngredients ?? undefined}
+                label="Ingredients"
+                placeholder="e.g. shea butter"
+                tagsColor={TagColor.INGREDIENT}
+              />
+            </div>
+            <div className="provider-search-container">
+              <SearchBar
+                label="Provider"
+                placeholder="e.g. rossmann"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
+            <div className="brand-search-container">
+              <SearchBar
+                label="Brand"
+                placeholder="e.g. lovely"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
 
-          <div className="category-search-container">
-            <SearchBar
-              label="Category"
-              placeholder="e.g. skin care"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
+            <div className="category-search-container">
+              <SearchBar
+                label="Category"
+                placeholder="e.g. skin care"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
+            <div className="search-button-container">
+              <FilledButton onClick={handleSearch}>Search</FilledButton>
+            </div>
           </div>
-          <div className="search-button-container">
-            <FilledButton onClick={handleSearch}>Search</FilledButton>
-          </div>
-        </div>
+        </ScrollBar>
       </div>
     </div>
   );
