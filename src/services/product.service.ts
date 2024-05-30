@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
 import RequestUrlBuilder from '../utils/requestBuilder';
 import api from '../config/api';
-import { stringToUrlString } from '../utils/stringToUrlString';
+import { stringToUrlString } from '../utils/urlUtils';
 
 const productsApiUrl = `${apiUrl}/products`;
 

@@ -22,8 +22,8 @@ import { RootState } from '../../store/reducers';
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const Home = (): ReactElement => {
-  const hasAllergens: boolean = useSelector((state: RootState) => state.like.dislikedIngredients)
-    ?.length > 0 ?? false;
+  const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
+  const hasAllergens: boolean = allergensSelector?.length > 0 ?? false;
 
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list

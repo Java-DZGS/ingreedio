@@ -24,8 +24,8 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
-  const hasAllergens: boolean = useSelector((state: RootState) => state.like.dislikedIngredients)
-    ?.length > 0 ?? false;
+  const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
+  const hasAllergens: boolean = allergensSelector?.length > 0 ?? false;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,7 +70,6 @@ const ProductList = (): ReactElement => {
   // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
 
   const fetchProducts = async (criteria: ProductCriteria) => {
-    console.log(criteria);
     try {
       const response = await getProductsListApi(criteria);
       if (response && response.data) {
