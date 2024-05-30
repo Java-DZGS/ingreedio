@@ -134,7 +134,6 @@ export const productCriteriaToUrlBuilder = (
   criteria: ProductCriteria,
 ): RequestUrlBuilder => {
   const builder = new RequestUrlBuilder(baseUrl);
-  console.log(criteria);
 
   const setIdsArrayParam = (key: string, values?: string[]) => {
     if (values && values.length > 0) {

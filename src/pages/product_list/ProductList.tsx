@@ -19,6 +19,7 @@ import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../
 import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import { TagColor } from '../../theme/tagColor';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
@@ -65,6 +66,8 @@ const ProductList = (): ReactElement => {
       }
     }
   };
+
+  // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
 
   const fetchProducts = async (criteria: ProductCriteria) => {
     console.log(criteria);
@@ -119,7 +122,7 @@ const ProductList = (): ReactElement => {
       <div className="filters-container">
         <div className="search-container">
           <div className="product-search-container">
-            <AutocompleteSearchBar
+            <SearchBar
               label="Product"
               placeholder="e.g. shampoo"
               initialValue={phrase}
@@ -143,7 +146,7 @@ const ProductList = (): ReactElement => {
               tagsColor={TagColor.INGREDIENT}
             />
           </div>
-          {/* <div className="provider-search-container">
+          <div className="provider-search-container">
             <SearchBar
               label="Provider"
               placeholder="e.g. rossmann"
@@ -164,7 +167,7 @@ const ProductList = (): ReactElement => {
               placeholder="e.g. skin care"
               onChange={(_value) => console.log('Not implemented yet')}
             />
-          </div> */}
+          </div>
           <div className="search-button-container">
             <FilledButton onClick={handleSearch}>Search</FilledButton>
           </div>
