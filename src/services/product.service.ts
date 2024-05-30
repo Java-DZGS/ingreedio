@@ -10,6 +10,10 @@ enum ProductListRequestParam {
   PAGE_NUMBER = 'page-number',
   INGREDIENTS_EXCLUDE = 'ingredients-exclude',
   INGREDIENTS_INCLUDE = 'ingredients-include',
+  BRANDS_EXCLUDE = 'brands-exclude',
+  BRANDS_INCLUDE = 'brands-include',
+  PROVIDERS = 'providers',
+  CATEGORIES = 'categories',
   MIN_RATING = 'min-rating',
   PHRASE = 'phrase',
   SORT_BY = 'sort-by',
@@ -31,6 +35,18 @@ export enum SortOrder {
 export interface SortBy {
   option: SortOption,
   order: SortOrder
+}
+
+export interface ProductCriteria {
+  ingredientsToIncludeIds?: string[];
+  ingredientsToExcludeIds?: string[];
+  brandsToIncludeIds?: string[];
+  brandsToExcludeIds?: string[];
+  providersIds?: string[];
+  categoriesIds?: string[];
+  minRating?: number;
+  sortingCriteria?: SortBy[];
+  phrase?: string;
 }
 
 export interface ProductObject {
@@ -61,21 +77,10 @@ export interface ProductDetailsResponse {
   rating: number
 }
 
-export interface ProductCriteria {
-    phrase?: string;
-    ingredientsToIncludeIds?: string[];
-    ingredientsToExcludeIds?: string[];
-    minRating?: number;
-    sortingCriteria?: SortBy[];
-    // TODO: sort by, brands, providers, categories
-}
-
 const parseSortBy = (input: string): SortBy | undefined => {
   const parts = input.split('-');
   const order = parts[0];
   const option = parts.slice(1).join('-');
-    console.log(order);
-    console.log(option);
   if (
     (order === SortOrder.ASCENDING || order === SortOrder.DESCENDING)
     && Object.values(SortOption).includes(option as SortOption)
@@ -113,9 +118,12 @@ export const urlToProductCriteria = (url: string): ProductCriteria => {
     phrase: queryParams.get(ProductListRequestParam.PHRASE) ?? undefined,
     ingredientsToExcludeIds: queryParams.get(ProductListRequestParam.INGREDIENTS_EXCLUDE)?.split(',') ?? undefined,
     ingredientsToIncludeIds: queryParams.get(ProductListRequestParam.INGREDIENTS_INCLUDE)?.split(',') ?? undefined,
+    brandsToExcludeIds: queryParams.get(ProductListRequestParam.BRANDS_EXCLUDE)?.split(',') ?? undefined,
+    brandsToIncludeIds: queryParams.get(ProductListRequestParam.BRANDS_INCLUDE)?.split(',') ?? undefined,
+    providersIds: queryParams.get(ProductListRequestParam.PROVIDERS)?.split(',') ?? undefined,
+    categoriesIds: queryParams.get(ProductListRequestParam.CATEGORIES)?.split(',') ?? undefined,
     minRating,
     sortingCriteria,
-    // TODO: sort by, brands, providers, categories
   };
 
   return criteria;
@@ -128,20 +136,23 @@ export const productCriteriaToUrlBuilder = (
   const builder = new RequestUrlBuilder(baseUrl);
   console.log(criteria);
 
+  const setIdsArrayParam = (key: string, values?: string[]) => {
+    if (values && values.length > 0) {
+      builder.setParam(key, values.join(','));
+    }
+  };
+
+  setIdsArrayParam(ProductListRequestParam.INGREDIENTS_INCLUDE, criteria.ingredientsToIncludeIds);
+  setIdsArrayParam(ProductListRequestParam.INGREDIENTS_EXCLUDE, criteria.ingredientsToExcludeIds);
+  setIdsArrayParam(ProductListRequestParam.BRANDS_INCLUDE, criteria.brandsToIncludeIds);
+  setIdsArrayParam(ProductListRequestParam.BRANDS_EXCLUDE, criteria.brandsToExcludeIds);
+  setIdsArrayParam(ProductListRequestParam.CATEGORIES, criteria.categoriesIds);
+  setIdsArrayParam(ProductListRequestParam.PROVIDERS, criteria.providersIds);
+
   if (criteria.phrase) {
     // The phrase has the uneccessary spaces removed
     // and the rest of the spaces are replaced with '%20'
     builder.setParam(ProductListRequestParam.PHRASE, stringToUrlString(criteria.phrase));
-  }
-
-  if (criteria.ingredientsToIncludeIds && criteria.ingredientsToIncludeIds.length > 0) {
-    builder.setParam(ProductListRequestParam.INGREDIENTS_INCLUDE,
-      criteria.ingredientsToIncludeIds.join(','));
-  }
-
-  if (criteria.ingredientsToExcludeIds && criteria.ingredientsToExcludeIds.length > 0) {
-    builder.setParam(ProductListRequestParam.INGREDIENTS_EXCLUDE,
-      criteria.ingredientsToExcludeIds.join(','));
   }
 
   if (criteria.minRating) {
@@ -153,8 +164,6 @@ export const productCriteriaToUrlBuilder = (
       (sortBy: SortBy) => `${sortBy.order}-${sortBy.option}`,
     ).join(','));
   }
-
-  // TODO: sort by, brands, providers, categories
 
   return builder;
 };
@@ -171,6 +180,7 @@ export const getProductsListApi = (
   if (criteria === undefined) {
     const builder = new RequestUrlBuilder(productsApiUrl);
     builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
+
     return axios.get(builder.build());
   }
 
@@ -190,5 +200,6 @@ export const getLikedProductsApi = (
   const builder = new RequestUrlBuilder(productsApiUrl);
   builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
   builder.setParam(ProductListRequestParam.LIKED, 'true');
+
   return api.get(builder.build());
 };
