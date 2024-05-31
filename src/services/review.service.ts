@@ -2,6 +2,9 @@ import { AxiosResponse } from 'axios';
 import api from '../config/api';
 
 const getApiUrl = (productId: string): string => `/products/${productId}/reviews`;
+const getLikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/likes`;
+const getDislikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/dislikes`;
+const getReportApiUrl = (reviewId: string): string => `/reviews/${reviewId}/reports`;
 
 export interface ReviewObject {
     rating: number,
@@ -9,12 +12,25 @@ export interface ReviewObject {
 }
 
 export interface ReviewResponse {
+    reviewId: string,
     userId: string,
     displayName: string,
     productId: string,
     rating: number,
     content: string,
-    createdAt: string
+    createdAt: string,
+    isLiked: boolean | null,
+    isDisliked: boolean | null,
+    isCurrentUser: boolean,
+    likesCount: number,
+    dislikesCount: number,
+}
+
+export interface ReportResponse {
+  reportId: string,
+  userId: string,
+  reviewId: string,
+  content: string,
 }
 
 export const getProductReviewsApi = async (
@@ -40,3 +56,24 @@ export const putProductReviewApi = async (
 export const deleteProductReviewApi = async (
   id: string,
 ): Promise<AxiosResponse<void>> => api.delete(getApiUrl(id));
+
+export const likeReviewApi = async (
+  id: string,
+): Promise<AxiosResponse<void>> => api.post(getLikeApiUrl(id));
+
+export const unlikeReviewApi = async (
+  id: string,
+): Promise<AxiosResponse<void>> => api.delete(getLikeApiUrl(id));
+
+export const dislikeReviewApi = async (
+  id: string,
+): Promise<AxiosResponse<void>> => api.post(getDislikeApiUrl(id));
+
+export const undislikeReviewApi = async (
+  id: string,
+): Promise<AxiosResponse<void>> => api.delete(getDislikeApiUrl(id));
+
+export const reportReviewApi = async (
+  id: string,
+  content: string,
+): Promise<AxiosResponse<ReportResponse>> => api.post(getReportApiUrl(id), content);

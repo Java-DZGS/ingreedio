@@ -32,6 +32,13 @@ import {
   ReviewResponse,
   getProductReviewsApi,
   postProductReviewApi,
+  putProductReviewApi,
+  deleteProductReviewApi,
+  likeReviewApi,
+  unlikeReviewApi,
+  dislikeReviewApi,
+  undislikeReviewApi,
+  reportReviewApi
 } from '../../services/review.service';
 import Description from '../../Description/Description';
 
@@ -116,15 +123,89 @@ const ProductDetails = (): JSX.Element => {
     console.log('Opinion submitted:', opinionRating, opinionContent);
   };
 
-  const handleLikeOpinion = () => {
+  const onEditOpinion = async (
+    opinionRating: number,
+    opinionContent: string,
+  ) => {
+    if (!productId) return;
+    try {
+      // eslint-disable-next-line operator-linebreak
+      const newReviewResponse: AxiosResponse<ReviewResponse> =
+        await putProductReviewApi(productId, {
+          rating: 2 * opinionRating,
+          content: opinionContent,
+        });
+
+      const newReview = newReviewResponse.data;
+      setProductReviews((reviews) => reviews.map((review) => (review.reviewId
+        === newReview.reviewId ? newReview : review)));
+      fetchProduct();
+    } catch (error) {
+      console.error('An error occurred while editing review:', error);
+    }
+    console.log('Opinion edited:', opinionRating, opinionContent);
+  };
+
+  const onDeleteOpinion = async () => {
+    if (!productId) return;
+    try {
+      // eslint-disable-next-line operator-linebreak
+      await deleteProductReviewApi(productId);
+
+      setProductReviews((reviews) => reviews.filter((review) => review.isCurrentUser !== true));
+      fetchProduct();
+    } catch (error) {
+      console.error('An error occurred while deleting review:', error);
+    }
+    console.log('Opinion deleted.');
+  };
+
+  const handleLikeOpinion = async (id: string) => {
+    try {
+      await likeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while liking review:', error);
+    }
     console.log('Like button clicked');
   };
 
-  const handleDislikeOpinion = () => {
+  const handleUnlikeOpinion = async (id: string) => {
+    try {
+      await unlikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while unliking review:', error);
+    }
+    console.log('Like button clicked');
+  };
+
+  const handleDislikeOpinion = async (id: string) => {
+    try {
+      await dislikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while disliking review:', error);
+    }
     console.log('Dislike button clicked');
   };
 
-  const handleReportOpinion = () => {
+  const handleUndislikeOpinion = async (id: string) => {
+    try {
+      await undislikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while undisliking review:', error);
+    }
+    console.log('Dislike button clicked');
+  };
+
+  const handleReportOpinion = async (id: string) => {
+    try {
+      await likeReviewApi(id);
+    } catch (error) {
+      console.error('An error occurred while liking review:', error);
+    }
     console.log('Report button clicked');
   };
 
@@ -229,13 +310,23 @@ const ProductDetails = (): JSX.Element => {
                                   key={`${opinion.displayName}-${product.id}`}
                                 >
                                   <Opinion
+                                    reviewId={opinion.reviewId}
                                     username={opinion.displayName}
                                     rating={opinion.rating}
                                     createdAt={opinion.createdAt}
                                     content={opinion.content}
+                                    isLiked={false}
+                                    isDisliked={false}
+                                    likesCount={opinion.likesCount}
+                                    dislikesCount={opinion.dislikesCount}
+                                    isCurrentUser={opinion.isCurrentUser}
                                     onLike={handleLikeOpinion}
+                                    onUnlike={handleUnlikeOpinion}
                                     onDislike={handleDislikeOpinion}
+                                    onUndislike={handleUndislikeOpinion}
                                     onReport={handleReportOpinion}
+                                    onEdit={onEditOpinion}
+                                    onDelete={onDeleteOpinion}
                                   />
                                 </li>
                               ))}
