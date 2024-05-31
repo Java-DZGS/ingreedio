@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
-import SearchBar from '../../components/SearchBar/SearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -15,9 +14,18 @@ import {
   urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
-import { IngredientObject, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
+import { TagColor } from '../../theme/tagColor';
+import SearchBar from '../../components/SearchBar/SearchBar';
+
+const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
+  const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
+  const hasAllergens: boolean = allergensSelector?.length > 0;
+
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -34,6 +42,17 @@ const ProductList = (): ReactElement => {
   const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
 
+  const fetchIngredientsSuggestions = async (query: string):
+  Promise<ObjectWithNameAndId[] | null> => {
+    if (query.length === 0) {
+      return null;
+    }
+    const ingredientsResponse = await getIngredientsApi(
+      query, MAX_INGREDIENTS_SUGGESTIONS, hasAllergens,
+    );
+    return ingredientsResponse.data;
+  };
+
   const fetchSelectedIngredients = async () => {
     if (queryProductCriteria.ingredientsToIncludeIds) {
       try {
@@ -46,6 +65,8 @@ const ProductList = (): ReactElement => {
       }
     }
   };
+
+  // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
 
   const fetchProducts = async (criteria: ProductCriteria) => {
     try {
@@ -62,6 +83,7 @@ const ProductList = (): ReactElement => {
     const criteria: ProductCriteria = {
       phrase,
       ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
+      sortingCriteria: queryProductCriteria.sortingCriteria,
     };
     fetchProducts(criteria);
     navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
@@ -96,47 +118,60 @@ const ProductList = (): ReactElement => {
         </ul>
       </ScrollBar>
       <div className="filters-container">
-        <div className="search-container">
-          <div className="product-search-container">
-            <SearchBar
-              label="Product"
-              placeholder="e.g. shampoo"
-              initialValue={phrase}
-              onChange={(value) => setPhrase(value)}
-            />
+        <ScrollBar>
+          <div className="search-container">
+            <div className="product-search-container">
+              <SearchBar
+                label="Product"
+                placeholder="e.g. shampoo"
+                initialValue={phrase}
+                onChange={(value) => setPhrase(value)}
+              />
+            </div>
+            <div className="ingredient-search-container">
+              <SearchBarTagsSelector
+                getSuggestions={fetchIngredientsSuggestions}
+                onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
+                  (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
+                )}
+                onElementRemoved={(id: string) => setSelectedIngredients(
+                  (old: IngredientObject[] | null) => old?.filter(
+                    (ingredient: IngredientObject) => ingredient.id !== id,
+                  ) ?? null,
+                )}
+                selectedElements={selectedIngredients ?? undefined}
+                label="Ingredients"
+                placeholder="e.g. shea butter"
+                tagsColor={TagColor.INGREDIENT}
+              />
+            </div>
+            <div className="provider-search-container">
+              <SearchBar
+                label="Provider"
+                placeholder="e.g. rossmann"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
+            <div className="brand-search-container">
+              <SearchBar
+                label="Brand"
+                placeholder="e.g. lovely"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
+
+            <div className="category-search-container">
+              <SearchBar
+                label="Category"
+                placeholder="e.g. skin care"
+                onChange={(_value) => console.log('Not implemented yet')}
+              />
+            </div>
+            <div className="search-button-container">
+              <FilledButton onClick={handleSearch}>Search</FilledButton>
+            </div>
           </div>
-          <div className="provider-search-container">
-            <SearchBar
-              label="Provider"
-              placeholder="e.g. rossmann"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
-          <div className="brand-search-container">
-            <SearchBar
-              label="Brand"
-              placeholder="e.g. lovely"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
-          <div className="ingredient-search-container">
-            <SearchBar
-              label="Ingredients"
-              placeholder="e.g. shea butter"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
-          <div className="category-search-container">
-            <SearchBar
-              label="Category"
-              placeholder="e.g. skin care"
-              onChange={(_value) => console.log('Not implemented yet')}
-            />
-          </div>
-          <div className="search-button-container">
-            <FilledButton onClick={handleSearch}>Search</FilledButton>
-          </div>
-        </div>
+        </ScrollBar>
       </div>
     </div>
   );

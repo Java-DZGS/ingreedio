@@ -4,7 +4,8 @@ import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
 import { AxiosResponse } from 'axios';
-import SearchBar, { Suggestion } from '../../components/SearchBar/SearchBar';
+import { useSelector } from 'react-redux';
+import AutocompleteSearchBar from '../../components/AutocompleteSearchBar/AutocompleteSearchBar';
 import FilledButton from '../../components/FilledButton/FilledButton';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -13,8 +14,17 @@ import {
 } from '../../services/ingredients.service';
 import Tag from '../../components/Tag/Tag';
 import { ProductCriteria, productCriteriaToUrl } from '../../services/product.service';
+import { TagColor } from '../../theme/tagColor';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import { RootState } from '../../store/reducers';
+
+const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const Home = (): ReactElement => {
+  const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
+  const hasAllergens: boolean = allergensSelector?.length > 0;
+
   const navigate = useNavigate();
   // todo: keep ingredients in a provider to not duplicate code between Home and Products list
   const [phrase, setPhrase] = useState<string>('');
@@ -39,14 +49,14 @@ const Home = (): ReactElement => {
       setIngredientsSuggestions(null);
       return;
     }
-    getIngredientsApi(query, 50).then(
+    getIngredientsApi(query, MAX_INGREDIENTS_SUGGESTIONS, hasAllergens).then(
       (value: AxiosResponse<IngredientObject[]>) => {
         setIngredientsSuggestions(value.data);
       },
     );
   };
 
-  const onIngredientClick = (suggestion: Suggestion) => {
+  const onIngredientClick = (suggestion: ObjectWithNameAndId) => {
     if (
       selectedIngredients.find(
         (value: IngredientObject) => value.id === suggestion.id,
@@ -56,7 +66,7 @@ const Home = (): ReactElement => {
     }
     setSelectedIngredients((prevIngredients: IngredientObject[]) => [
       ...prevIngredients,
-      { id: suggestion.id, name: suggestion.text },
+      suggestion,
     ]);
   };
 
@@ -81,18 +91,11 @@ const Home = (): ReactElement => {
             placeholder="e.g. shampoo"
             onChange={(value) => setPhrase(value)}
           />
-          <SearchBar
+          <AutocompleteSearchBar
             id="ingredient-search"
             label="Ingredients"
             placeholder="e.g. shea butter"
-            suggestions={
-              ingredientsSuggestions?.map(
-                (ingredient: IngredientObject): Suggestion => ({
-                  id: ingredient.id,
-                  text: ingredient.name,
-                }),
-              ) ?? undefined
-            }
+            suggestions={ingredientsSuggestions ?? undefined}
             onChange={onSearchBarChange}
             onSuggestionClick={onIngredientClick}
           />
@@ -110,7 +113,7 @@ const Home = (): ReactElement => {
                 <Tag
                   key={ingredient.id}
                   text={ingredient.name}
-                  color="rgba(255,219,119,0.80)"
+                  color={TagColor.INGREDIENT}
                   onDelete={() => handleRemoveIngredient(ingredient.id)}
                 />
               ))}

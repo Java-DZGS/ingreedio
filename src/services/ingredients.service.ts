@@ -1,18 +1,17 @@
 import { AxiosResponse } from 'axios';
 import { apiUrl } from '../config/config';
-import { WithId } from '../types/types';
 import RequestUrlBuilder from '../utils/requestBuilder';
+import { ObjectWithNameAndId } from '../types/objectWithNameAndId';
 import api from '../config/api';
 
 const ingredientsApiUrl = `${apiUrl}/ingredients`;
 
-export interface IngredientObject extends WithId {
-  name: string;
-}
+export type IngredientObject = ObjectWithNameAndId
 
-export const getIngredientsApi = (query: string, count: number): Promise<
+export const getIngredientsApi = (query: string, count: number, skipAllergens?: boolean): Promise<
   AxiosResponse<IngredientObject[]>
-> => api.get(new RequestUrlBuilder(`${ingredientsApiUrl}`).setParam('count', count.toString()).setParam('query', query).build());
+> => api.get(new RequestUrlBuilder(`${ingredientsApiUrl}`).setParam('skip-allergens', skipAllergens?.toString() ?? 'false').setParam('count', count.toString()).setParam('query', query)
+  .build());
 
 // Example of the ids string: '5,21,52,10,11'
 export const getIngredientsByIdsStringApi = (ids: string): Promise<
