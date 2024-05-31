@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
-import AutocompleteSearchBar from '../../components/AutocompleteSearchBar/AutocompleteSearchBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -25,7 +24,7 @@ const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
   const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
-  const hasAllergens: boolean = allergensSelector?.length > 0 ?? false;
+  const hasAllergens: boolean = allergensSelector?.length > 0;
 
   const navigate = useNavigate();
   const location = useLocation();
