@@ -1,5 +1,5 @@
-import { WithId } from '../types/types';
+import { ObjectWithNameAndId } from '../types/objectWithNameAndId';
 
-const toIdSetString = <T extends WithId>(items: T[]): string => Array.from(new Set(items.map((obj) => obj.id))).join(',');
+const toIdSetString = <T extends ObjectWithNameAndId>(items: T[]): string => Array.from(new Set(items.map((obj) => obj.id))).join(',');
 
 export default toIdSetString;
