@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProductTile from '../../components/ProductTile/ProductTile';
@@ -15,6 +15,7 @@ import {
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
 import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import useEffectSingular from '../../hooks/useEffectSignular';
 import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import { TagColor } from '../../theme/tagColor';
@@ -89,11 +90,10 @@ const ProductList = (): ReactElement => {
     navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
-  useEffect(() => {
-    // fetch products
+  useEffectSingular(() => {
     fetchProducts(queryProductCriteria);
     fetchSelectedIngredients();
-  }, []);
+  });
 
   return (
     <div className="product-list-page">

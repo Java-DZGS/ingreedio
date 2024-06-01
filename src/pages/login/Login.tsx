@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import './Login.scss';
-import { Button, FormControl } from '@chakra-ui/react';
+import { Button, FormControl, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
@@ -9,15 +9,17 @@ import actions from '../../store/actions';
 import { RootState } from '../../store/reducers';
 
 const Login = (): ReactElement => {
-  // Navigate hook
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const toast = useToast();
   const {
-    loginSuccessful, accessToken, refreshToken, buttonLoading,
+    loginSuccessful,
+    accessToken,
+    refreshToken,
+    buttonLoading,
+    errorCode,
   } = useSelector((state: RootState) => state.auth);
 
-  // States
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
@@ -31,8 +33,25 @@ const Login = (): ReactElement => {
       localStorage.setItem('username', username);
       navigate(ROUTES.HOME);
     } else {
-      // todo: proper error message
-      alert('Login unsuccessful');
+      let errorMessage = 'Login unsuccessful';
+      switch (errorCode) {
+        case 401:
+          errorMessage = 'Invalid username or password. Please try again.';
+          break;
+        case errorCode && errorCode >= 500:
+          errorMessage = 'Server error. Please try again later.';
+          break;
+        default:
+          errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+
+      toast({
+        title: 'Login unsuccessful',
+        description: errorMessage,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
 
     setLoggingIn(false);
@@ -43,7 +62,6 @@ const Login = (): ReactElement => {
     setLoggingIn(true);
     dispatch(actions.signInRequest(username, password));
 
-    // Prevent from page reload
     e.preventDefault();
   };
 
@@ -67,7 +85,6 @@ const Login = (): ReactElement => {
                 type="password"
                 label="Password"
                 onChange={(e) => setPassword(e.target.value)}
-                // minLength={6}
                 required
               />
             </FormControl>
