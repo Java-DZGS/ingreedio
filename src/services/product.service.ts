@@ -96,9 +96,6 @@ const parseSortBy = (input: string): SortBy | undefined => {
 export const urlToProductCriteria = (url: string): ProductCriteria => {
   const queryParams = new URLSearchParams(url);
 
-  const minRatingStr = queryParams.get(ProductListRequestParams.MIN_RATING);
-  let minRating: number | undefined;
-
   const sortingCriteriaParam = queryParams.get(ProductListRequestParam.SORT_BY);
   let sortingCriteria: SortBy[] = [];
   if (sortingCriteriaParam) {
