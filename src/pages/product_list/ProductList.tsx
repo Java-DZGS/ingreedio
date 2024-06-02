@@ -1,8 +1,4 @@
-import React, {
-  ReactElement,
-  useState,
-  useCallback,
-} from 'react';
+import React, { ReactElement, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
@@ -21,7 +17,11 @@ import {
   urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
-import { IngredientObject, getIngredientsApi, getIngredientsByIdsApi } from '../../services/ingredients.service';
+import {
+  IngredientObject,
+  getIngredientsApi,
+  getIngredientsByIdsApi,
+} from '../../services/ingredients.service';
 import useEffectSingular from '../../hooks/useEffectSignular';
 import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
@@ -31,7 +31,9 @@ import { handleError } from '../../utils/handleError';
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
 const ProductList = (): ReactElement => {
-  const allergensSelector = useSelector((state: RootState) => state.like.dislikedIngredients);
+  const allergensSelector = useSelector(
+    (state: RootState) => state.like.dislikedIngredients,
+  );
   const hasAllergens: boolean = allergensSelector?.length > 0;
 
   const navigate = useNavigate();
@@ -48,16 +50,23 @@ const ProductList = (): ReactElement => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   // Data recreated basing on the query product criteria
-  const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
-  const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
+  const [phrase, setPhrase] = useState<string>(
+    queryProductCriteria.phrase ?? '',
+  );
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    IngredientObject[] | null
+  >(null);
 
-  const fetchIngredientsSuggestions = async (query: string):
-    Promise<ObjectWithNameAndId[] | null> => {
+  const fetchIngredientsSuggestions = async (
+    query: string,
+  ): Promise<ObjectWithNameAndId[] | null> => {
     if (query.length === 0) {
       return null;
     }
     const ingredientsResponse = await getIngredientsApi(
-      query, MAX_INGREDIENTS_SUGGESTIONS, hasAllergens,
+      query,
+      MAX_INGREDIENTS_SUGGESTIONS,
+      hasAllergens,
     );
     return ingredientsResponse.data;
   };
@@ -88,7 +97,8 @@ const ProductList = (): ReactElement => {
       if (response && response.data) {
         setProducts((prevProducts) => {
           const newProducts = response.data.products.filter(
-            (newProduct) => !prevProducts.some((product) => product.id === newProduct.id),
+            (newProduct) =>
+              !prevProducts.some((product) => product.id === newProduct.id),
           );
           return [...prevProducts, ...newProducts];
         });
@@ -104,7 +114,9 @@ const ProductList = (): ReactElement => {
   const handleSearch = () => {
     const criteria: ProductCriteria = {
       phrase,
-      ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
+      ingredientsToIncludeIds: selectedIngredients?.map(
+        (ingr: IngredientObject) => ingr.id,
+      ),
       sortingCriteria: queryProductCriteria.sortingCriteria,
     };
     setProducts([]);
@@ -123,6 +135,7 @@ const ProductList = (): ReactElement => {
     if (!isFetching) {
       setPageNumber((prevPageNumber) => prevPageNumber + 1);
     }
+    if (pageNumber > 0) fetchProducts(queryProductCriteria, pageNumber);
   };
 
   return (
@@ -171,14 +184,16 @@ const ProductList = (): ReactElement => {
             <div className="ingredient-search-container">
               <SearchBarTagsSelector
                 getSuggestions={fetchIngredientsSuggestions}
-                onElementChosen={(element: ObjectWithNameAndId) => setSelectedIngredients(
-                  (old: IngredientObject[] | null) => (old ? [...old, element] : [element]),
-                )}
-                onElementRemoved={(id: string) => setSelectedIngredients(
-                  (old: IngredientObject[] | null) => old?.filter(
-                    (ingredient: IngredientObject) => ingredient.id !== id,
-                  ) ?? null,
-                )}
+                onElementChosen={(element: ObjectWithNameAndId) =>
+                  setSelectedIngredients((old: IngredientObject[] | null) =>
+                    (old ? [...old, element] : [element]))}
+                onElementRemoved={(id: string) =>
+                  setSelectedIngredients(
+                    (old: IngredientObject[] | null) =>
+                      old?.filter(
+                        (ingredient: IngredientObject) => ingredient.id !== id,
+                      ) ?? null,
+                  )}
                 selectedElements={selectedIngredients ?? undefined}
                 label="Ingredients"
                 placeholder="e.g. shea butter"
