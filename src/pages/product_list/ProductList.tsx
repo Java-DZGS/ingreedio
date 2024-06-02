@@ -1,6 +1,5 @@
 import React, {
   ReactElement,
-  useEffect,
   useState,
   useCallback,
 } from 'react';
@@ -43,9 +42,6 @@ const ProductList = (): ReactElement => {
   );
 
   const [products, setProducts] = useState<ProductObject[]>([]);
-  const [selectedIngredients, setSelectedIngredients] = useState<
-    IngredientObject[] | null
-  >(null);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -84,7 +80,7 @@ const ProductList = (): ReactElement => {
     if (isFetching || page >= totalPages) return;
 
     setIsFetching(true);
-  // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
+    // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
 
     try {
       const response = await getProductsListApi(criteria, page);
