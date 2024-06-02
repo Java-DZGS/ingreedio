@@ -114,7 +114,7 @@ const ProductList = (): ReactElement => {
   };
 
   useEffectSingular(() => {
-    fetchProducts(queryProductCriteria);
+    fetchProducts(queryProductCriteria, pageNumber);
     fetchSelectedIngredients();
   });
 
