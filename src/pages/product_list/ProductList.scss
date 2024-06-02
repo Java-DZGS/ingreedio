@@ -20,12 +20,13 @@
     padding: 20px;
   }
   .scrollbar-container {
-    width: 70%;
     flex: 10;
   }
   .filters-container {
     flex: 3;
     padding: 20px;
+    max-width: 25%;
+    min-width: 25%;
     background-color: 'rgba(229, 244, 255, 0.42)';
 
     .search-container {

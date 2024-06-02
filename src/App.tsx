@@ -11,9 +11,11 @@ import ProductList from './pages/product_list/ProductList';
 import ProductDetails from './pages/product_details/ProductDetails';
 import useLoginAutomatically from './hooks/useLoginAutomatically';
 import { LoginState, ProtectedRoute } from './routes/ProtectedRoute';
+import useCheckForcefulLogout from './hooks/useCheckForcefulLogout';
 
 function App(): ReactElement {
   useLoginAutomatically();
+  useCheckForcefulLogout();
 
   return (
     <div className="app">

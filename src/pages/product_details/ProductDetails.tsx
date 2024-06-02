@@ -141,8 +141,6 @@ const ProductDetails = (): JSX.Element => {
     );
   }
 
-  console.log(product.longDescription);
-
   return (
     <div className="product-details-container">
       <div className="card-wrapper">

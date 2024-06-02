@@ -8,6 +8,7 @@ type AuthState = {
   refreshToken: string;
   buttonLoading: boolean;
   isAuthenticated: boolean;
+  errorCode: number | null;
 };
 
 const initialState: AuthState = {
@@ -17,6 +18,7 @@ const initialState: AuthState = {
   refreshToken: '',
   buttonLoading: false,
   isAuthenticated: false,
+  errorCode: null,
 };
 
 const auth = (
@@ -55,6 +57,7 @@ const auth = (
         refreshToken: '',
         buttonLoading: false,
         isAuthenticated: false,
+        errorCode: action.payload,
       };
 
     case types.SIGN_UP_REQUEST:
@@ -75,6 +78,7 @@ const auth = (
         ...state,
         signupSuccessful: false,
         buttonLoading: false,
+        errorCode: action.payload,
       };
 
     case types.SIGN_OUT:
@@ -88,6 +92,7 @@ const auth = (
         ...state,
         loginSuccessful: null,
         signupSuccessful: null,
+        errorCode: null,
       };
 
     default:
