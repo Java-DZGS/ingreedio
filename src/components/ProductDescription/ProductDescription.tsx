@@ -10,7 +10,7 @@ type ProductDescriptionProps = {
   volume: number;
   brand: string;
   rating: number;
-  isLiked: boolean;
+  isLiked: boolean | null;
   largeImageUrl: string;
   showLike: boolean;
   handleLike: () => void;
