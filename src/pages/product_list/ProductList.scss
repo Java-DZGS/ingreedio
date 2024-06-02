@@ -3,6 +3,22 @@
   padding-top: 50px;
   display: flex;
   flex: 1;
+  .loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  }
+  .no-products-message {
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.5em;
+    color: #555;
+    margin-top: 20px;
+    text-align: center;
+    padding: 20px;
+  }
   .scrollbar-container {
     flex: 10;
   }

@@ -1,9 +1,16 @@
-import React, { ReactElement, useState } from 'react';
+import React, {
+  ReactElement,
+  useState,
+  useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import PagingScrollBar from '../../components/PagingScrollBar/PagingScrollBar';
 import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
@@ -19,7 +26,6 @@ import useEffectSingular from '../../hooks/useEffectSignular';
 import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import { TagColor } from '../../theme/tagColor';
-import SearchBar from '../../components/SearchBar/SearchBar';
 
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
@@ -29,15 +35,16 @@ const ProductList = (): ReactElement => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    isAuthenticated,
-  } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  // Get product criteria basing on the page url
-  const queryProductCriteria: ProductCriteria = urlToProductCriteria(location.search);
+  const queryProductCriteria: ProductCriteria = urlToProductCriteria(
+    location.search,
+  );
 
-  // Current products displayed
   const [products, setProducts] = useState<ProductObject[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   // Data recreated basing on the query product criteria
   const [phrase, setPhrase] = useState<string>(queryProductCriteria.phrase ?? '');
@@ -54,29 +61,42 @@ const ProductList = (): ReactElement => {
     return ingredientsResponse.data;
   };
 
-  const fetchSelectedIngredients = async () => {
+  const fetchSelectedIngredients = useCallback(async () => {
     if (queryProductCriteria.ingredientsToIncludeIds) {
       try {
-        const response = await getIngredientsByIdsApi(queryProductCriteria.ingredientsToIncludeIds);
+        const response = await getIngredientsByIdsApi(
+          queryProductCriteria.ingredientsToIncludeIds,
+        );
         if (response && response.data) {
           setSelectedIngredients(response.data);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching ingredients:', error);
       }
     }
-  };
+  }, [queryProductCriteria.ingredientsToIncludeIds]);
 
-  // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
+  const fetchProducts = async (criteria: ProductCriteria, page: number) => {
+    if (isFetching || page >= totalPages) return;
 
-  const fetchProducts = async (criteria: ProductCriteria) => {
+    setIsFetching(true);
+    // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
+
     try {
-      const response = await getProductsListApi(criteria);
+      const response = await getProductsListApi(criteria, page);
       if (response && response.data) {
-        setProducts(response.data.products);
+        setProducts((prevProducts) => {
+          const newProducts = response.data.products.filter(
+            (newProduct) => !prevProducts.some((product) => product.id === newProduct.id),
+          );
+          return [...prevProducts, ...newProducts];
+        });
+        setTotalPages(response.data.totalPages);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -86,37 +106,56 @@ const ProductList = (): ReactElement => {
       ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
       sortingCriteria: queryProductCriteria.sortingCriteria,
     };
-    fetchProducts(criteria);
+    setProducts([]);
+    setPageNumber(0);
+    setTotalPages(1);
+    fetchProducts(criteria, 0);
     navigate(productCriteriaToUrl(ROUTES.PRODUCTS, criteria));
   };
 
   useEffectSingular(() => {
-    fetchProducts(queryProductCriteria);
+    fetchProducts(queryProductCriteria, pageNumber);
     fetchSelectedIngredients();
   });
 
+  const loadMoreProducts = () => {
+    if (!isFetching) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
+
   return (
     <div className="product-list-page">
-      <ScrollBar className="scrollbar-container">
+      <PagingScrollBar
+        className="scrollbar-container"
+        onLoadMore={loadMoreProducts}
+      >
         <ul className="product-grid">
-          {products
-            && products.map((product) => (
-              <li key={product.id} className="product">
-                <Link to={`/products/${product.id}`}>
-                  <ProductTile
-                    name={`${product.brand} ${product.name}`}
-                    provider={product.provider}
-                    smallImageUrl={product.smallImageUrl}
-                    shortDescription={product.shortDescription}
-                    rating={product.rating}
-                    showLike={isAuthenticated}
-                    isLiked={!!product.isLiked}
-                  />
-                </Link>
-              </li>
-            ))}
+          {products.length === 0 && !isFetching && (
+            <div className="no-products-message">No products found</div>
+          )}
+          {products.map((product) => (
+            <li key={product.id} className="product">
+              <Link to={`/products/${product.id}`}>
+                <ProductTile
+                  name={`${product.brand} ${product.name}`}
+                  provider={product.provider}
+                  smallImageUrl={product.smallImageUrl}
+                  shortDescription={product.shortDescription}
+                  rating={product.rating}
+                  showLike={isAuthenticated}
+                  isLiked={!!product.isLiked}
+                />
+              </Link>
+            </li>
+          ))}
         </ul>
-      </ScrollBar>
+        {isFetching && (
+          <div className="loading-indicator">
+            <ClipLoader size={35} color="#123abc" loading />
+          </div>
+        )}
+      </PagingScrollBar>
       <div className="filters-container">
         <ScrollBar>
           <div className="search-container">
