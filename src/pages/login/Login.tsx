@@ -33,7 +33,7 @@ const Login = (): ReactElement => {
       localStorage.setItem('username', username);
       navigate(ROUTES.HOME);
     } else {
-      let errorMessage = 'Login unsuccessful';
+      let errorMessage;
       switch (errorCode) {
         case 401:
           errorMessage = 'Invalid username or password. Please try again.';

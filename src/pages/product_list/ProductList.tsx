@@ -26,6 +26,7 @@ import useEffectSingular from '../../hooks/useEffectSignular';
 import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
 import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
 import { TagColor } from '../../theme/tagColor';
+import { handleError } from '../../utils/handleError';
 
 const MAX_INGREDIENTS_SUGGESTIONS = 50;
 
@@ -51,7 +52,7 @@ const ProductList = (): ReactElement => {
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientObject[] | null>(null);
 
   const fetchIngredientsSuggestions = async (query: string):
-  Promise<ObjectWithNameAndId[] | null> => {
+    Promise<ObjectWithNameAndId[] | null> => {
     if (query.length === 0) {
       return null;
     }
@@ -71,7 +72,7 @@ const ProductList = (): ReactElement => {
           setSelectedIngredients(response.data);
         }
       } catch (error) {
-        console.error('Error fetching ingredients:', error);
+        handleError(error, 'An error occurred while fetching ingredients.');
       }
     }
   }, [queryProductCriteria.ingredientsToIncludeIds]);
@@ -94,7 +95,7 @@ const ProductList = (): ReactElement => {
         setTotalPages(response.data.totalPages);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      handleError(error, 'An error occurred while fetching products');
     } finally {
       setIsFetching(false);
     }

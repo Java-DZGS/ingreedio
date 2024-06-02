@@ -13,7 +13,7 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AxiosResponse } from 'axios';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
@@ -33,12 +33,12 @@ import {
   getProductReviewsApi,
   postProductReviewApi,
 } from '../../services/review.service';
-import Description from '../../Description/Description';
+import Description from '../../components/Description/Description';
+import { handleError } from '../../utils/handleError';
 
 const ProductDetails = (): JSX.Element => {
-  const dispatch = useDispatch();
-
   const { productId } = useParams<{ productId: string }>();
+  // todo: get this value from backend
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
   const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
@@ -56,7 +56,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       likeProductApi(productId)
         .then(() => setIsLiked(true))
-        .catch((error) => console.error(error));
+        .catch((error) => handleError(error, 'An error occurred while liking the product.'));
     }
   };
 
@@ -64,7 +64,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       unlikeProductApi(productId)
         .then(() => setIsLiked(false))
-        .catch((error) => console.error(error));
+        .catch((error) => handleError(error, 'An error occurred while unliking the product.'));
     }
   };
 
@@ -78,7 +78,7 @@ const ProductDetails = (): JSX.Element => {
         setProduct(response.data);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      handleError(error, 'Error fetching product.');
     }
   };
 
@@ -90,7 +90,7 @@ const ProductDetails = (): JSX.Element => {
         setProductReviews(response.data);
       }
     } catch (error) {
-      console.error('Error fetching product reviews:', error);
+      handleError(error, 'Error fetching product reviews.');
     }
   };
 
@@ -111,7 +111,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => [...reviews, newReview]);
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while adding review:', error);
+      handleError(error, 'An error occurred while adding review.');
     }
     console.log('Opinion submitted:', opinionRating, opinionContent);
   };
@@ -131,7 +131,7 @@ const ProductDetails = (): JSX.Element => {
   useEffect(() => {
     fetchProduct();
     fetchProductReviews();
-  }, [dispatch, productId]);
+  }, [productId]);
 
   if (!product) {
     return (
@@ -186,13 +186,13 @@ const ProductDetails = (): JSX.Element => {
                                 <li key={ingredient + Math.random()}>
                                   <ProductDetailsIngredient
                                     ingredient={ingredient}
-                                    // TODO: when backend returns the ingredients id
-                                    // isLiked={likedIngredients.includes(
-                                    //   ingredient,
-                                    // )}
-                                    // isDisliked={dislikedIngredients.includes(
-                                    //   ingredient,
-                                    // )}
+                                  // TODO: when backend returns the ingredients id
+                                  // isLiked={likedIngredients.includes(
+                                  //   ingredient,
+                                  // )}
+                                  // isDisliked={dislikedIngredients.includes(
+                                  //   ingredient,
+                                  // )}
                                   />
                                 </li>
                               ))}
