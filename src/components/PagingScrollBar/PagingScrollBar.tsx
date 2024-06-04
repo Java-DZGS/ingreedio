@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 import Scrollbars, { positionValues } from 'react-custom-scrollbars-2';
 
 type ScrollBarProps = {
@@ -17,9 +17,7 @@ const PagingScrollBar = ({
     const { scrollTop, scrollHeight, clientHeight } = values;
 
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-    console.log(distanceFromBottom);
-
-    if (distanceFromBottom < 50) {
+    if (distanceFromBottom < 300) {
       if (onLoadMore) {
         onLoadMore();
       }

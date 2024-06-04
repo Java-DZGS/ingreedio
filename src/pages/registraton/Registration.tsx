@@ -1,6 +1,11 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import './Registration.scss';
-import { Button, FormControl, FormHelperText } from '@chakra-ui/react';
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  useToast,
+} from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input/Input';
@@ -9,15 +14,13 @@ import actions from '../../store/actions';
 import { RootState } from '../../store/reducers';
 
 const Registration = (): ReactElement => {
-  // Navigate hook
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const toast = useToast();
 
-  const {
-    signupSuccessful,
-    buttonLoading,
-  } = useSelector((state: RootState) => state.auth);
+  const { signupSuccessful, buttonLoading, errorCode } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   // States
   const [email, setEmail] = useState('');
@@ -33,7 +36,25 @@ const Registration = (): ReactElement => {
       navigate(ROUTES.LOGIN);
     } else {
       // todo: proper error message
-      alert('Sign up unsuccessful');
+      let errorMessage = 'Sign up unsuccessful';
+      switch (errorCode) {
+        case 409:
+          errorMessage = 'User with that username or email already exists.';
+          break;
+        case errorCode && errorCode >= 500:
+          errorMessage = 'Server error. Please try again later.';
+          break;
+        default:
+          errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+
+      toast({
+        title: 'Sign up unsuccessful',
+        description: errorMessage,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
 
     setSigningUp(false);
