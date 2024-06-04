@@ -38,7 +38,7 @@ import {
   unlikeReviewApi,
   dislikeReviewApi,
   undislikeReviewApi,
-  reportReviewApi
+  reportReviewApi,
 } from '../../services/review.service';
 import Description from '../../Description/Description';
 
@@ -51,6 +51,12 @@ const ProductDetails = (): JSX.Element => {
   const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  let canAddOpinion = true;
+  if (productReviews
+    && productReviews[0]
+    && productReviews[0].isCurrentUser != null
+    && productReviews[0].isCurrentUser) canAddOpinion = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { likedIngredients, dislikedIngredients } = useSelector(
@@ -137,6 +143,7 @@ const ProductDetails = (): JSX.Element => {
         });
 
       const newReview = newReviewResponse.data;
+      console.log(newReview);
       setProductReviews((reviews) => reviews.map((review) => (review.reviewId
         === newReview.reviewId ? newReview : review)));
       fetchProduct();
@@ -146,13 +153,13 @@ const ProductDetails = (): JSX.Element => {
     console.log('Opinion edited:', opinionRating, opinionContent);
   };
 
-  const onDeleteOpinion = async () => {
+  const onDeleteOpinion = async (reviewId: string) => {
     if (!productId) return;
     try {
       // eslint-disable-next-line operator-linebreak
       await deleteProductReviewApi(productId);
 
-      setProductReviews((reviews) => reviews.filter((review) => review.isCurrentUser !== true));
+      setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
       fetchProduct();
     } catch (error) {
       console.error('An error occurred while deleting review:', error);
@@ -200,11 +207,11 @@ const ProductDetails = (): JSX.Element => {
     console.log('Dislike button clicked');
   };
 
-  const handleReportOpinion = async (id: string) => {
+  const handleReportOpinion = async (id: string, content: string) => {
     try {
-      await likeReviewApi(id);
+      await reportReviewApi(id, content);
     } catch (error) {
-      console.error('An error occurred while liking review:', error);
+      console.error('An error occurred while reporting review:', error);
     }
     console.log('Report button clicked');
   };
@@ -298,7 +305,7 @@ const ProductDetails = (): JSX.Element => {
                         style={{ display: 'flex', flex: 1, width: '100%' }}
                       >
                         <ScrollBar>
-                          {isAuthenticated && (
+                          {isAuthenticated && canAddOpinion && (
                             <Button onClick={onOpen} variant="link">
                               Add your opinion
                             </Button>
@@ -315,8 +322,8 @@ const ProductDetails = (): JSX.Element => {
                                     rating={opinion.rating}
                                     createdAt={opinion.createdAt}
                                     content={opinion.content}
-                                    isLiked={false}
-                                    isDisliked={false}
+                                    isLiked={opinion.isLiked}
+                                    isDisliked={opinion.isDisliked}
                                     likesCount={opinion.likesCount}
                                     dislikesCount={opinion.dislikesCount}
                                     isCurrentUser={opinion.isCurrentUser}
@@ -344,6 +351,8 @@ const ProductDetails = (): JSX.Element => {
       </div>
       <OpinionModal
         isOpen={isOpen}
+        rating={0}
+        content=""
         onClose={onClose}
         onSubmit={onSubmitOpinion}
       />

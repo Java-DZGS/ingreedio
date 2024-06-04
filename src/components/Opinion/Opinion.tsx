@@ -1,10 +1,20 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 import './Opinion.scss';
-import { FaThumbsUp, FaThumbsDown, FaStar } from 'react-icons/fa';
+import {
+  FaThumbsUp,
+  FaThumbsDown,
+  FaStar,
+  FaTrashAlt,
+  FaEdit,
+} from 'react-icons/fa';
+import { useDisclosure } from '@chakra-ui/react';
+import OpinionModal from '../OpinionModal/OpinionModal';
+import ReportOpinionModal from '../ReportOpinionModal/ReportOpinionModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 
 interface OpinionProps {
-  reviewId: string,
+  reviewId: string;
   username: string;
   rating: number;
   createdAt: string;
@@ -13,14 +23,14 @@ interface OpinionProps {
   dislikesCount: number;
   isLiked: boolean | null;
   isDisliked: boolean | null;
-  isCurrentUser: boolean;
+  isCurrentUser: boolean | null;
   onLike: (id: string) => void;
   onUnlike: (id: string) => void;
   onDislike: (id: string) => void;
   onUndislike: (id: string) => void;
-  onReport: (id: string) => void;
+  onReport: (id: string, content: string) => void;
   onEdit: (opinionRating: number, opinionContent: string) => void;
-  onDelete: () => void;
+  onDelete: (reviewId: string) => void;
 }
 
 const Opinion = ({
@@ -45,18 +55,49 @@ const Opinion = ({
   const [liked, setLiked] = useState<boolean | null>(isLiked);
   const [disliked, setDisliked] = useState<boolean | null>(isDisliked);
 
+  const [likes, setLikes] = useState<number>(likesCount);
+  const [dislikes, setDislikes] = useState<number>(likesCount);
+
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
+  const {
+    isOpen: isReportOpen,
+    onOpen: onReportOpen,
+    onClose: onReportClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+
+  useEffect(() => {
+    setLiked(isLiked);
+    setDisliked(isDisliked);
+  }, [isLiked, isDisliked]);
+
+  useEffect(() => {
+    setLikes(likesCount);
+    setDislikes(dislikesCount);
+  }, [likesCount, dislikesCount]);
+
   const toggleLike = () => {
     console.log(liked);
     if (liked == null) return;
     if (liked === false) {
-      // onLike(reviewId);
-      // setLiked(true);
-      // setDisliked(false);
+      setLikes((prev) => prev + 1);
+      setLiked(true);
+      if (disliked) {
+        setDislikes((prev) => (prev > 0 ? prev - 1 : 0));
+        setDisliked(false);
+      }
       onLike(reviewId);
     } else {
-      // onUnlike(reviewId);
-      // setLiked(false);
-      // setDisliked(true);
+      setLikes((prev) => (prev > 0 ? prev - 1 : 0));
+      setLiked(false);
       onUnlike(reviewId);
     }
   };
@@ -65,20 +106,31 @@ const Opinion = ({
     console.log(disliked);
     if (disliked == null) return;
     if (disliked === false) {
-      // onDislike(reviewId);
-      // setDisliked(true);
-      // setLiked(false);
+      setDislikes((prev) => prev + 1);
+      setDisliked(true);
+      if (liked) {
+        setLikes((prev) => (prev > 0 ? prev - 1 : 0));
+        setLiked(false);
+      }
       onDislike(reviewId);
     } else {
-      // onUndislike(reviewId);
-      // setDisliked(false);
-      // setLiked(true);
+      setDislikes((prev) => (prev > 0 ? prev - 1 : 0));
+      setDisliked(false);
       onUndislike(reviewId);
     }
   };
 
-  const handleReport = () => {
-    onReport(reviewId);
+  const handleReport = (content: string) => {
+    onReport(reviewId, content);
+  };
+
+  const handleEdit = async (opinionRating: number, opinionContent: string) => {
+    onEdit(opinionRating, opinionContent);
+  };
+
+  const handleDelete = async () => {
+    onDelete(reviewId);
+    onDeleteClose();
   };
 
   return (
@@ -95,16 +147,53 @@ const Opinion = ({
       </div>
       <div className="content">{content}</div>
       <div className="footer">
-        <button className="report-button" type="button" onClick={handleReport}>
+        <button className="report-button" type="button" onClick={onReportOpen}>
           Report
         </button>
+        {isCurrentUser && isCurrentUser === true && (
+          <div className="edit-delete-buttons">
+            <button type="button" onClick={onEditOpen} className="edit-button">
+              <FaEdit /> Edit
+            </button>
+            <button
+              type="button"
+              onClick={onDeleteOpen}
+              className="delete-button"
+            >
+              <FaTrashAlt /> Delete
+            </button>
+          </div>
+        )}
         <div className="icons">
-          <FaThumbsUp className="icon" onClick={toggleLike} />
-          <span className="likes-count">{likesCount}</span>
-          <FaThumbsDown className="icon" onClick={toggleDislike} />
-          <span className="dislikes-count">{dislikesCount}</span>
+          <FaThumbsUp
+            className={`icon ${liked ? 'liked' : ''}`}
+            onClick={toggleLike}
+          />
+          <span className="likes-count">{likes}</span>
+          <FaThumbsDown
+            className={`icon ${disliked ? 'disliked' : ''}`}
+            onClick={toggleDislike}
+          />
+          <span className="dislikes-count">{dislikes}</span>
         </div>
       </div>
+      <OpinionModal
+        isOpen={isEditOpen}
+        rating={rating}
+        content={content}
+        onClose={onEditClose}
+        onSubmit={handleEdit}
+      />
+      <ReportOpinionModal
+        isOpen={isReportOpen}
+        onClose={onReportClose}
+        onSubmit={handleReport}
+      />
+      <DeleteConfirmationModal
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };

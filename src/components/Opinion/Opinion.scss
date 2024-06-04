@@ -1,90 +1,108 @@
-/* Opinion.scss */
 .opinion {
-    border: 1px solid rgba(135, 185, 255, 0.47);
-    background-color: transparent;
-    padding: 16px;
-    margin: 16px 0;
-    border-radius: 8px;
-  
-    .header {
-      display: flex;  /* Changed to inline-flex to fit contents */
-      flex-direction: row;
-      justify-content: space-between;
+  border: 1px solid rgba(135, 185, 255, 0.47);
+  background-color: transparent;
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 8px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0;
+    width: 100%;
+    block-size: fit-content;
+
+    .user-info {
+      display: flex;
       align-items: center;
-      margin-bottom: 8px;
-      padding: 0;
-      width: 100%;
-      block-size: fit-content;
-  
-      .user-info {
+
+      .username {
+        font-weight: bold;
         display: flex;
         align-items: center;
-  
-        .username {
-          font-weight: bold;
-          display: flex;
-          align-items: center;
-        }
-  
-        .rating {
-          padding: 0px 5px;
-        }
-        
-        .star {
-            color: gold;  
-          }
       }
-  
-      .date {
-        font-size: 0.9em;
-        color: #666;
+
+      .rating {
+        padding: 0px 5px;
+      }
+      
+      .star {
+        color: gold;  
       }
     }
-  
-    .content {
-      margin-bottom: 12px;
-      text-align: left;  /* Ensure content is left-aligned */
+
+    .date {
+      font-size: 0.9em;
+      color: #666;
     }
-  
-    .footer {
+  }
+
+  .content {
+    margin-bottom: 12px;
+    text-align: left;  
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #98A099;
+
+    .report-button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9em;
+    }
+
+    .edit-delete-buttons {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #98A099;
-  
-      .report-button {
-        background-color: transparent;
+      gap: 10px;
+
+      .edit-button, .delete-button {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: none;
         border: none;
         cursor: pointer;
-        padding: 0;
-        font-size: 0.9em;
-      }
-  
-      .icons {
-        display: flex;
-        align-items: center;
-        color: rgb(83, 83, 83);
+        color: #4a4a4a;
 
-         .like-section, .dislike-section {
-        display: flex;
-        align-items: center;
-        margin-right: 10px;
-
-        .icon {
-          margin-right: 5px;
-          cursor: pointer;
-        }
-
-        .likes-count, .dislikes-count {
-          font-size: 14px;
+        &:hover {
+          color: #000;
         }
       }
-  
-        .icon {
-          cursor: pointer;
-          margin-left: 8px;
-        }
+    }
+
+    .icons {
+      display: flex;
+      align-items: center;
+      color: rgb(83, 83, 83);
+
+      .icon.liked {
+        color: #4caf50; 
+      }
+
+      .icon.disliked {
+        color: #f44336; 
+      }
+
+      .icon {
+        margin-right: 5px;
+        cursor: pointer;
+      }
+
+      .likes-count, .dislikes-count {
+        font-size: 14px;
+      }
+
+      .icon {
+        cursor: pointer;
+        margin-left: 8px;
       }
     }
   }
-  
+}

@@ -21,7 +21,7 @@ export interface ReviewResponse {
     createdAt: string,
     isLiked: boolean | null,
     isDisliked: boolean | null,
-    isCurrentUser: boolean,
+    isCurrentUser: boolean | null,
     likesCount: number,
     dislikesCount: number,
 }
