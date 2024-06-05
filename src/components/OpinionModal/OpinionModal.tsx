@@ -35,10 +35,8 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   const [opinionRating, setOpinionRating] = useState(rating);
 
   useEffect(() => {
-    if (isOpen) {
-      setOpinionRating(rating);
-      setOpinionContent(content);
-    }
+    setOpinionRating(rating);
+    setOpinionContent(content);
   }, [isOpen]);
 
   const handleSubmitOpinion = () => {
