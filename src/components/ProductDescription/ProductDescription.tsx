@@ -36,7 +36,7 @@ const ProductDescription = ({
     <div className="product-image-container">
       {showLike && (
         <HeartComponent
-          isLiked={isLiked}
+          isLiked={isLiked ?? false}
           className="heart-button"
           onLike={handleLike}
           onUnlike={handleUnlike}

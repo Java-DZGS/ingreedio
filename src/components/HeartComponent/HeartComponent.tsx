@@ -3,7 +3,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import './HeartComponent.scss';
 
 type HeartProps = {
-  isLiked: boolean | null;
+  isLiked: boolean;
   onLike: () => void;
   onUnlike: () => void;
   className?: string;
