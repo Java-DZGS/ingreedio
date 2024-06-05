@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 import './Opinion.scss';
@@ -134,66 +135,85 @@ const Opinion = ({
   };
 
   return (
-    <div className="opinion">
-      <div className="header">
-        <div className="user-info">
-          <span className="username">{username}</span>
-          <span className="rating">· {rating / 2}/5 </span>
-          <FaStar className="star" />
-        </div>
-        <span className="date">
-          {new Date(createdAt).toLocaleDateString('sv-SE')}
-        </span>
-      </div>
-      <div className="content">{content}</div>
-      <div className="footer">
-        <button className="report-button" type="button" onClick={onReportOpen}>
-          Report
-        </button>
-        {isCurrentUser && isCurrentUser === true && (
-          <div className="edit-delete-buttons">
-            <button type="button" onClick={onEditOpen} className="edit-button">
-              <FaEdit /> Edit
-            </button>
-            <button
-              type="button"
-              onClick={onDeleteOpen}
-              className="delete-button"
-            >
-              <FaTrashAlt /> Delete
-            </button>
+    <div className="opinion-container">
+      <div className="opinion">
+        <div className="header">
+          <div className="user-info">
+            <span className="username">{username}</span>
+            <span className="rating">· {rating / 2}/5 </span>
+            <FaStar className="star" />
+            {isCurrentUser && isCurrentUser === true && (
+              <div className="edit-delete-buttons">
+                <button
+                  type="button"
+                  onClick={onEditOpen}
+                  className="opinion-edit-button"
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  type="button"
+                  onClick={onDeleteOpen}
+                  className="opinion-delete-button"
+                >
+                  <FaTrashAlt />
+                </button>
+              </div>
+            )}
           </div>
-        )}
-        <div className="icons">
-          <FaThumbsUp
-            className={`icon ${liked ? 'liked' : ''}`}
-            onClick={toggleLike}
-          />
-          <span className="likes-count">{likes}</span>
-          <FaThumbsDown
-            className={`icon ${disliked ? 'disliked' : ''}`}
-            onClick={toggleDislike}
-          />
-          <span className="dislikes-count">{dislikes}</span>
+          <span className="date">
+            {new Date(createdAt).toLocaleDateString('sv-SE')}
+          </span>
+        </div>
+        <div className="content">
+          {content.split('\n').map((par) => (
+            <p key={Math.random()}>{par}</p>
+          ))}
+        </div>
+        <div className="footer">
+          <button
+            className="report-button"
+            type="button"
+            onClick={onReportOpen}
+          >
+            Report
+          </button>
+
+          <div className="icons">
+            <FaThumbsUp
+              className={`icon ${liked ? 'liked' : ''}`}
+              onClick={toggleLike}
+            />
+            <span className="likes-count">{likes}</span>
+            <FaThumbsDown
+              className={`icon ${disliked ? 'disliked' : ''}`}
+              onClick={toggleDislike}
+            />
+            <span className="dislikes-count">{dislikes}</span>
+          </div>
         </div>
       </div>
-      <OpinionModal
-        isOpen={isEditOpen}
-        rating={rating}
-        content={content}
-        onClose={onEditClose}
-        onSubmit={handleEdit}
-      />
-      <ReportOpinionModal
-        isOpen={isReportOpen}
-        onClose={onReportClose}
-        onSubmit={handleReport}
-      />
-      <DeleteConfirmationModal
-        isOpen={isDeleteOpen}
-        onClose={onDeleteClose}
-        onConfirm={handleDelete}
-      />
+      {(isEditOpen || isReportOpen || isDeleteOpen) && (
+        <div className="modals">
+          <OpinionModal
+            isOpen={isEditOpen}
+            rating={rating}
+            content={content}
+            onClose={onEditClose}
+            onSubmit={handleEdit}
+          />
+          <ReportOpinionModal
+            isOpen={isReportOpen}
+            onClose={onReportClose}
+            onSubmit={handleReport}
+          />
+          <DeleteConfirmationModal
+            isOpen={isDeleteOpen}
+            onClose={onDeleteClose}
+            onConfirm={handleDelete}
+          />
+        </div>
+      )}
     </div>
   );
 };

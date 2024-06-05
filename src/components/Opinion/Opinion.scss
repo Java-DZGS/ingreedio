@@ -27,9 +27,30 @@
       .rating {
         padding: 0px 5px;
       }
-      
+
       .star {
-        color: gold;  
+        color: gold;
+      }
+
+      .edit-delete-buttons {
+        display: flex;
+        flex-direction: wrap;
+        gap: 10px;
+        margin-left: 15px;
+  
+        .opinion-edit-button,
+        .opinion-delete-button {
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+  
+          cursor: pointer;
+          color: #5a5a5a;
+  
+          &:hover {
+            color: #2c2c2c;
+          }
+        }
       }
     }
 
@@ -41,14 +62,14 @@
 
   .content {
     margin-bottom: 12px;
-    text-align: left;  
+    text-align: left;
   }
 
   .footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #98A099;
+    color: #98a099;
 
     .report-button {
       background-color: transparent;
@@ -58,36 +79,18 @@
       font-size: 0.9em;
     }
 
-    .edit-delete-buttons {
-      display: flex;
-      gap: 10px;
-
-      .edit-button, .delete-button {
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #4a4a4a;
-
-        &:hover {
-          color: #000;
-        }
-      }
-    }
-
     .icons {
       display: flex;
+      flex-direction: wrap;
       align-items: center;
       color: rgb(83, 83, 83);
 
       .icon.liked {
-        color: #4caf50; 
+        color: #4caf50;
       }
 
       .icon.disliked {
-        color: #f44336; 
+        color: #f44336;
       }
 
       .icon {
@@ -95,7 +98,8 @@
         cursor: pointer;
       }
 
-      .likes-count, .dislikes-count {
+      .likes-count,
+      .dislikes-count {
         font-size: 14px;
       }
 
