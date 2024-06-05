@@ -126,7 +126,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while adding review:', error);
     }
-    console.log('Opinion submitted:', opinionRating, opinionContent);
   };
 
   const onEditOpinion = async (
@@ -143,14 +142,12 @@ const ProductDetails = (): JSX.Element => {
         });
 
       const newReview = newReviewResponse.data;
-      console.log(newReview);
       setProductReviews((reviews) => reviews.map((review) => (review.reviewId
         === newReview.reviewId ? newReview : review)));
       fetchProduct();
     } catch (error) {
       console.error('An error occurred while editing review:', error);
     }
-    console.log('Opinion edited:', opinionRating, opinionContent);
   };
 
   const onDeleteOpinion = async (reviewId: string) => {
@@ -164,7 +161,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while deleting review:', error);
     }
-    console.log('Opinion deleted.');
   };
 
   const handleLikeOpinion = async (id: string) => {
@@ -174,7 +170,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while liking review:', error);
     }
-    console.log('Like button clicked');
   };
 
   const handleUnlikeOpinion = async (id: string) => {
@@ -184,7 +179,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while unliking review:', error);
     }
-    console.log('Like button clicked');
   };
 
   const handleDislikeOpinion = async (id: string) => {
@@ -194,7 +188,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while disliking review:', error);
     }
-    console.log('Dislike button clicked');
   };
 
   const handleUndislikeOpinion = async (id: string) => {
@@ -204,7 +197,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while undisliking review:', error);
     }
-    console.log('Dislike button clicked');
   };
 
   const handleReportOpinion = async (id: string, content: string) => {
@@ -213,7 +205,6 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while reporting review:', error);
     }
-    console.log('Report button clicked');
   };
 
   useEffect(() => {

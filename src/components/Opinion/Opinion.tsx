@@ -86,7 +86,6 @@ const Opinion = ({
   }, [likesCount, dislikesCount]);
 
   const toggleLike = () => {
-    console.log(liked);
     if (liked == null) return;
     if (liked === false) {
       setLikes((prev) => prev + 1);
@@ -104,7 +103,6 @@ const Opinion = ({
   };
 
   const toggleDislike = () => {
-    console.log(disliked);
     if (disliked == null) return;
     if (disliked === false) {
       setDislikes((prev) => prev + 1);
