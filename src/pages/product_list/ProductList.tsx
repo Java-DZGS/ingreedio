@@ -81,7 +81,7 @@ const ProductList = (): ReactElement => {
           setSelectedIngredients(response.data);
         }
       } catch (error) {
-        handleError(error, 'An error occurred while fetching ingredients.');
+        handleError(error, 'An error occurred while loading ingredients.');
       }
     }
   }, [queryProductCriteria.ingredientsToIncludeIds]);
@@ -105,7 +105,7 @@ const ProductList = (): ReactElement => {
         setTotalPages(response.data.totalPages);
       }
     } catch (error) {
-      handleError(error, 'An error occurred while fetching products');
+      handleError(error, 'An error occurred while loading products.');
     } finally {
       setIsFetching(false);
     }

@@ -9,7 +9,7 @@ export const handleError = (error: unknown, errorTitle: string): void => {
     errorMessage = error.response?.data.detail;
   }
   toast({
-    title: errorTitle,
+    title: `${errorTitle} Please try again.`,
     description: errorMessage,
     status: 'error',
     duration: 5000,

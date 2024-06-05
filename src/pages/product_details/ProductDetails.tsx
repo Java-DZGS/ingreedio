@@ -78,7 +78,7 @@ const ProductDetails = (): JSX.Element => {
         setProduct(response.data);
       }
     } catch (error) {
-      handleError(error, 'Error fetching product.');
+      handleError(error, 'Error loading product.');
     }
   };
 
@@ -90,7 +90,7 @@ const ProductDetails = (): JSX.Element => {
         setProductReviews(response.data);
       }
     } catch (error) {
-      handleError(error, 'Error fetching product reviews.');
+      handleError(error, 'Error loading product reviews.');
     }
   };
 
