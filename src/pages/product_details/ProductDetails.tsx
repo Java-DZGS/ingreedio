@@ -146,7 +146,7 @@ const ProductDetails = (): JSX.Element => {
         === newReview.reviewId ? newReview : review)));
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while editing review:', error);
+      handleError(error, 'An error occurred while editing the review.');
     }
   };
 
@@ -159,7 +159,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while deleting review:', error);
+      handleError(error, 'An error occurred while deleting review.');
     }
   };
 
@@ -168,7 +168,7 @@ const ProductDetails = (): JSX.Element => {
       await likeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while liking review:', error);
+      handleError(error, 'An error occurred while liking review.');
     }
   };
 
@@ -177,7 +177,7 @@ const ProductDetails = (): JSX.Element => {
       await unlikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while unliking review:', error);
+      handleError(error, 'An error occurred while unliking review.');
     }
   };
 
@@ -186,7 +186,7 @@ const ProductDetails = (): JSX.Element => {
       await dislikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while disliking review:', error);
+      handleError(error, 'An error occurred while disliking review.');
     }
   };
 
@@ -195,7 +195,7 @@ const ProductDetails = (): JSX.Element => {
       await undislikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while undisliking review:', error);
+      handleError(error, 'An error occurred while undisliking review.');
     }
   };
 
@@ -203,7 +203,7 @@ const ProductDetails = (): JSX.Element => {
     try {
       await reportReviewApi(id, content);
     } catch (error) {
-      console.error('An error occurred while reporting review:', error);
+      handleError(error, 'An error occurred while reporting review.');
     }
   };
 
