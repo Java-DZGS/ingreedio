@@ -10,7 +10,6 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Button,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
@@ -26,7 +25,6 @@ import {
 } from '../../services/product.service';
 import ProductDetailsIngredient from '../../components/ProductDetailsIngredient/ProductDetailsIngredient';
 import { likeProductApi, unlikeProductApi } from '../../services/like.service';
-import Opinion from '../../components/Opinion/Opinion';
 import OpinionModal from '../../components/OpinionModal/OpinionModal';
 import {
   ReviewResponse,
@@ -42,6 +40,7 @@ import {
 } from '../../services/review.service';
 import Description from '../../components/Description/Description';
 import { handleError } from '../../utils/handleError';
+import OpinionList from '../../components/OpinionList/OpinionList';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
@@ -293,42 +292,24 @@ const ProductDetails = (): JSX.Element => {
                       <TabPanel
                         style={{ display: 'flex', flex: 1, width: '100%' }}
                       >
-                        <ScrollBar>
-                          {isAuthenticated && canAddOpinion && (
-                            <Button onClick={onOpen} variant="link">
-                              Add your opinion
-                            </Button>
+                        {productReviews
+                          && (
+                            <OpinionList
+                              productId={productId}
+                              productReviews={productReviews}
+                              isAuthenticated={isAuthenticated}
+                              canAddOpinion={canAddOpinion}
+                              onOpen={onOpen}
+                              fetchProductReviews={fetchProductReviews}
+                              onLikeOpinion={handleLikeOpinion}
+                              onUnlikeOpinion={handleUnlikeOpinion}
+                              onDislikeOpinion={handleDislikeOpinion}
+                              onUndislikeOpinion={handleUndislikeOpinion}
+                              onReportOpinion={handleReportOpinion}
+                              onEditOpinion={onEditOpinion}
+                              onDeleteOpinion={onDeleteOpinion}
+                            />
                           )}
-                          <div className="opinions-list">
-                            <ul>
-                              {productReviews.map((opinion) => (
-                                <li
-                                  key={`${opinion.displayName}-${product.id}`}
-                                >
-                                  <Opinion
-                                    reviewId={opinion.reviewId}
-                                    username={opinion.displayName}
-                                    rating={opinion.rating}
-                                    createdAt={opinion.createdAt}
-                                    content={opinion.content}
-                                    isLiked={opinion.isLiked}
-                                    isDisliked={opinion.isDisliked}
-                                    likesCount={opinion.likesCount}
-                                    dislikesCount={opinion.dislikesCount}
-                                    isCurrentUser={opinion.isCurrentUser}
-                                    onLike={handleLikeOpinion}
-                                    onUnlike={handleUnlikeOpinion}
-                                    onDislike={handleDislikeOpinion}
-                                    onUndislike={handleUndislikeOpinion}
-                                    onReport={handleReportOpinion}
-                                    onEdit={onEditOpinion}
-                                    onDelete={onDeleteOpinion}
-                                  />
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </ScrollBar>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
