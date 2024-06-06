@@ -13,7 +13,7 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AxiosResponse } from 'axios';
 import Card from '../../components/Card/Card';
 import './ProductDetails.scss';
@@ -40,11 +40,10 @@ import {
   undislikeReviewApi,
   reportReviewApi,
 } from '../../services/review.service';
-import Description from '../../Description/Description';
+import Description from '../../components/Description/Description';
+import { handleError } from '../../utils/handleError';
 
 const ProductDetails = (): JSX.Element => {
-  const dispatch = useDispatch();
-
   const { productId } = useParams<{ productId: string }>();
   const [isLiked, setIsLiked] = useState<boolean | null>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
@@ -69,7 +68,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       likeProductApi(productId)
         .then(() => setIsLiked(true))
-        .catch((error) => console.error(error));
+        .catch((error) => handleError(error, 'An error occurred while liking the product.'));
     }
   };
 
@@ -77,7 +76,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       unlikeProductApi(productId)
         .then(() => setIsLiked(false))
-        .catch((error) => console.error(error));
+        .catch((error) => handleError(error, 'An error occurred while unliking the product.'));
     }
   };
 
@@ -92,7 +91,7 @@ const ProductDetails = (): JSX.Element => {
       }
       setIsLiked(response.data.isLiked);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      handleError(error, 'Error loading product.');
     }
   };
 
@@ -104,7 +103,7 @@ const ProductDetails = (): JSX.Element => {
         setProductReviews(response.data);
       }
     } catch (error) {
-      console.error('Error fetching product reviews:', error);
+      handleError(error, 'Error loading product reviews.');
     }
   };
 
@@ -125,7 +124,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => [...reviews, newReview]);
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while adding review:', error);
+      handleError(error, 'An error occurred while adding review.');
     }
   };
 
@@ -211,7 +210,7 @@ const ProductDetails = (): JSX.Element => {
   useEffect(() => {
     fetchProduct();
     fetchProductReviews();
-  }, [dispatch, productId]);
+  }, [productId]);
 
   if (!product) {
     return (
