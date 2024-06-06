@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 import './Opinion.scss';
 import {
@@ -9,10 +7,6 @@ import {
   FaTrashAlt,
   FaEdit,
 } from 'react-icons/fa';
-import { useDisclosure } from '@chakra-ui/react';
-import OpinionModal from '../OpinionModal/OpinionModal';
-import ReportOpinionModal from '../ReportOpinionModal/ReportOpinionModal';
-import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 
 interface OpinionProps {
   reviewId: string;
@@ -29,9 +23,9 @@ interface OpinionProps {
   onUnlike: (id: string) => void;
   onDislike: (id: string) => void;
   onUndislike: (id: string) => void;
-  onReport: (id: string, content: string) => void;
-  onEdit: (opinionRating: number, opinionContent: string) => void;
-  onDelete: (reviewId: string) => void;
+  onReport: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 const Opinion = ({
@@ -55,25 +49,8 @@ const Opinion = ({
 }: OpinionProps): JSX.Element => {
   const [liked, setLiked] = useState<boolean | null>(isLiked);
   const [disliked, setDisliked] = useState<boolean | null>(isDisliked);
-
   const [likes, setLikes] = useState<number>(likesCount);
   const [dislikes, setDislikes] = useState<number>(likesCount);
-
-  const {
-    isOpen: isEditOpen,
-    onOpen: onEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure();
-  const {
-    isOpen: isReportOpen,
-    onOpen: onReportOpen,
-    onClose: onReportClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure();
 
   useEffect(() => {
     setLiked(isLiked);
@@ -119,41 +96,33 @@ const Opinion = ({
     }
   };
 
-  const handleReport = (content: string) => {
-    onReport(reviewId, content);
-  };
-
-  const handleEdit = async (opinionRating: number, opinionContent: string) => {
-    onEdit(opinionRating, opinionContent);
-  };
-
-  const handleDelete = async () => {
-    onDelete(reviewId);
-    onDeleteClose();
-  };
-
   return (
     <div className="opinion-container">
       <div className="opinion">
         <div className="header">
           <div className="user-info">
             <span className="username">{username}</span>
-            <span className="rating">· {rating / 2}/5 </span>
+            <span className="rating">
+              {rating / 2}
+              /5
+            </span>
             <FaStar className="star" />
             {isCurrentUser && isCurrentUser === true && (
               <div className="edit-delete-buttons">
                 <button
                   type="button"
-                  onClick={onEditOpen}
+                  onClick={onEdit}
                   className="opinion-edit-button"
                 >
+                  Edit
                   <FaEdit />
                 </button>
                 <button
                   type="button"
-                  onClick={onDeleteOpen}
+                  onClick={onDelete}
                   className="opinion-delete-button"
                 >
+                  Delete
                   <FaTrashAlt />
                 </button>
               </div>
@@ -169,11 +138,7 @@ const Opinion = ({
           ))}
         </div>
         <div className="footer">
-          <button
-            className="report-button"
-            type="button"
-            onClick={onReportOpen}
-          >
+          <button className="report-button" type="button" onClick={onReport}>
             Report
           </button>
 
@@ -191,27 +156,6 @@ const Opinion = ({
           </div>
         </div>
       </div>
-      {(isEditOpen || isReportOpen || isDeleteOpen) && (
-        <div className="modals">
-          <OpinionModal
-            isOpen={isEditOpen}
-            rating={rating}
-            content={content}
-            onClose={onEditClose}
-            onSubmit={handleEdit}
-          />
-          <ReportOpinionModal
-            isOpen={isReportOpen}
-            onClose={onReportClose}
-            onSubmit={handleReport}
-          />
-          <DeleteConfirmationModal
-            isOpen={isDeleteOpen}
-            onClose={onDeleteClose}
-            onConfirm={handleDelete}
-          />
-        </div>
-      )}
     </div>
   );
 };
