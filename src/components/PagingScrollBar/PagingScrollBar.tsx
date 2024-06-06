@@ -17,7 +17,6 @@ const PagingScrollBar = ({
     const { scrollTop, scrollHeight, clientHeight } = values;
 
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
     if (distanceFromBottom < 300) {
       if (onLoadMore) {
         onLoadMore();

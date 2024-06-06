@@ -6,12 +6,13 @@ import { FaStar } from 'react-icons/fa';
 import './StarRatingInput.scss';
 
 interface StarRatingInputProps {
+  value: number | null,
   onChange: (rating: number) => void;
 }
 
-const StarRatingInput: React.FC<StarRatingInputProps> = ({ onChange }) => {
+const StarRatingInput: React.FC<StarRatingInputProps> = ({ onChange, value }) => {
   const [hover, setHover] = useState<number>(0);
-  const [selectedRating, setSelectedRating] = useState<number>(0);
+  const [selectedRating, setSelectedRating] = useState<number>(value ?? 0);
 
   const handleStarClick = (rating: number) => {
     setSelectedRating(rating);

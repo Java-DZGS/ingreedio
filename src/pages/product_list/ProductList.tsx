@@ -1,7 +1,7 @@
 import React, { ReactElement, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
+import { CircularProgress } from '@chakra-ui/react';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
 import FilledButton from '../../components/FilledButton/FilledButton';
@@ -165,7 +165,7 @@ const ProductList = (): ReactElement => {
         </ul>
         {isFetching && (
           <div className="loading-indicator">
-            <ClipLoader size={35} color="#123abc" loading />
+            <CircularProgress isIndeterminate color="green" trackColor="none" />
           </div>
         )}
       </PagingScrollBar>

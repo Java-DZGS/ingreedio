@@ -32,6 +32,13 @@ import {
   ReviewResponse,
   getProductReviewsApi,
   postProductReviewApi,
+  putProductReviewApi,
+  deleteProductReviewApi,
+  likeReviewApi,
+  unlikeReviewApi,
+  dislikeReviewApi,
+  undislikeReviewApi,
+  reportReviewApi,
 } from '../../services/review.service';
 import Description from '../../Description/Description';
 
@@ -44,6 +51,12 @@ const ProductDetails = (): JSX.Element => {
   const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  let canAddOpinion = true;
+  if (productReviews
+    && productReviews[0]
+    && productReviews[0].isCurrentUser != null
+    && productReviews[0].isCurrentUser) canAddOpinion = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { likedIngredients, dislikedIngredients } = useSelector(
@@ -114,19 +127,85 @@ const ProductDetails = (): JSX.Element => {
     } catch (error) {
       console.error('An error occurred while adding review:', error);
     }
-    console.log('Opinion submitted:', opinionRating, opinionContent);
   };
 
-  const handleLikeOpinion = () => {
-    console.log('Like button clicked');
+  const onEditOpinion = async (
+    opinionRating: number,
+    opinionContent: string,
+  ) => {
+    if (!productId) return;
+    try {
+      // eslint-disable-next-line operator-linebreak
+      const newReviewResponse: AxiosResponse<ReviewResponse> =
+        await putProductReviewApi(productId, {
+          rating: 2 * opinionRating,
+          content: opinionContent,
+        });
+
+      const newReview = newReviewResponse.data;
+      setProductReviews((reviews) => reviews.map((review) => (review.reviewId
+        === newReview.reviewId ? newReview : review)));
+      fetchProduct();
+    } catch (error) {
+      console.error('An error occurred while editing review:', error);
+    }
   };
 
-  const handleDislikeOpinion = () => {
-    console.log('Dislike button clicked');
+  const onDeleteOpinion = async (reviewId: string) => {
+    if (!productId) return;
+    try {
+      // eslint-disable-next-line operator-linebreak
+      await deleteProductReviewApi(productId);
+
+      setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
+      fetchProduct();
+    } catch (error) {
+      console.error('An error occurred while deleting review:', error);
+    }
   };
 
-  const handleReportOpinion = () => {
-    console.log('Report button clicked');
+  const handleLikeOpinion = async (id: string) => {
+    try {
+      await likeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while liking review:', error);
+    }
+  };
+
+  const handleUnlikeOpinion = async (id: string) => {
+    try {
+      await unlikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while unliking review:', error);
+    }
+  };
+
+  const handleDislikeOpinion = async (id: string) => {
+    try {
+      await dislikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while disliking review:', error);
+    }
+  };
+
+  const handleUndislikeOpinion = async (id: string) => {
+    try {
+      await undislikeReviewApi(id);
+      await fetchProductReviews();
+    } catch (error) {
+      console.error('An error occurred while undisliking review:', error);
+    }
+  };
+
+  const handleReportOpinion = async (id: string, content: string) => {
+    try {
+      await reportReviewApi(id, content);
+    } catch (error) {
+      console.error('An error occurred while reporting review:', error);
+    }
   };
 
   useEffect(() => {
@@ -216,7 +295,7 @@ const ProductDetails = (): JSX.Element => {
                         style={{ display: 'flex', flex: 1, width: '100%' }}
                       >
                         <ScrollBar>
-                          {isAuthenticated && (
+                          {isAuthenticated && canAddOpinion && (
                             <Button onClick={onOpen} variant="link">
                               Add your opinion
                             </Button>
@@ -228,13 +307,23 @@ const ProductDetails = (): JSX.Element => {
                                   key={`${opinion.displayName}-${product.id}`}
                                 >
                                   <Opinion
+                                    reviewId={opinion.reviewId}
                                     username={opinion.displayName}
                                     rating={opinion.rating}
                                     createdAt={opinion.createdAt}
                                     content={opinion.content}
+                                    isLiked={opinion.isLiked}
+                                    isDisliked={opinion.isDisliked}
+                                    likesCount={opinion.likesCount}
+                                    dislikesCount={opinion.dislikesCount}
+                                    isCurrentUser={opinion.isCurrentUser}
                                     onLike={handleLikeOpinion}
+                                    onUnlike={handleUnlikeOpinion}
                                     onDislike={handleDislikeOpinion}
+                                    onUndislike={handleUndislikeOpinion}
                                     onReport={handleReportOpinion}
+                                    onEdit={onEditOpinion}
+                                    onDelete={onDeleteOpinion}
                                   />
                                 </li>
                               ))}
@@ -252,6 +341,8 @@ const ProductDetails = (): JSX.Element => {
       </div>
       <OpinionModal
         isOpen={isOpen}
+        rating={0}
+        content=""
         onClose={onClose}
         onSubmit={onSubmitOpinion}
       />
