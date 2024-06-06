@@ -128,6 +128,7 @@ const ProductDetails = (): JSX.Element => {
   };
 
   const onEditOpinion = async (
+    reviewId: string,
     opinionRating: number,
     opinionContent: string,
   ) => {
@@ -135,7 +136,7 @@ const ProductDetails = (): JSX.Element => {
     try {
       // eslint-disable-next-line operator-linebreak
       const newReviewResponse: AxiosResponse<ReviewResponse> =
-        await putProductReviewApi(productId, {
+        await putProductReviewApi(reviewId, {
           rating: 2 * opinionRating,
           content: opinionContent,
         });
@@ -153,7 +154,7 @@ const ProductDetails = (): JSX.Element => {
     if (!productId) return;
     try {
       // eslint-disable-next-line operator-linebreak
-      await deleteProductReviewApi(productId);
+      await deleteProductReviewApi(reviewId);
 
       setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
       fetchProduct();

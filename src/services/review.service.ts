@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import api from '../config/api';
 
-const getApiUrl = (productId: string): string => `/products/${productId}/reviews`;
+const getApiUrl = (reviewId: string): string => `/reviews/${reviewId}`;
 const getLikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/likes`;
 const getDislikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/dislikes`;
 const getReportApiUrl = (reviewId: string): string => `/reviews/${reviewId}/reports`;
