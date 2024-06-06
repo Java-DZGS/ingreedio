@@ -68,7 +68,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       likeProductApi(productId)
         .then(() => setIsLiked(true))
-        .catch((error) => handleError(error, 'An error occurred while liking the product.'));
+        .catch((_error) => handleError('An error occurred while liking the product.'));
     }
   };
 
@@ -76,7 +76,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       unlikeProductApi(productId)
         .then(() => setIsLiked(false))
-        .catch((error) => handleError(error, 'An error occurred while unliking the product.'));
+        .catch((_error) => handleError('An error occurred while unliking the product.'));
     }
   };
 
@@ -91,7 +91,7 @@ const ProductDetails = (): JSX.Element => {
       }
       setIsLiked(response.data.isLiked);
     } catch (error) {
-      handleError(error, 'Error loading product.');
+      handleError('Error loading product.');
     }
   };
 
@@ -103,7 +103,7 @@ const ProductDetails = (): JSX.Element => {
         setProductReviews(response.data);
       }
     } catch (error) {
-      handleError(error, 'Error loading product reviews.');
+      handleError('Error loading product reviews.');
     }
   };
 
@@ -124,7 +124,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => [...reviews, newReview]);
       fetchProduct();
     } catch (error) {
-      handleError(error, 'An error occurred while adding review.');
+      handleError('An error occurred while adding review.');
     }
   };
 
@@ -227,10 +227,10 @@ const ProductDetails = (): JSX.Element => {
           <div className="card-content-container">
             <ProductDescription
               name={product.name}
-              provider={product.provider}
+              provider={product.provider.name}
               shortDescription={shortDescription}
               volume={product.volume}
-              brand={product.brand}
+              brand={product.brand.name}
               rating={product.rating}
               isLiked={isLiked}
               largeImageUrl={product.largeImageUrl}
@@ -262,16 +262,13 @@ const ProductDetails = (): JSX.Element => {
                           <ScrollBar>
                             <ul>
                               {product.ingredients.map((ingredient) => (
-                                <li key={ingredient + Math.random()}>
+                                <li key={ingredient.id}>
                                   <ProductDetailsIngredient
                                     ingredient={ingredient}
-                                  // TODO: when backend returns the ingredients id
-                                  // isLiked={likedIngredients.includes(
-                                  //   ingredient,
-                                  // )}
-                                  // isDisliked={dislikedIngredients.includes(
-                                  //   ingredient,
-                                  // )}
+                                    isLiked={likedIngredients.some((ingr) => ingr.id
+                                      === ingredient.id)}
+                                    isDisliked={dislikedIngredients.some((ingr) => ingr.id
+                                      === ingredient.id)}
                                   />
                                 </li>
                               ))}

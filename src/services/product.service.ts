@@ -52,9 +52,9 @@ export interface ProductCriteria {
 export interface ProductObject {
   id: string;
   name: string;
-  brand: string;
+  brand: {id: string, name: string};
   smallImageUrl: string;
-  provider: string;
+  provider: {id: string, name: string};
   shortDescription: string;
   isLiked?: boolean;
   rating: number
@@ -69,16 +69,16 @@ export interface ProductDetailsResponse {
   id: string;
   name: string;
   largeImageUrl: string;
-  provider: string;
-  brand: string;
+  provider: {id: string, name: string};
+  brand: {id: string, name: string};
   longDescription: string;
   volume: number;
-  ingredients: string[];
+  ingredients: {id: string, name: string}[];
   isLiked: boolean | null,
   rating: number
 }
 
-const parseSortBy = (input: string): SortBy | undefined => {
+export const parseSortBy = (input: string): SortBy | undefined => {
   const parts = input.split('-');
   const order = parts[0];
   const option = parts.slice(1).join('-');
@@ -178,12 +178,12 @@ export const getProductsListApi = (
   pageNumber?: number,
 ): Promise<AxiosResponse<ProductResponse>> => {
   if (criteria === undefined) {
-    const builder = new RequestUrlBuilder(productsApiUrl);
+    const builder = new RequestUrlBuilder(`${productsApiUrl}/search`);
     builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
     return api.get(builder.build());
   }
 
-  const builder = productCriteriaToUrlBuilder(productsApiUrl, criteria);
+  const builder = productCriteriaToUrlBuilder(`${productsApiUrl}/search`, criteria);
   builder.setParam(ProductListRequestParam.PAGE_NUMBER, (pageNumber ?? 0).toString());
 
   return api.get(builder.build());

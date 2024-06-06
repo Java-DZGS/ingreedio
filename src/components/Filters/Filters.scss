@@ -1,0 +1,21 @@
+.filters-container {
+    flex: 3;
+    padding-right: 10px;
+    max-width: 25%;
+    min-width: 25%;
+    background-color: 'rgba(229, 244, 255, 0.42)';
+
+    .search-container {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .search-button-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+    }
+  }

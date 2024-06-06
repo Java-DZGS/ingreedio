@@ -23,7 +23,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // eslint-disable-next-line no-underscore-dangle
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
 

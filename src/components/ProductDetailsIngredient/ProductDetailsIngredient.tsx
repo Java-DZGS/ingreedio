@@ -6,7 +6,7 @@ import './ProductDetailsIngredient.scss';
 import { RootState } from '../../store/reducers';
 
 type ProductDetailsIngredientProps = {
-  ingredient: string;
+  ingredient: {id: string, name:string};
   isLiked?: boolean;
   isDisliked?: boolean;
 };
@@ -51,7 +51,7 @@ const ProductDetailsIngredient = ({
       onMouseEnter={() => isAuthenticated && setIsHovered(true)}
       onMouseLeave={() => isAuthenticated && setIsHovered(false)}
     >
-      <span>{ingredient}</span>
+      <span>{ingredient.name}</span>
       {isHovered && (
         <div className="icon-container">
           <MdOutlineThumbUp

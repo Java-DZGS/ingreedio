@@ -1,6 +1,6 @@
 // Home.tsx
 
-import React, { ReactElement, useState } from 'react';
+import React, { FormEvent, ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.scss';
 import { AxiosResponse } from 'axios';
@@ -36,7 +36,8 @@ const Home = (): ReactElement => {
     IngredientObject[]
   >([]);
 
-  const handleSearch = () => {
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const criteria: ProductCriteria = {
       phrase,
       ingredientsToIncludeIds: selectedIngredients?.map((ingr: IngredientObject) => ingr.id),
@@ -102,7 +103,7 @@ const Home = (): ReactElement => {
           <div className="search-button-container">
             <div className="inner-search-button-container">
               <div className="search-button">
-                <FilledButton onClick={handleSearch}>Search</FilledButton>
+                <FilledButton>Search</FilledButton>
               </div>
             </div>
           </div>
