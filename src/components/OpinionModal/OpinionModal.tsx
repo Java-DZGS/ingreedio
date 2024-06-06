@@ -18,23 +18,25 @@ import TextButton from '../TextButton/TextButton';
 
 interface OpinionModalProps {
   isOpen: boolean;
+  rating: number;
+  content: string;
   onClose: () => void;
   onSubmit: (opinionRating: number, opinionContent: string) => void;
 }
 
 const OpinionModal: React.FC<OpinionModalProps> = ({
   isOpen,
+  rating,
+  content,
   onClose,
   onSubmit,
 }) => {
-  const [opinionContent, setOpinionContent] = useState('');
-  const [opinionRating, setOpinionRating] = useState(0);
+  const [opinionContent, setOpinionContent] = useState(content);
+  const [opinionRating, setOpinionRating] = useState(rating);
 
   useEffect(() => {
-    if (isOpen) {
-      setOpinionRating(0);
-      setOpinionContent('');
-    }
+    setOpinionRating(rating);
+    setOpinionContent(content);
   }, [isOpen]);
 
   const handleSubmitOpinion = () => {
@@ -53,6 +55,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           <ModalCloseButton />
           <ModalBody className="modal-body">
             <StarRatingInput
+              value={opinionRating / 2}
               onChange={(rating: number) => setOpinionRating(rating)}
             />
             <Textarea
