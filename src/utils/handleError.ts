@@ -3,14 +3,10 @@ import { createStandaloneToast } from '@chakra-ui/react';
 
 const { toast } = createStandaloneToast();
 
-export const handleError = (error: unknown, errorTitle: string): void => {
-  let errorMessage = 'An unexpected error occurred. Please try again.';
-  if (error instanceof AxiosError) {
-    errorMessage = error.response?.data.detail;
-  }
+export const handleError = (errorTitle: string): void => {
   toast({
-    title: `${errorTitle} Please try again.`,
-    description: errorMessage,
+    title: `${errorTitle} :(`,
+    description: 'Please try again. :)',
     status: 'error',
     duration: 5000,
     isClosable: true,
