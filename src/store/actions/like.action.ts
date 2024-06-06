@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
+import { IngredientObject } from '../../services/ingredients.service';
 
 export const types = {
   LIKE_INGREDIENT: 'LIKE_INGREDIENT',
@@ -16,22 +17,22 @@ export const types = {
   GET_DISLIKES: 'GET_DISLIKES',
 };
 
-export const likeIngredient = (ingredient: string): AnyAction => ({
+export const likeIngredient = (ingredient: IngredientObject): AnyAction => ({
   type: types.LIKE_INGREDIENT,
   payload: ingredient,
 });
 
-export const dislikeIngredient = (ingredient: string): AnyAction => ({
+export const dislikeIngredient = (ingredient: IngredientObject): AnyAction => ({
   type: types.DISLIKE_INGREDIENT,
   payload: ingredient,
 });
 
-export const likeSuccess = (ingredient: string): AnyAction => ({
+export const likeSuccess = (ingredient: IngredientObject): AnyAction => ({
   type: types.LIKE_SUCCESS,
   payload: ingredient,
 });
 
-export const dislikeSuccess = (ingredient: string): AnyAction => ({
+export const dislikeSuccess = (ingredient: IngredientObject): AnyAction => ({
   type: types.DISLIKE_SUCCESS,
   payload: ingredient,
 });
@@ -46,22 +47,22 @@ export const dislikeFailure = (error: AxiosError): AnyAction => ({
   payload: error,
 });
 
-export const unlikeIngredient = (ingredient: string): AnyAction => ({
+export const unlikeIngredient = (ingredient: IngredientObject): AnyAction => ({
   type: types.UNLIKE_INGREDIENT,
   payload: ingredient,
 });
 
-export const undislikeIngredient = (ingredient: string): AnyAction => ({
+export const undislikeIngredient = (ingredient: IngredientObject): AnyAction => ({
   type: types.UNDISLIKE_INGREDIENT,
   payload: ingredient,
 });
 
-export const unlikeSuccess = (ingredient: string): AnyAction => ({
+export const unlikeSuccess = (ingredient: IngredientObject): AnyAction => ({
   type: types.UNLIKE_SUCCESS,
   payload: ingredient,
 });
 
-export const undislikeSuccess = (ingredient: string): AnyAction => ({
+export const undislikeSuccess = (ingredient: IngredientObject): AnyAction => ({
   type: types.UNDISLIKE_SUCCESS,
   payload: ingredient,
 });

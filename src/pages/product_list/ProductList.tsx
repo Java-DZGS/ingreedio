@@ -1,41 +1,32 @@
-import React, { ReactElement, useState, useCallback } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@chakra-ui/react';
 import ProductTile from '../../components/ProductTile/ProductTile';
 import './ProductList.scss';
-import FilledButton from '../../components/FilledButton/FilledButton';
-import SearchBar from '../../components/SearchBar/SearchBar';
 import PagingScrollBar from '../../components/PagingScrollBar/PagingScrollBar';
-import ScrollBar from '../../components/Scrollbar/ScrollBar';
 import { ROUTES } from '../../routes/routes';
 import {
   getProductsListApi,
   ProductCriteria,
   productCriteriaToUrl,
   ProductObject,
+  SortBy,
+  SortOption,
+  SortOrder,
   urlToProductCriteria,
 } from '../../services/product.service';
 import { RootState } from '../../store/reducers';
-import {
-  IngredientObject,
-  getIngredientsApi,
-  getIngredientsByIdsApi,
-} from '../../services/ingredients.service';
+import { IngredientObject } from '../../services/ingredients.service';
 import useEffectSingular from '../../hooks/useEffectSignular';
-import SearchBarTagsSelector from '../../components/SearchBarTagsSelector/SearchBarTagsSelector';
-import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
-import { TagColor } from '../../theme/tagColor';
 import { handleError } from '../../utils/handleError';
-
-const MAX_INGREDIENTS_SUGGESTIONS = 50;
+import Filters from '../../components/Filters/Filters';
+import { ObjectWithNameAndId } from '../../types/objectWithNameAndId';
+import { ProviderObject } from '../../services/providers.api';
+import { BrandObject } from '../../services/brand.service';
+import { CategoryObject } from '../../services/category.service';
 
 const ProductList = (): ReactElement => {
-  const allergensSelector = useSelector(
-    (state: RootState) => state.like.dislikedIngredients,
-  );
-  const hasAllergens: boolean = allergensSelector?.length > 0;
-
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -49,49 +40,10 @@ const ProductList = (): ReactElement => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  // Data recreated basing on the query product criteria
-  const [phrase, setPhrase] = useState<string>(
-    queryProductCriteria.phrase ?? '',
-  );
-  const [selectedIngredients, setSelectedIngredients] = useState<
-    IngredientObject[] | null
-  >(null);
-
-  const fetchIngredientsSuggestions = async (
-    query: string,
-  ): Promise<ObjectWithNameAndId[] | null> => {
-    if (query.length === 0) {
-      return null;
-    }
-    const ingredientsResponse = await getIngredientsApi(
-      query,
-      MAX_INGREDIENTS_SUGGESTIONS,
-      hasAllergens,
-    );
-    return ingredientsResponse.data;
-  };
-
-  const fetchSelectedIngredients = useCallback(async () => {
-    if (queryProductCriteria.ingredientsToIncludeIds) {
-      try {
-        const response = await getIngredientsByIdsApi(
-          queryProductCriteria.ingredientsToIncludeIds,
-        );
-        if (response && response.data) {
-          setSelectedIngredients(response.data);
-        }
-      } catch (error) {
-        handleError('An error occurred while loading ingredients.');
-      }
-    }
-  }, [queryProductCriteria.ingredientsToIncludeIds]);
-
   const fetchProducts = async (criteria: ProductCriteria, page: number) => {
     if (isFetching || page >= totalPages) return;
 
     setIsFetching(true);
-    // TODO: fetchSelectedBrands, fetchSelectedProviders, fetchSelectedCategories (get by ids)
-
     try {
       const response = await getProductsListApi(criteria, page);
       if (response && response.data) {
@@ -111,13 +63,27 @@ const ProductList = (): ReactElement => {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = (
+    phrase: string,
+    selectedIngredients: ObjectWithNameAndId[] | null,
+    selectedProviders: ObjectWithNameAndId[] | null,
+    selectedBrands: ObjectWithNameAndId[] | null,
+    selectedCategories: ObjectWithNameAndId[] | null,
+    sortBy: SortBy | null,
+  ) => {
     const criteria: ProductCriteria = {
       phrase,
       ingredientsToIncludeIds: selectedIngredients?.map(
         (ingr: IngredientObject) => ingr.id,
       ),
-      sortingCriteria: queryProductCriteria.sortingCriteria,
+      providersIds: selectedProviders?.map((ingr: ProviderObject) => ingr.id),
+      brandsToIncludeIds: selectedBrands?.map((ingr: BrandObject) => ingr.id),
+      categoriesIds: selectedCategories?.map((ingr: CategoryObject) => ingr.id),
+      ...(sortBy
+        ? {
+          sortingCriteria: [sortBy],
+        }
+        : { option: SortOption.MATCH_SCORE, order: SortOrder.DESCENDING }),
     };
     setProducts([]);
     setPageNumber(0);
@@ -128,7 +94,6 @@ const ProductList = (): ReactElement => {
 
   useEffectSingular(() => {
     fetchProducts(queryProductCriteria, pageNumber);
-    fetchSelectedIngredients();
   });
 
   const loadMoreProducts = () => {
@@ -152,8 +117,8 @@ const ProductList = (): ReactElement => {
             <li key={product.id} className="product">
               <Link to={`/products/${product.id}`}>
                 <ProductTile
-                  name={`${product.brand} ${product.name}`}
-                  provider={product.provider}
+                  name={`${product.brand.name} ${product.name}`}
+                  provider={product.provider.name}
                   smallImageUrl={product.smallImageUrl}
                   shortDescription={product.shortDescription}
                   rating={product.rating}
@@ -170,64 +135,10 @@ const ProductList = (): ReactElement => {
           </div>
         )}
       </PagingScrollBar>
-      <div className="filters-container">
-        <ScrollBar>
-          <div className="search-container">
-            <div className="product-search-container">
-              <SearchBar
-                label="Product"
-                placeholder="e.g. shampoo"
-                initialValue={phrase}
-                onChange={(value) => setPhrase(value)}
-              />
-            </div>
-            <div className="ingredient-search-container">
-              <SearchBarTagsSelector
-                getSuggestions={fetchIngredientsSuggestions}
-                onElementChosen={(element: ObjectWithNameAndId) =>
-                  setSelectedIngredients((old: IngredientObject[] | null) =>
-                    (old ? [...old, element] : [element]))}
-                onElementRemoved={(id: string) =>
-                  setSelectedIngredients(
-                    (old: IngredientObject[] | null) =>
-                      old?.filter(
-                        (ingredient: IngredientObject) => ingredient.id !== id,
-                      ) ?? null,
-                  )}
-                selectedElements={selectedIngredients ?? undefined}
-                label="Ingredients"
-                placeholder="e.g. shea butter"
-                tagsColor={TagColor.INGREDIENT}
-              />
-            </div>
-            <div className="provider-search-container">
-              <SearchBar
-                label="Provider"
-                placeholder="e.g. rossmann"
-                onChange={(_value) => console.log('Not implemented yet')}
-              />
-            </div>
-            <div className="brand-search-container">
-              <SearchBar
-                label="Brand"
-                placeholder="e.g. lovely"
-                onChange={(_value) => console.log('Not implemented yet')}
-              />
-            </div>
-
-            <div className="category-search-container">
-              <SearchBar
-                label="Category"
-                placeholder="e.g. skin care"
-                onChange={(_value) => console.log('Not implemented yet')}
-              />
-            </div>
-            <div className="search-button-container">
-              <FilledButton onClick={handleSearch}>Search</FilledButton>
-            </div>
-          </div>
-        </ScrollBar>
-      </div>
+      <Filters
+        queryProductCriteria={queryProductCriteria}
+        handleSearch={handleSearch}
+      />
     </div>
   );
 };
