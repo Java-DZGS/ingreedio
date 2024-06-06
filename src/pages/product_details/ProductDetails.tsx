@@ -67,7 +67,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       likeProductApi(productId)
         .then(() => setIsLiked(true))
-        .catch((error) => handleError(error, 'An error occurred while liking the product.'));
+        .catch((error) => handleError('An error occurred while liking the product.'));
     }
   };
 
@@ -75,7 +75,7 @@ const ProductDetails = (): JSX.Element => {
     if (productId) {
       unlikeProductApi(productId)
         .then(() => setIsLiked(false))
-        .catch((error) => handleError(error, 'An error occurred while unliking the product.'));
+        .catch((error) => handleError('An error occurred while unliking the product.'));
     }
   };
 
@@ -90,7 +90,7 @@ const ProductDetails = (): JSX.Element => {
       }
       setIsLiked(response.data.isLiked);
     } catch (error) {
-      handleError(error, 'Error loading product.');
+      handleError('Error loading product.');
     }
   };
 
@@ -102,7 +102,7 @@ const ProductDetails = (): JSX.Element => {
         setProductReviews(response.data);
       }
     } catch (error) {
-      handleError(error, 'Error loading product reviews.');
+      handleError('Error loading product reviews.');
     }
   };
 
@@ -123,7 +123,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => [...reviews, newReview]);
       fetchProduct();
     } catch (error) {
-      handleError(error, 'An error occurred while adding review.');
+      handleError('An error occurred while adding review.');
     }
   };
 
@@ -145,7 +145,7 @@ const ProductDetails = (): JSX.Element => {
         === newReview.reviewId ? newReview : review)));
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while editing review:', error);
+      handleError('An error occurred while editing the review.');
     }
   };
 
@@ -158,7 +158,7 @@ const ProductDetails = (): JSX.Element => {
       setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
       fetchProduct();
     } catch (error) {
-      console.error('An error occurred while deleting review:', error);
+      handleError('An error occurred while deleting review.');
     }
   };
 
@@ -167,7 +167,7 @@ const ProductDetails = (): JSX.Element => {
       await likeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while liking review:', error);
+      handleError('An error occurred while liking review.');
     }
   };
 
@@ -176,7 +176,7 @@ const ProductDetails = (): JSX.Element => {
       await unlikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while unliking review:', error);
+      handleError('An error occurred while unliking review.');
     }
   };
 
@@ -185,7 +185,7 @@ const ProductDetails = (): JSX.Element => {
       await dislikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while disliking review:', error);
+      handleError('An error occurred while disliking review.');
     }
   };
 
@@ -194,7 +194,7 @@ const ProductDetails = (): JSX.Element => {
       await undislikeReviewApi(id);
       await fetchProductReviews();
     } catch (error) {
-      console.error('An error occurred while undisliking review:', error);
+      handleError('An error occurred while undisliking review.');
     }
   };
 
@@ -202,7 +202,7 @@ const ProductDetails = (): JSX.Element => {
     try {
       await reportReviewApi(id, content);
     } catch (error) {
-      console.error('An error occurred while reporting review:', error);
+      handleError('An error occurred while reporting review.');
     }
   };
 
