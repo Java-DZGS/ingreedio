@@ -24,7 +24,6 @@ const signInSuccess = (response: AuthResponse): AnyAction => ({
   payload: response,
 });
 
-// todo: error type // i think this is resolved
 const signInFailure = (error: AxiosError): AnyAction => ({
   type: types.SIGN_IN_FAILURE,
   payload: error,
