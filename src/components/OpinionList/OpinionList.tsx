@@ -19,7 +19,7 @@ interface OpinionListProps {
   onDislikeOpinion: (id: string) => void;
   onUndislikeOpinion: (id: string) => void;
   onReportOpinion: (id: string, content: string) => void;
-  onEditOpinion: (opinionRating: number, opinionContent: string) => void;
+  onEditOpinion: (reviewId: string, opinionRating: number, opinionContent: string) => void;
   onDeleteOpinion: (reviewId: string) => void;
 }
 
@@ -73,7 +73,7 @@ const OpinionList = ({
     opinionContent: string,
   ) => {
     if (selectedReview) {
-      await onEditOpinion(opinionRating, opinionContent);
+      await onEditOpinion(selectedReview.reviewId, opinionRating, opinionContent);
       onModalClose();
       fetchProductReviews();
     }
