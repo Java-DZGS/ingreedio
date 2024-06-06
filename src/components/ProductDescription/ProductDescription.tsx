@@ -10,7 +10,7 @@ type ProductDescriptionProps = {
   volume: number;
   brand: string;
   rating: number;
-  isLiked: boolean;
+  isLiked: boolean | null;
   largeImageUrl: string;
   showLike: boolean;
   handleLike: () => void;
@@ -36,7 +36,7 @@ const ProductDescription = ({
     <div className="product-image-container">
       {showLike && (
         <HeartComponent
-          isLiked={isLiked}
+          isLiked={isLiked ?? false}
           className="heart-button"
           onLike={handleLike}
           onUnlike={handleUnlike}

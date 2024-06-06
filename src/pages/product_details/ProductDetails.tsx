@@ -38,8 +38,7 @@ import { handleError } from '../../utils/handleError';
 
 const ProductDetails = (): JSX.Element => {
   const { productId } = useParams<{ productId: string }>();
-  // todo: get this value from backend
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean | null>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
   const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
@@ -77,6 +76,7 @@ const ProductDetails = (): JSX.Element => {
       if (response && response.data) {
         setProduct(response.data);
       }
+      setIsLiked(response.data.isLiked);
     } catch (error) {
       handleError(error, 'Error loading product.');
     }
