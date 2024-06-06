@@ -46,7 +46,7 @@ const ProductDetails = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const { productId } = useParams<{ productId: string }>();
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean | null>(false);
   const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
   const [productReviews, setProductReviews] = useState<ReviewResponse[]>([]);
 
@@ -90,6 +90,7 @@ const ProductDetails = (): JSX.Element => {
       if (response && response.data) {
         setProduct(response.data);
       }
+      setIsLiked(response.data.isLiked);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -265,13 +266,13 @@ const ProductDetails = (): JSX.Element => {
                                 <li key={ingredient + Math.random()}>
                                   <ProductDetailsIngredient
                                     ingredient={ingredient}
-                                    // TODO: when backend returns the ingredients id
-                                    // isLiked={likedIngredients.includes(
-                                    //   ingredient,
-                                    // )}
-                                    // isDisliked={dislikedIngredients.includes(
-                                    //   ingredient,
-                                    // )}
+                                  // TODO: when backend returns the ingredients id
+                                  // isLiked={likedIngredients.includes(
+                                  //   ingredient,
+                                  // )}
+                                  // isDisliked={dislikedIngredients.includes(
+                                  //   ingredient,
+                                  // )}
                                   />
                                 </li>
                               ))}

@@ -74,6 +74,7 @@ export interface ProductDetailsResponse {
   longDescription: string;
   volume: number;
   ingredients: string[];
+  isLiked: boolean | null,
   rating: number
 }
 
