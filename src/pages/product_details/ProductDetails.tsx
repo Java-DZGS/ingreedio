@@ -154,7 +154,6 @@ const ProductDetails = (): JSX.Element => {
     if (!productId) return;
     try {
       // eslint-disable-next-line operator-linebreak
-      console.log(reviewId);
       await deleteProductReviewApi(reviewId);
 
       setProductReviews((reviews) => reviews.filter((review) => review.reviewId !== reviewId));
