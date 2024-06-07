@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import api from '../config/api';
 
-const getApiUrl = (reviewId: string): string => `/reviews/${reviewId}`;
+const getApiUrl = (productId: string): string => `/products/${productId}/reviews`;
+const getReviewApiUrl = (reviewId: string): string => `/reviews/${reviewId}`;
 const getLikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/likes`;
 const getDislikeApiUrl = (reviewId: string): string => `/reviews/${reviewId}/dislikes`;
 const getReportApiUrl = (reviewId: string): string => `/reviews/${reviewId}/reports`;
@@ -48,14 +49,15 @@ export const postProductReviewApi = async (
 export const putProductReviewApi = async (
   id: string,
   review: ReviewObject,
-): Promise<AxiosResponse<ReviewResponse>> => api.put(getApiUrl(id), {
-  rating: review.rating,
-  content: review.content,
-});
+): Promise<AxiosResponse<ReviewResponse>> =>
+  api.put(getReviewApiUrl(id), {
+    rating: review.rating,
+    content: review.content,
+  });
 
 export const deleteProductReviewApi = async (
   id: string,
-): Promise<AxiosResponse<void>> => api.delete(getApiUrl(id));
+): Promise<AxiosResponse<void>> => api.delete(getReviewApiUrl(id));
 
 export const likeReviewApi = async (
   id: string,
