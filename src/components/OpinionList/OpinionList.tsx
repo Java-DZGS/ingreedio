@@ -19,7 +19,11 @@ interface OpinionListProps {
   onDislikeOpinion: (id: string) => void;
   onUndislikeOpinion: (id: string) => void;
   onReportOpinion: (id: string, content: string) => void;
-  onEditOpinion: (reviewId: string, opinionRating: number, opinionContent: string) => void;
+  onEditOpinion: (
+    reviewId: string,
+    opinionRating: number,
+    opinionContent: string,
+  ) => void;
   onDeleteOpinion: (reviewId: string) => void;
 }
 
@@ -55,8 +59,11 @@ const OpinionList = ({
   const handleUnlike = (id: string) => onUnlikeOpinion(id);
   const handleDislike = (id: string) => onDislikeOpinion(id);
   const handleUndislike = (id: string) => onUndislikeOpinion(id);
-  const handleReport = (id: string, content: string) =>
-    onReportOpinion(id, content);
+  const handleReport = (review: ReviewResponse) => {
+    setSelectedReview(review);
+    setModalType('report');
+    onModalOpen();
+  };
   const handleEdit = (review: ReviewResponse) => {
     setSelectedReview(review);
     setModalType('edit');
@@ -73,7 +80,11 @@ const OpinionList = ({
     opinionContent: string,
   ) => {
     if (selectedReview) {
-      await onEditOpinion(selectedReview.reviewId, opinionRating, opinionContent);
+      await onEditOpinion(
+        selectedReview.reviewId,
+        opinionRating,
+        opinionContent,
+      );
       onModalClose();
       fetchProductReviews();
     }
@@ -81,7 +92,7 @@ const OpinionList = ({
 
   const handleReportSubmit = async (reportContent: string) => {
     if (selectedReview) {
-      await handleReport(selectedReview.reviewId, reportContent);
+      await onReportOpinion(selectedReview.reviewId, reportContent);
       onModalClose();
     }
   };
@@ -121,8 +132,7 @@ const OpinionList = ({
                   onUnlike={handleUnlike}
                   onDislike={handleDislike}
                   onUndislike={handleUndislike}
-                  onReport={() =>
-                    handleReport(opinion.reviewId, opinion.content)}
+                  onReport={() => handleReport(opinion)}
                   onEdit={() => handleEdit(opinion)}
                   onDelete={() => handleDelete(opinion)}
                 />

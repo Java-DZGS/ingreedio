@@ -40,7 +40,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
   }, [isOpen]);
 
   const handleSubmitOpinion = () => {
-    onSubmit(opinionRating, opinionContent);
+    onSubmit(opinionRating / 2, opinionContent);
     onClose();
   };
 
@@ -56,7 +56,7 @@ const OpinionModal: React.FC<OpinionModalProps> = ({
           <ModalBody className="modal-body">
             <StarRatingInput
               value={opinionRating / 2}
-              onChange={(rating: number) => setOpinionRating(rating)}
+              onChange={(rating: number) => setOpinionRating(rating * 2)}
             />
             <Textarea
               placeholder="Write your opinion here..."
