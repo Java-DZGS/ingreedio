@@ -114,7 +114,6 @@ const Opinion = ({
                   onClick={onEdit}
                   className="opinion-edit-button"
                 >
-                  Edit
                   <FaEdit />
                 </button>
                 <button
@@ -122,7 +121,6 @@ const Opinion = ({
                   onClick={onDelete}
                   className="opinion-delete-button"
                 >
-                  Delete
                   <FaTrashAlt />
                 </button>
               </div>
