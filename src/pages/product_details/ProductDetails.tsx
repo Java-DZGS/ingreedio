@@ -201,10 +201,7 @@ const ProductDetails = (): JSX.Element => {
 
   const handleReportOpinion = async (id: string, content: string) => {
     try {
-      const report = await reportReviewApi(id, content);
-      if (report && report.data) {
-        console.log(report.data.content);
-      }
+      await reportReviewApi(id, content);
     } catch (error) {
       handleError('An error occurred while reporting review.');
     }
