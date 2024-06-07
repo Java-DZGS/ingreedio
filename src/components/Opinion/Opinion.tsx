@@ -1,4 +1,3 @@
-export default Opinion;
 import React, { useState, useEffect } from 'react';
 import './Opinion.scss';
 import {
@@ -165,3 +164,4 @@ const Opinion = ({
   );
 };
 
+export default Opinion;
