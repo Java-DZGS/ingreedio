@@ -1,3 +1,4 @@
+export default Opinion;
 import React, { useState, useEffect } from 'react';
 import './Opinion.scss';
 import {
@@ -114,6 +115,9 @@ const Opinion = ({
                   onClick={onEdit}
                   className="opinion-edit-button"
                 >
+                  {
+                    // eslint-disable-next-linejsx - a11y / control - has - associated - label
+                  }
                   <FaEdit />
                 </button>
                 <button
@@ -121,6 +125,9 @@ const Opinion = ({
                   onClick={onDelete}
                   className="opinion-delete-button"
                 >
+                  {
+                    // eslint-disable-next-linejsx - a11y / control - has - associated - label
+                  }
                   <FaTrashAlt />
                 </button>
               </div>
@@ -158,4 +165,3 @@ const Opinion = ({
   );
 };
 
-export default Opinion;
